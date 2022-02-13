@@ -1,4 +1,4 @@
-## Welcome to GitHub Pages
+## Welcome to xshige's beta notes
 
 You can use the [editor on GitHub](https://github.com/xshigee/gitbook0/edit/main/docs/index.md) to maintain and preview the content for your website in Markdown files.
 
