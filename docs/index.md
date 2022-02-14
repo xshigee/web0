@@ -10,9 +10,11 @@ githubに移行中
 1. [uncannyeyesスケッチをplatformioでビルドする](md/M5Stack_uncannyEyes_md.md)
 1. [LovyanGFX-Display ライブラリを使用したスケッチをplatformioでビルドする](md/LovyanGFX_sketch_pio.md)
 1. [Wio-Terminal/M5Core2のWiFiAnallyzer](md/WiFiAnalyzer_WIOT_M5C2_md.md)
-1. [Wio-TerminalでMQTTを動かす]
-1. [wio-terminalでGROVEを使う]
-1. [MAKER_PI_RP2040でI2Cを使う(Arduino編)]
+1. [Wio-TerminalでMQTTを動かす](md/WIOT_MQTT.md)
+1. [wio-terminalでGROVEを使う](md/WIOT_TWO_GROVES.md)
+1. [MAKER_PI_RP2040でI2Cを使う(Arduino編)](md/MAKER_PI_RP2040_I2C_.md)
+1. [WebRadio for M5Core2](md/WebRadio_M5C2_md.md)
+1. [WebRadio for M5StickCPlus](md/WebRadio_M5SCP_md.md)
 
 ## tools
 * [dfu-util最新版インストール ](md/dfu-util_latest_install_md.md)
