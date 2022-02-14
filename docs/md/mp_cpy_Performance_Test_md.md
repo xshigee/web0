@@ -137,6 +137,7 @@ Count:  39187
 
 ## 結果
 
+
 | ボード名 | M/C/P |	Count|
 | :--- | :---: | ---:|
 |F767ZI |M |	5,676,566 |
@@ -161,7 +162,7 @@ Count:  39187
 |PC(linux) |P|	161,265,687|
 |micropython-Rpi4 |M|	16,117,283|
 |python3-Rpi4 |P|	11,359,199 |
-[]()  
+
 
 M/C/Pは、pythonの種類を表し、  
 M:MicroPython、   
