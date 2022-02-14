@@ -1,10 +1,11 @@
 ## Welcome to xshige's beta notes
 
 # 役に立ちそうなメモの置き場
+
 githubに移行中  
 以下のリンクをクリックして下さい：
 
-## latest
+# latest
 1. [platformioのために新しいユーザーを設定する](md/newuser_pio.md)
 1. [Wio_ExtFlashLoad(WriteSampleMenu.ino)スケッチをplatformioでビルドする](md/Wio_ExtFlashLoad_pio_md.md)
 1. [uncannyeyesスケッチをplatformioでビルドする](md/M5Stack_uncannyEyes_md.md)
@@ -16,7 +17,7 @@ githubに移行中
 1. [WebRadio for M5Core2](md/WebRadio_M5C2_md.md)
 1. [WebRadio for M5StickCPlus](md/WebRadio_M5SCP_md.md)
 
-## tools
+# tools
 * [dfu-util最新版インストール ](md/dfu-util_latest_install_md.md)
 * [gcc-arm-none-eabi最新版インストール](md/gcc-arm-none-eabi_latest_install_md.md)
 * [st-flash最新版インストール](md/st-flash_latest_install_md.md)
