@@ -1,5 +1,5 @@
 
-2021/2/7+  
+2021/2/7++  
 
 MicroPython CircuitPython Performace Test (v2)
 # MicroPython CircuitPython Performace Test (v2)
@@ -138,31 +138,31 @@ Count:  39187
 ## 結果
 
 
-| ボード名 | M/C/P |	Count|
-| :--- | :---: | ---:|
-|F767ZI |M |	5,676,566 |
-|F446RE	|M | 2,825,625 |
-|F4Disco|M|	2,882,769 |
-|Maixduino|M|	2,218,879 |
-| Pico-MP |M | 1,507,516|
-|F401RE|M |	1,362,752 |
-|L476RG|M |	1,089,347 |
-| PyPortal| C |	474,734 |
-| Grand-Central-M4-Express|C |	445,404 |
-| Feather-M4-Express| C|	438,444 |
-| Teensy4.0 |C |	432,413 |
-| Pico-CPY |C | 341,033 |
-|XIAO |C |	174,388 |
-|Circuit-Playground-Express |C|	121,800|
-|ESP8266 |M|	64,049|
-|ESP32 |M|	39,187|
-|CC3200 |M|	5,529|
-|BareMetal-RpiZero |M|	680,525 |
-|Linux-RpiZero |P|	6,370,022|
-|PC(linux) |P|	161,265,687|
-|micropython-Rpi4 |M|	16,117,283|
-|python3-Rpi4 |P|	11,359,199 |
-
+| ボード名 | M/C/P |	Count|  
+| :--- | :---: | ---:|  
+|F767ZI |M |	5,676,566 |  
+|F446RE	|M | 2,825,625 |  
+|F4Disco|M|	2,882,769 |  
+|Maixduino|M|	2,218,879 |  
+| Pico-MP |M | 1,507,516|  
+|F401RE|M |	1,362,752 |  
+|L476RG|M |	1,089,347 |  
+| PyPortal| C |	474,734 |  
+| Grand-Central-M4-Express|C |	445,404 |  
+| Feather-M4-Express| C|	438,444 |  
+| Teensy4.0 |C |	432,413 |  
+| Pico-CPY |C | 341,033 |  
+|XIAO |C |	174,388 |  
+|Circuit-Playground-Express |C|	121,800|  
+|ESP8266 |M|	64,049|  
+|ESP32 |M|	39,187|  
+|CC3200 |M|	5,529|  
+|BareMetal-RpiZero |M|	680,525 |  
+|Linux-RpiZero |P|	6,370,022|  
+|PC(linux) |P|	161,265,687|  
+|micropython-Rpi4 |M|	16,117,283|  
+|python3-Rpi4 |P|	11,359,199 |  
+  
 
 M/C/Pは、pythonの種類を表し、  
 M:MicroPython、   
