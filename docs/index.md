@@ -1,39 +1,53 @@
 ## Welcome to xshige's beta notes
 
-## 役に立ちそうなメモの置き場
+# 役に立ちそうなメモの置き場
+githubに移行中  
+以下のリンクをクリックして下さい：
 
-You can use the [editor on GitHub](https://github.com/xshigee/gitbook0/edit/main/docs/index.md) to maintain and preview the content for your website in Markdown files.
+## latest
+1. [platformioのために新しいユーザーを設定する](md/newuser_pio.md)
+1. [Wio_ExtFlashLoad(WriteSampleMenu.ino)スケッチをplatformioでビルドする](md/Wio_ExtFlashLoad_pio_md.md)
+1. [uncannyeyesスケッチをplatformioでビルドする](md/M5Stack_uncannyEyes_md.md)
+1. [LovyanGFX-Display ライブラリを使用したスケッチをplatformioでビルドする](md/LovyanGFX_sketch_pio.md)
+1. [Wio-Terminal/M5Core2のWiFiAnallyzer](md/WiFiAnalyzer_WIOT_M5C2_md.md)
+1. [Wio-TerminalでMQTTを動かす]
+1. [wio-terminalでGROVEを使う]
+1. [MAKER_PI_RP2040でI2Cを使う(Arduino編)]
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+## tools
+* [dfu-util最新版インストール ](md/dfu-util_latest_install_md.md)
+* [gcc-arm-none-eabi最新版インストール](md/gcc-arm-none-eabi_latest_install_md.md)
+* [st-flash最新版インストール](md/st-flash_latest_install_md.md)
 
-### Markdown
+# platformio
+* [platformioのために新しいユーザーを設定する](md/newuser_pio.md)
+* [arduinoフレームワーク用platformio.ini集](md/platformio_iini_arduino_md.md)
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+# benchmark/install
+* [ノートPCのSSDベンチマーク結果](md/SSD_benchmark.md)
+* [MicroPython CircuitPython Performace Test (v2)](md/mp_cpy_Performance_Test_md.md)
+* [ThinkPad X1 Carbon(20HQ) linux install](md/X11Carbon_linux_install.md)
 
-```markdown
-Syntax highlighted code block
+# library
+* [LovyanGFX-Display ライブラリを使用したスケッチをplatformioでビルドする](md/LovyanGFX_sketch_pio.md)
 
-# Header 1
-## Header 2
-### Header 3
+# Wio-Terminal
+* [nixieクロックにＮＴＰクライアントの機能を追加する(V2)](md/pio_Wio-Terminal_nixie-NTP_V2_md.md)
+* [Wio_ExtFlashLoad(WriteSampleMenu.ino)スケッチをplatformioでビルドする](md/Wio_ExtFlashLoad_pio_md.md)
 
-- Bulleted
-- List
+# M5Stack
+* [M5CameraでCameraWebServerを動かす](md/M5CAMERA_CameraWebServer_md.md)
+* [platformioベースのArduinoフレームワークを使って[M5Stack Core2 IoT開発キット]を動かす](md/M5Core2_Arduino_install_md.md)
+* [uncannyeyesスケッチをplatformioでビルドする](md/M5Stack_uncannyEyes_md.md)
 
-1. Numbered
-2. List
+# Wio-Terminal/M5Core2
+* [Wio-Terminal/M5Core2のWiFiAnallyzer](md/WiFiAnalyzer_WIOT_M5C2_md.md)
 
-**Bold** and _Italic_ and `Code` text
+# STM32 Nucleo
+* [MicroPython(F767ZI ) Network Samples](md/MP_F767ZI_network_samples_md.md)
 
-[Link](url) and ![Image](src)
-```
+# unclassified
+* [Switching ADSL to Optical network memo](md/ADSL2opt_md.md)
 
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
 
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/xshigee/gitbook0/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+以上
