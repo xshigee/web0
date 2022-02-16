@@ -1,11 +1,13 @@
 ## Welcome to xshige's beta notes
 
 # 役に立ちそうなメモの置き場
+2022/2/16現在  
 
 githubに移行中:construction:  
 以下のリンクをクリックして下さい：
 
 # latest:rocket:
+1. [GitHubでblog(webサーバー)を実現する](md/github_desktop_blog.md)
 1. [platformioのために新しいユーザーを設定する](md/newuser_pio.md)
 1. [Wio_ExtFlashLoad(WriteSampleMenu.ino)スケッチをplatformioでビルドする](md/Wio_ExtFlashLoad_pio_md.md)
 1. [uncannyeyesスケッチをplatformioでビルドする](md/M5Stack_uncannyEyes_md.md)
@@ -14,8 +16,7 @@ githubに移行中:construction:
 1. [Wio-TerminalでMQTTを動かす](md/WIOT_MQTT.md)
 1. [wio-terminalでGROVEを使う](md/WIOT_TWO_GROVES.md)
 1. [MAKER_PI_RP2040でI2Cを使う(Arduino編)](md/MAKER_PI_RP2040_I2C_.md)
-1. [WebRadio for M5Core2](md/WebRadio_M5C2_md.md)
-1. [WebRadio for M5StickCPlus](md/WebRadio_M5SCP_md.md)
+
 
 # tools:wrench:
 * [dfu-util最新版インストール ](md/dfu-util_latest_install_md.md)
@@ -39,6 +40,8 @@ githubに移行中:construction:
 * [Wio_ExtFlashLoad(WriteSampleMenu.ino)スケッチをplatformioでビルドする](md/Wio_ExtFlashLoad_pio_md.md)
 
 # M5Stack
+* [WebRadio for M5Core2](md/WebRadio_M5C2_md.md)
+* [WebRadio for M5StickCPlus](md/WebRadio_M5SCP_md.md)
 * [M5CameraでCameraWebServerを動かす](md/M5CAMERA_CameraWebServer_md.md)
 * [platformioベースのArduinoフレームワークを使って[M5Stack Core2 IoT開発キット]を動かす](md/M5Core2_Arduino_install_md.md)
 * [uncannyeyesスケッチをplatformioでビルドする](md/M5Stack_uncannyEyes_md.md)
