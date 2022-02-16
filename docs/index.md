@@ -56,4 +56,8 @@ githubに移行中:construction:
 * [Switching ADSL to Optical network memo](md/ADSL2opt_md.md)
 
 
-以上
+以上  
+
+click to:  
+[xshige's beta notes archive](https://github.com/xshigee/beta_notes)
+
