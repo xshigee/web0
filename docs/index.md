@@ -3,8 +3,7 @@
 # 役に立ちそうなメモの置き場
 2022/2/16現在  
 
-githubに移行中:construction:  
-以下のリンクをクリックして下さい：
+以下のリンクをクリックして下さい：  
 
 # latest:rocket:
 1. [GitHubでblog(webサーバー)を実現する](md/github_desktop_blog.md)
