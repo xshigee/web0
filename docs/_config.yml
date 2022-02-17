@@ -1,5 +1,9 @@
 theme: jekyll-theme-leap-day
-markdown: GFM
+
+markdown: redcarpet
+redcarpet:
+  extensions: [tables,autolink,strikethrough]
+
 gems:
   - jekyll-mentions
   - jekyll-redirect-from
