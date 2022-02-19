@@ -3,9 +3,12 @@ plugins:
 - jekyll-remote-theme # add this line to the plugins list if you already have one
 #theme: jekyll-theme-leap-day
 
-markdown: redcarpet
-redcarpet:
-  extensions: [tables,autolink,strikethrough]
+#markdown: redcarpet
+#redcarpet:
+#  extensions: [tables,autolink,strikethrough]
+ 
+markdown: kramdown
+highlighter: rouge
 
 gems:
   - jekyll-mentions
@@ -14,5 +17,4 @@ gems:
   - jekyll-sitemap
 
 show_downloads: false
-
 
