@@ -150,7 +150,7 @@ wget https://raw.githubusercontent.com/kd8bxp/micro-Maqueen-Arduino-Library/mast
 ```
 
 動作：  
-・ボタンAを押すとプログラムが開始される。
+・ボタンAを押すとプログラムが開始される。  
 ・microbitのLEDマトリクスに距離が表示される。  
 ・シリアルを接続すると距離を出力する。  
   
@@ -295,4 +295,4 @@ bug?:
 以上    
 
 [Go to Toplevel](https://xshigee.github.io/web0/)  
-https://xshigee.github.io/web0/ 
+
