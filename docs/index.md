@@ -1,11 +1,12 @@
 ## Welcome to xshige's beta notes
 
 # 役に立ちそうなメモの置き場
-2022/2/16現在  
+2022/2/19現在  
 
 以下のリンクをクリックして下さい：  
 
 # latest:rocket:
+1. [Maqueen用スケッチをplatformioでビルドする](md/MaqueenArduino.md)  
 1. [GitHubでblog(webサーバー)を実現する](md/github_desktop_blog.md)
 1. [platformioのために新しいユーザーを設定する](md/newuser_pio.md)
 1. [Wio_ExtFlashLoad(WriteSampleMenu.ino)スケッチをplatformioでビルドする](md/Wio_ExtFlashLoad_pio_md.md)
@@ -14,8 +15,6 @@
 1. [Wio-Terminal/M5Core2のWiFiAnallyzer](md/WiFiAnalyzer_WIOT_M5C2_md.md)
 1. [Wio-TerminalでMQTTを動かす](md/WIOT_MQTT.md)
 1. [wio-terminalでGROVEを使う](md/WIOT_TWO_GROVES.md)
-1. [MAKER_PI_RP2040でI2Cを使う(Arduino編)](md/MAKER_PI_RP2040_I2C_.md)
-
 
 # tools:wrench:
 * [dfu-util最新版インストール ](md/dfu-util_latest_install_md.md)
@@ -33,6 +32,9 @@
 
 # library:tada:
 * [LovyanGFX-Display ライブラリを使用したスケッチをplatformioでビルドする](md/LovyanGFX_sketch_pio.md)
+
+# RP2040
+* [MAKER_PI_RP2040でI2Cを使う(Arduino編)](md/MAKER_PI_RP2040_I2C_.md)
 
 # Wio-Terminal
 * [nixieクロックにＮＴＰクライアントの機能を追加する(V2)](md/pio_Wio-Terminal_nixie-NTP_V2_md.md)
