@@ -6,9 +6,11 @@ plugins:
 #markdown: redcarpet
 #redcarpet:
 #  extensions: [tables,autolink,strikethrough]
- 
+
 markdown: kramdown
-highlighter: rouge
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
 
 gems:
   - jekyll-mentions
