@@ -1,7 +1,7 @@
 
 GFM test 
 
-2022/2/20  
+2022/2/20+  
 
 [GitHub Flavored Markdown Spec](https://github.github.com/gfm/)
 
@@ -50,12 +50,12 @@ this is the 2^(nd) time
 
 This is _underlined_ but this is still *italic*
 
-## highlight
+## highlight(NotWork)
 
 This is ==highlighted==  
 
 
-## Color Test  
+## Color Test(NotWork)  
 <span style="color:blue">some *blue* text</span>    
 `#ffce44`  
 `rgb(255,0,0)`  
