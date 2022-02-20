@@ -331,7 +331,7 @@ classDiagram
 ```
 
 UML sequence diagram
-```mermaind
+```mermaid
 sequenceDiagram
     autonumber
     Student->>Admin: Can I enrol this semester?
