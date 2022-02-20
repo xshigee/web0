@@ -374,7 +374,7 @@ John-->>Alice: Great!
 John->>Bob: How about you?
 Bob-->>John: Jolly good!
 ```
-
+simpleX
 <div class="mermaid> 
 sequenceDiagram
 Alice->>John: Hello John, how are you?
