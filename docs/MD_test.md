@@ -5,11 +5,11 @@ GFM test
 
 [GitHub Flavored Markdown Spec](https://github.github.com/gfm/)
 
- This is head1
- =============
+ This is head1  
+ =============  
 
- This is head 2
- --------------
+ This is head 2  
+ --------------  
  
 ## table (PHP-Markdown style)
  
@@ -28,7 +28,7 @@ Content Cell  | Content Cell
 
 ## autolink
 
-http://mukaer.com
+http://google.com
 
 ## strikethrough
 
@@ -52,14 +52,15 @@ This is _underlined_ but this is still *italic*
 
 ## highlight
 
-This is ==highlighted==
+This is ==highlighted==  
 
 
 ## Color Test  
+<span style="color:blue">some *blue* text</span>    
 `#ffce44`  
 `rgb(255,0,0)`  
 `rgba(0,255,0,0.4)`  
-`hsl(100, 10%, 10%)`
+`hsl(100, 10%, 10%)`  
 `hsla(100, 24%, 40%, 0.5)`  
 
 ---
@@ -155,7 +156,8 @@ ___
 Y(下にスペースが必要)
 
 ---
-Z
+Z(下にスペースが必要)
+
 ***
 
 
@@ -209,7 +211,7 @@ https://www.google.co.jp/
 ## GFM:pre記法(シンタックスハイライト)
 チルダ、もしくはバッククォート3つの後ろに対象シンタックスの言語名を記述します。
 
- ~~~ruby  
+~~~ruby  
 　class Hoge  
 　  def hoge  
 　    print 'hoge'  
