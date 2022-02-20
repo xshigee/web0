@@ -182,7 +182,7 @@ Markdownの文書の途中に長いリンクを記述したくない場合は、
 
 ## GFM:リンクテキスト簡易記法
 
-https://www.google.co.jp/
+https://www.google.co.jp/  
 
 
 ## GFM:取り消し線
@@ -233,14 +233,42 @@ GitHubのMarkdownを利用すると、見出し記法を利用した際に
 そのアンカーを利用したページ内リンクを簡単に作成できます。  
 
 ## menu
-* [to header1](#header1)
-* [to header2](#header2)
+* [to header1](#header1)  
+* [to header2](#header2)  
 
-<!-- some long code -->
+<!-- some long code -->  
 
-[return to menu](#menu)
+[return to menu](#menu)  
 ### header1
 ### header2
+
+----   
+
+## emoji test
+==== Emojis ====  
+:bug: バグ修正  
+:+1: 機能改善  
+:sparkles: 部分的な機能追加  
+:tada: 盛大に祝うべき大きな機能追加  
+:recycle: リファクタリング  
+:shower: 不要な機能・使われなくなった機能の削除  
+:green_heart: テストやCIの修正・改善  
+:shirt: Lintエラーの修正やコードスタイルの修正  
+:rocket: パフォーマンス改善  
+:up: 依存パッケージなどのアップデート  
+:lock: 新機能の公開範囲の制限  
+:cop: セキュリティ関連の改善  
+:books: ドキュメント  
+:art: デザインUI/UX  
+:horse: パフォーマンス  
+:wrench: ツール  
+:rotating_light: テスト  
+:hankey: 非推奨追加  
+:wastebasket: 削除  
+:construction: WIP  
+:truck: ファイルの移動  
+:bookmark: バージョンタグ  
+  
 
 以上
 
