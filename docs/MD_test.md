@@ -269,6 +269,111 @@ GitHubのMarkdownを利用すると、見出し記法を利用した際に
 :truck: ファイルの移動  
 :bookmark: バージョンタグ  
   
+---
+
+## Mermaid Test
+
+[Use Mermaid syntax to create diagrams](https://www.diagrams.net/blog/mermaid-diagrams)
+
+flowchart
+```mermaid
+graph TD
+   A(Coffee machine <br>not working) --> B{Machine has power?}
+   B -->|No| H(Plug in and turn on)
+   B -->|Yes| C{Out of beans or water?} -->|Yes| G(Refill beans and water)
+   C -->|No| D{Filter warning?} -->|Yes| I(Replace or clean filter)
+   D -->|No| F(Send for repair)
+```
+
+Gantt chart
+```mermaid
+gantt
+ title Example Gantt diagram
+    dateFormat  YYYY-MM-DD
+    section Team 1
+    Research & requirements :done, a1, 2020-03-08, 2020-04-10
+    Review & documentation : after a1, 20d
+    section Team 2
+    Implementation      :crit, active, 2020-03-25  , 20d
+    Testing      :crit, 20d
+```
+
+
+UML  class diagram
+```mermaid
+classDiagram
+   Person <|-- Student
+   Person <|-- Professor
+   Person : +String name
+   Person : +String phoneNumber
+   Person : +String emailAddress
+   Person: +purchaseParkingPass()
+   Address "1" <-- "0..1" Person:lives at
+   class Student{
+      +int studentNumber
+      +int averageMark
+      +isEligibleToEnrol()
+      +getSeminarsTaken()
+    }
+    class Professor{
+      +int salary
+    }
+    class Address{
+      +String street
+      +String city
+      +String state
+      +int postalCode
+      +String country
+      -validate()
+      +outputAsLabel()  
+    }			
+
+```
+
+UML sequence diagram
+```mermaind
+sequenceDiagram
+    autonumber
+    Student->>Admin: Can I enrol this semester?
+    loop enrolmentCheck
+        Admin->>Admin: Check previous results
+    end
+    Note right of Admin: Exam results may <br> be delayed
+    Admin-->>Student: Enrolment success
+    Admin->>Professor: Assign student to tutor
+    Professor-->>Admin: Student is assigned
+```
+
+Pie chart
+```mermaid
+pie title Commits to mxgraph2 on GitHub
+	"Sunday" : 4
+	"Monday" : 5
+	"Tuesday" : 7
+  "Wednesday" : 3
+```
+
+simple0
+```mermaid
+graph TD
+A[Hard] -->|Text| B(Round)
+B --> C{Decision}
+C -->|One| D[Result 1]
+C -->|Two| E[Result 2]
+````
+
+simple1
+```mermaid
+sequenceDiagram
+Alice->>John: Hello John, how are you?
+loop Healthcheck
+    John->>John: Fight against hypochondria
+end
+Note right of John: Rational thoughts!
+John-->>Alice: Great!
+John->>Bob: How about you?
+Bob-->>John: Jolly good!
+```
 
 以上
 
