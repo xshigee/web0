@@ -60,5 +60,5 @@
 以上  
 
 click to:  
-[xshige's beta notes archive](https://github.com/xshigee/beta_notes)
-
+[xshige's beta notes archive](https://github.com/xshigee/beta_notes)  
+[-----------------------------------------](MD_test.md)
