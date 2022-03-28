@@ -1,7 +1,7 @@
     
 # EWI3000をEWI-USB(もどき)として使う(iPhone編)    
 
-2022/3/28      
+2022/3/28+      
 初版    
   
 ## 概要    
@@ -19,6 +19,9 @@
 MIDI IN/OUTをUSBに変換するアダプター(これが定番らしい)  
 * [CREATIVE Sound Blaster Play! 3 (Windows/Mac対応)USBオーディオインターフェース](https://jp.creative.com/p/sound-blaster/sound-blaster-play-3)  
 なくてもかまわない。その場合、iPhone本体から音がでる。音質重視なら、あったほうが良い。
+* [スイッチングＡＣアダプター１５Ｖ１．２Ａ　１００Ｖ～２４０Ｖ　ＧＦ１８－ＵＳ１５１２－Ｔ(GF18-US1512-T)](https://akizukidenshi.com/catalog/g/gM-02195/)  
+EWI3000m用代替ACアダプター  
+純正のACアダプターを紛失したので、その代わりのACアダプター。もちろん、純正があるなら不要。
 
 ## 必要なソフトウェア  
 * [KORG Gadget 2](https://www.korg.com/jp/products/software/korg_gadget/)
@@ -33,9 +36,7 @@ MIDI IN/OUTをUSBに変換するアダプター(これが定番らしい)
 1. UM-ONE-MK2のMIDI-OUT[CONNECT TO MIDI IN]をEWI3000mのMIDI-INに接続する。
 1. UM-ONE-MK2のMIDI-IN[CONNECT TO MIDI OUT]をEWI3000mのMIDI-OUTに接続する。 
    今回の場合、EWI3000mからiPhoneにMIDI信号が流れることがないので接続しなくてもかまわない。
-1. [スイッチングＡＣアダプター１５Ｖ１．２Ａ　１００Ｖ～２４０Ｖ　ＧＦ１８－ＵＳ１５１２－Ｔ(GF18-US1512-T)](https://akizukidenshi.com/catalog/g/gM-02195/)  
-EWI3000m用代替ACアダプター  
-純正のACアダプターを紛失したので、その代わりのACアダプター。もちろん、純正があるなら不要。
+1. EWI3000mとACアダプターを接続する。
 
 ## 起動                     
 1. EWI3000mのバックアップ電池は電池寿命が尽きていてバックアップできていないので、起動時は、工場出荷時の設定に初期化する必要がある。それには、「MIDI」と「UP」ボタンを同時押しで電源ONする。  
