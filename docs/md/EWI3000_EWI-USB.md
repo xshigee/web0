@@ -1,5 +1,8 @@
     
-# EWI3000をEWI-USB(もどき)として使う(iPhone編)    
+# EWI3000をEWI-USB(もどき)として使う(iPhone/iPad編)    
+
+2022/4/23  
+bluetooth-MIDI対応の記述を追加した。  
 
 2022/3/28+      
 初版    
@@ -9,7 +12,7 @@
 音源モジュールのEWI3000mはMIDI-IN/OUTの端子があるので、なにかしらの方法で外部音源を接続できれば、それを利用して音を出すことができる。
   
 ## 必要な機材
-* iPhone  
+* iPhone/iPad  
 ソフト音源として使用する
 * [Apple Lightning USB-3 カメラアダプタ (MK0W2AM/A)](https://www.apple.com/jp/shop/product/MK0W2AM/A/lightning-usb-3%E3%82%AB%E3%83%A1%E3%83%A9%E3%82%A2%E3%83%80%E3%83%97%E3%82%BF) 
 ライトニング-USB変換アダプターになる  
@@ -29,25 +32,48 @@ EWI3000m用代替ACアダプター
 末尾に「Le」が付く評価版もあるので、試しに使用する場合は、それを使用する。
 
 ## 接続
-1. 「Lightning USB-3 カメラアダプタ」をiPhoneに接続する。  
+1. 「Lightning USB-3 カメラアダプタ」をiPhone/iPadに接続する。  
 (ライトニング入力端子は電力供給用なのでライトニングACアダプターに接続する)  
 1. カメラアダプタのUSB端子とUSBハブを接続する。  
-1. USBハブとUM-ONE-MK2を接続する  
+1. USBハブとUM-ONE-MK2を接続する   
+1. UM-ONE-MK2のスライドスイッチをtab側にする。 
 1. UM-ONE-MK2のMIDI-OUT[CONNECT TO MIDI IN]をEWI3000mのMIDI-INに接続する。
+   今回の場合、iPhoneからEWI3000mにMIDI信号が流れることがないので接続しなくてもかまわない。
 1. UM-ONE-MK2のMIDI-IN[CONNECT TO MIDI OUT]をEWI3000mのMIDI-OUTに接続する。 
-   今回の場合、EWI3000mからiPhoneにMIDI信号が流れることがないので接続しなくてもかまわない。
 1. EWI3000mとACアダプターを接続する。
 
 ## 起動                     
-1. EWI3000mのバックアップ電池は電池寿命が尽きていてバックアップできていないので、起動時は、工場出荷時の設定に初期化する必要がある。それには、「MIDI」と「UP」ボタンを同時押しで電源ONする。  
+1. EWI3000mのバックアップ電池は電池寿命が尽きていてバックアップできていないので、起動時は、工場出荷時の設定に初期化する必要がある。  
+それには、「MIDI」と「UP」ボタンを同時押しで電源ONする。  
 \# 音源としてではなく、MIDIコンバータとして使用するには、
 バックアップ電池が尽きていても使用できる。    
 \# いうまでもないが、音源として使用する場合はバックアップ電池を交換する必要がある。(交換は基板上の電池を交換することになる)    
-1. 以上で、とりあえず、EWI3000を吹くとiPhone(KORG Gadget 2)から音が出る。  
+1. 音源のEWI3000mのブレスコントール設定をVOLUMEにする。
+1. 以上でEWI3000を吹くとiPhone(KORG Gadget 2)から音が出る。  
 1. 吹奏感を調整するためにEWI3000mのBREATH、GLIDE、BENDのツマミを調整する。  
     1. 外側のツマミを目一杯右に回し、次にLEDランプが消える位置まで戻す。  
     1. 内側のツマミでセンサーの閾値を調整する。  
 
+
+## bluetooth_MIDI対応
+以下の手順でワイヤレスにiPhone/iPadとEWI30000m(音源)を
+接続できる。
+
+0. 以下のWIDI_Masterを購入する。
+[ttps://hookup.co.jp/products/cme/widi-master](https://hookup.co.jp/products/cme/widi-master)
+1. WIDI_Masterを音源のMIDI-IN/MIDI-OUTに接続する。
+MIDI-OUTから電源を供給する方式なので特に電源アダプタを用意する必要はない。
+1. 音源をオンにしてWIDI_Masterに電源を供給する。
+1. iPhone/IpadアプリのWIDI_Appをインストールして、(購入直後はファームウェアが古いので)bluetooth経由でファームウェアをアップデートする。
+アップデート開始時は、Updaterというデバイスが出現するので自動的にそのデバイスと接続してデバイスをアップデートする。
+アップデート後はリブートする必要がある。(電源をいれｎaosu )
+また、アップデートでbluetooth接続ができない場合はiPhoneのbluetooh設定でいったんWIDI_Masterのデバイスを削除すると良い。
+1. WIDI_Appでデバイス名は変更できるので複数のWIDI_Masterを使用している場合はデバイス名を変更したほうが良い。リブート後、変更は有効になる。
+1. 以上でWIDI_Masterが有効になる。
+
+その後、iPhone/iPadのbluetoothをオンにして、音源アプリで、bluetoothMIDIでWIDI_Masterを接続する。あとは、USBで接続したと同様に操作できる。
+
+WIDI_MasterのみでiPhone/iPadと接続できるので、USB接続よりもお勧めである。
 
 ## 参考情報
 
