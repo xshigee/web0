@@ -1,11 +1,13 @@
 ## Welcome to xshige's beta notes
 
 # 役に立ちそうなメモの置き場
-2022/3/28現在  
+2022/4/24現在  
 
 以下のリンクをクリックして下さい：  
 
-# latest:rocket:    
+# latest:rocket:  
+1. [EWI5000に外部音源(EWI3000m,Aria/Windows)を接続する](md/EWI5000_EWI-Aria.md)    
+1. [EWI5000ことはじめ](md/EWI5000_EWI-GetStarted.md) 
 1. [EWI3000をEWI-USB(もどき)として使う(Aria/Windows編)](md/EWI3000_EWI-Aria.md)   
 1. [EWI3000をEWI-USB(もどき)として使う(iPhone/iPad編)](md/EWI3000_EWI-USB.md)    
 1. [Maqueen用スケッチをplatformioでビルドする](md/MaqueenArduino.md)  

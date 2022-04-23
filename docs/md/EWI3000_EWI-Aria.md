@@ -114,7 +114,7 @@ tp-link UB500
 1. Tools/Preferenceを選択して以下を設定する：  
     * Input MIDI Device: loopMIDI port  
     これでWIDI_Masterで受信したMIDIデータがloopMIDI_portに流れ、そのportのMIDIデータをソフト音源Ariaが受信することになる。
-1. 以上でAriaとEWI3000がbluetooth-MIDEで接続された状態になる。
+1. 以上でAriaとEWI3000がbluetooth-MIDIで接続された状態になる。
 
 ## 参考情報
 
