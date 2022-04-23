@@ -5,8 +5,9 @@
 
 以下のリンクをクリックして下さい：  
 
-# latest:rocket:
-1. [EWI3000をEWI-USB(もどき)として使う(iPhone編)   ](md/EWI3000_EWI-USB.md)    
+# latest:rocket:    
+1. [EWI3000をEWI-USB(もどき)として使う(Aria/Windows編)](md/EWI3000_EWI-Aria.md)   
+1. [EWI3000をEWI-USB(もどき)として使う(iPhone/iPad編)](md/EWI3000_EWI-USB.md)    
 1. [Maqueen用スケッチをplatformioでビルドする](md/MaqueenArduino.md)  
 1. [GitHubでblog(webサーバー)を実現する](md/github_desktop_blog.md)
 1. [platformioのために新しいユーザーを設定する](md/newuser_pio.md)
