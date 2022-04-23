@@ -1,7 +1,7 @@
     
 # EWI3000をEWI-USB(もどき)として使う(Aria/Windows編)    
 
-2022/4/23      
+2022/4/23+      
 初版    
   
 ## 概要    
@@ -39,14 +39,14 @@ EWI3000m用代替ACアダプター
 PC側：
 1. ソフト音源Ariaを立ち上げる。
 1. Tools/Preferenceを選択して以下を設定する：
-    * Input MIDI Device: 3-UM-ONE
-    * Output MIDI Devices: 何も設定しない
+    * Input MIDI Device: 3-UM-ONE  
+    * Output MIDI Devices: 何も設定しない  
     (Aria自身が音源なので外部音源は不要)
-    * Adudio Device API: ASIO
+    * Adudio Device API: ASIO  
     (ASIO4ALLインストール済みの前提)
-    * Audio Device: ASIO4ALL
+    * Audio Device: ASIO4ALL  
      (ASIO4ALLインストール済みの前提)
-1. Tools/EWI Configuration
+1. Tools/EWI Configuration  
 EWI_USBの設定らしいので、今回の場合、なにもしない。
 1. 音色を選択する  
 [EWI-USB 導入ガイド](https://www.inmusicbrands.jp/support/data/EWI-USB_Setup_Guide.pdf)の「3. ARIA で音色を選択する」を参照のこと。
@@ -106,13 +106,13 @@ tp-link UB500
 1. (自動的に起動している)LoopMIDIで仮想MIDIポートを作成する。(以下、参照のこと)
 [Windowsで仮想MIDIドライバーを使用する方法解説 ](https://canplay-music.com/2019/12/14/loopmidi/)  
 1. MIDIberryを起動して入力と出力ポートを設定する。
-    * 入力：WIDI_Master
-    * 出力：loopMIDI port
+    * 入力：WIDI_Master  
+    * 出力：loopMIDI port  
 たぶん自動検出で設定されると思うが、そうでない場合は上のように設定する。
 注意：loopMIDIを使う場合はMIDIberryを起動する前に、loopMIDIを起動する必要あり。通常はloopMIDIのほうがPC起動時に先に立ち上がるので特に問題はない。
 1. ソフト音源Ariaを立ち上げる。
-1. Tools/Preferenceを選択して以下を設定する：
-    * Input MIDI Device: loopMIDI port
+1. Tools/Preferenceを選択して以下を設定する：  
+    * Input MIDI Device: loopMIDI port  
     これでWIDI_Masterで受信したMIDIデータがloopMIDI_portに流れ、そのportのMIDIデータをソフト音源Ariaが受信することになる。
 1. 以上でAriaとEWI3000がbluetooth-MIDEで接続された状態になる。
 
