@@ -1,7 +1,7 @@
     
 # EWI5000に外部音源(EWI3000m,Aria/Windows)を接続する    
 
-2022/4/24      
+2022/4/24+      
 初版    
   
 ## 概要    
@@ -110,6 +110,31 @@ PC内蔵のbluetoothでは動作が非常に不安定だったので、なるべ
         * Input MIDI Device: loopMIDI port
     これでWIDI_Masterで受信したMIDIデータがloopMIDI_portに流れ、そのportのMIDIデータをソフト音源Ariaが受信することになる。
     1. 以上でAriaとEWI5000がbluetooth-MIDIで接続された状態になる。
+
+
+##  WIDI_uhost
+EWI5000本体にWIDI_Masterを接続する代わりに、以下のWIDI_uhostをUSB経由でEWI5000に接続しても同様のことができるはずだが、実際にやってみる動作しなかった。
+
+[https://hookup.co.jp/products/cme/widi-uhost](https://hookup.co.jp/products/cme/widi-uhost)
+
+ここでは記録としてやったことを残す。
+
+1. 本体との接続接続
+    1. WIDI_uhostの電源供給用としてUSBのACアダプターとWIDI_uhostを接続する。(USB-Power側)
+電源スイッチがないので直ぐにuhostの電源がオンになる。
+    1. EWI5000本体とWIDI_uhostを「USB-A 2.0 to USB-C ケーブル」で接続する(USB-Host/Devide側)
+これは別売の「WIDI-USB-B OTG Cable Pack I」に含まれる。
+1. ファームウェア・アップデート
+    1. WIDI_Masterと同様にiPhone/iPadでファームウェアをアップデートする。
+WIDI_Masterと異なり２つのファームウェア(USB firmware, Bluetooth firmware)をアップデートすることになる。
+    1. WIDI_uhostをリブートする(uhostの電源をいったん切る)
+1. bluetooth接続
+WIDI_Masterと同様にPCと接続する。
+
+以上でbluetooth接続が確立するが、EWIを吹いてもMIDIデータが流れない。
+
+EWI5000のUSB-MIDIのファームウェアとuhostのファームウェアの相性の問題でMIDIデータが流れないようだ。
+
 
 ## 参考情報
 
