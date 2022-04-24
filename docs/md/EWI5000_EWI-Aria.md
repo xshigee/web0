@@ -120,12 +120,12 @@ EWI5000本体にWIDI_Masterを接続する代わりに、以下のWIDI_uhostをU
 ここでは記録としてやったことを残す。
 
 1. 本体との接続接続
-    1. WIDI_uhostの電源供給用としてUSBのACアダプターとWIDI_uhostを接続する。(USB-Power側)
+    1. WIDI_uhostの電源供給用としてUSBのACアダプターとWIDI_uhostを接続する。(USB-Power側)  
 電源スイッチがないので直ぐにuhostの電源がオンになる。
-    1. EWI5000本体とWIDI_uhostを「USB-A 2.0 to USB-C ケーブル」で接続する(USB-Host/Devide側)
+    1. EWI5000本体とWIDI_uhostを「USB-A 2.0 to USB-C ケーブル」で接続する(USB-Host/Device側)  
 これは別売の「WIDI-USB-B OTG Cable Pack I」に含まれる。
 1. ファームウェア・アップデート
-    1. WIDI_Masterと同様にiPhone/iPadでファームウェアをアップデートする。
+    1. WIDI_Masterと同様にiPhone/iPadでファームウェアをアップデートする。  
 WIDI_Masterと異なり２つのファームウェア(USB firmware, Bluetooth firmware)をアップデートすることになる。
     1. WIDI_uhostをリブートする(uhostの電源をいったん切る)
 1. bluetooth接続
