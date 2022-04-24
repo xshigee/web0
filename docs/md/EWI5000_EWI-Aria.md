@@ -20,7 +20,7 @@ EWI3000の音源であるEWI3000mのMIDI-INとEWI5000のMIDI-OUTをMIDIケーブ
 \# いうまでもないが、音源として使用する場合はバックアップ電池を交換する必要がある。(交換は基板上の電池を交換することになる)    
 
 ### 2. bluetooth-MIDI接続
-1. ２つのWIDI_Masterを用意する、
+1. ２つのWIDI_Masterを用意する。
 1. EWI3000mのMIDI-OUT/MIDI-INの両方にWIDI_Masterを接続する。(実際に必要なものはMIDI-INのみだが電源を供給するためにMIDI-OUTも接続する)
 1. EWI5000のMIDI-OUTにWIDI_Masterを接続する。
 
