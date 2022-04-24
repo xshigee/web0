@@ -1,7 +1,7 @@
     
 # EWI5000に外部音源(EWI3000m,Aria/Windows)を接続する    
 
-2022/4/24+      
+2022/4/24++      
 初版    
   
 ## 概要    
@@ -20,7 +20,7 @@ EWI3000の音源であるEWI3000mのMIDI-INとEWI5000のMIDI-OUTをMIDIケーブ
 \# いうまでもないが、音源として使用する場合はバックアップ電池を交換する必要がある。(交換は基板上の電池を交換することになる)    
 
 ### 2. bluetooth-MIDI接続
-1. ２つのWIDI_MAsterを用意する、
+1. ２つのWIDI_Masterを用意する、
 1. EWI3000mのMIDI-OUT/MIDI-INの両方にWIDI_Masterを接続する。(実際に必要なものはMIDI-INのみだが電源を供給するためにMIDI-OUTも接続する)
 1. EWI5000のMIDI-OUTにWIDI_Masterを接続する。
 
@@ -107,7 +107,7 @@ PC内蔵のbluetoothでは動作が非常に不安定だったので、なるべ
 注意：loopMIDIを使う場合はMIDIberryを起動する前に、loopMIDIを起動する必要あり。通常はloopMIDIのほうがPC起動時に先に立ち上がるので特に問題はない。
     1. ソフト音源Ariaを立ち上げる。
     1. Tools/Preferenceを選択して以下を設定する：
-        * Input MIDI Device: loopMIDI port
+        * Input MIDI Device: loopMIDI port    
     これでWIDI_Masterで受信したMIDIデータがloopMIDI_portに流れ、そのportのMIDIデータをソフト音源Ariaが受信することになる。
     1. 以上でAriaとEWI5000がbluetooth-MIDIで接続された状態になる。
 
