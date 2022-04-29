@@ -15,11 +15,11 @@ EWI5000には、USBやMIDI-OUT端子があるので、これを使って外部�
 1. EWI5000とPCをUSB接続する。
 1. PCのEWI5000_Editorを起動する。
 1. 画面で「Controller/Breath」を選択して
-以下にように設定する：
-Breath(br): Low Resolution(Lr)
-Volume(vo): Low Resolution(Lr)
-Expression(EP): Low Resolution(Lr)
-1. EWI5000_Editorを終了する。
+以下にように設定する：  
+Breath(br): Low Resolution(Lr)  
+Volume(vo): Low Resolution(Lr)  
+Expression(EP): Low Resolution(Lr)  
+1. EWI5000_Editorを終了する。  
 1. 必要なければPCとEWI5000とのUSBケーブルを外す。  
 (Aria音源を有線接続で使用するときは、そのままとする)
 
