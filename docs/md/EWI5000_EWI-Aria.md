@@ -1,12 +1,29 @@
     
 # EWI5000に外部音源(EWI3000m,Aria/Windows)を接続する    
 
+2022/4/29  
+EWI5000のMIDI-OUT設定について追加した。  
+
 2022/4/24++      
 初版    
   
 ## 概要    
 EWI5000には、USBやMIDI-OUT端子があるので、これを使って外部音源を接続することができる。  
 以下に音源の接続方法について説明する。  
+
+## 0. EWI5000のMIDI-OUT設定
+1. EWI5000とPCをUSB接続する。
+1. PCのEWI5000_Editorを起動する。
+1. 画面で「Controller/Breath」を選択して
+以下にように設定する：
+Breath(br): Low Resolution(Lr)
+Volume(vo): Low Resolution(Lr)
+Expression(EP): Low Resolution(Lr)
+1. EWI5000_Editorを終了する。
+1. 必要なければPCとEWI5000とのUSBケーブルを外す。  
+(Aria音源を有線接続で使用するときは、そのままとする)
+
+以降、この設定で外部音源と接続する。
 
 ## EWI3000mの場合
 ### 1.有線接続(MIDIケーブル)
