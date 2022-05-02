@@ -1,11 +1,13 @@
 ## Welcome to xshige's beta notes
 
 # 役に立ちそうなメモの置き場
-2022/4/29現在  
+2022/5/2現在  
 
 以下のリンクをクリックして下さい：  
 
 # latest:rocket:  
+1. [Aerophone(AE-20)に外部音源(VL70m)を接続する](md/AE-20_VL70m.md)    
+1. [EWI5000に外部音源(VL70m)を接続する](md/EWI5000_VL70m.md)    
 1. [Aerophone(AE-20)に外部音源(EWI3000m,Aria/Windows)を接続する](md/AE-20-ExternalAria.md)    
 1. [EWI5000に外部音源(EWI3000m,Aria/Windows)を接続する](md/EWI5000_EWI-Aria.md)    
 1. [EWI5000ことはじめ](md/EWI5000_EWI-GetStarted.md) 
