@@ -7,12 +7,12 @@
 ## 概要    
 WIDI_uhostは、USB-MIDIをbluetooth-MIDIに変換するアダプターであるがAE-20に使ってみる。  
 既にAE-20はbluetooth-MIDIを内蔵しているので、これを使う意味があるのか疑問に持つかもしれないが、
-接続性の相性でWIDI_uhostを使用したほうが接続性が良いことがある。　　
+接続性の相性でWIDI_uhostを使用したほうが接続性が良いことがある。  
 
 具体例として、EWI3000mとAE-20をbluetooth-MIDIで接続した場合、
-AE-20内蔵のbluetooth-MIDIの場合、EWI3000mからAE-20へMIDIを流すことができなかった。　　
-(つまり、AE-20を外部音源にしてEWI3000でウィンド・コントローラとして制御することができなかった)　　
-これが、WIDI_uhostを使用すると、解消した。　　
+AE-20内蔵のbluetooth-MIDIの場合、EWI3000mからAE-20へMIDIを流すことができなかった。  
+(つまり、AE-20を外部音源にしてEWI3000でウィンド・コントローラとして制御することができなかった)  
+これが、WIDI_uhostを使用すると、解消した。  
 
 ### AE-20とWIDI_uhostの接続
 1. AE-20と(WIDI_uhostの)USB_Host/DeviceをUSBで接続する。   
