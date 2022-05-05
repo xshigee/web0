@@ -14,13 +14,15 @@ Aerophone(AE-20)には、MIDIコネクタがないが、USBとbluetoothがある
 ## EWI3000mの場合
 
 ### 1. bluetooth-MIDI接続
-1. 1つのWIDI_Masterを用意する。
+1. 1つのWIDI_Masterを用意する。  
 [WIDI_Master](https://hookup.co.jp/products/cme/widi-master) 
-1. EWI3000mのMIDI-OUT/MIDI-INの両方にWIDI_Masterを接続する。(実際に必要なものはMIDI-INのみだが電源を供給するためにMIDI-OUTも接続する)
+1. EWI3000mのMIDI-OUT/MIDI-INの両方にWIDI_Masterを接続する。  
+(実際に必要なものはMIDI-INのみだが電源を供給するためにMIDI-OUTも接続する)
 
 以下の手順でAE-20とEWI3000mを立ち上げる：
-1. 周りにあるスマフォやPCのbuletoothをオフする。
-特に「Aerophone Pro Editor」をインストールしてあるiPhone/iPadは、bluetoothをオフにする。理由として、bluetoothの意図しない接続を回避するためにそうする。
+1. 周りにあるスマフォやPCのbuletoothをオフする。  
+特に「Aerophone Pro Editor」をインストールしてあるiPhone/iPadは、bluetoothをオフにする。  
+理由として、bluetoothの意図しない接続を回避するためにそうする。
 1. AE-20の電源を入れる。
 1. EWI3000mの電源を入れる。  
 EWI3000mのバックアップ電池は電池寿命が尽きていてバックアップできていないので、起動時は、工場出荷時の設定に初期化する必要がある。  
@@ -28,7 +30,7 @@ EWI3000mのバックアップ電池は電池寿命が尽きていてバックア
 \# 音源としてではなく、MIDIコンバータとして使用するには、
 バックアップ電池が尽きていても使用できる。    
 \# いうまでもないが、音源として使用する場合はバックアップ電池を交換する必要がある。(交換は基板上の電池を交換することになる) 
-1. 以上でAE-20側とEWI3000m側のWIDI_Masterが自動的にペアリングしてbluetoothで接続する。
+1. 以上でAE-20側とEWI3000m側のWIDI_Masterが自動的にペアリングしてbluetoothで接続する。  
 (WIDI_MasterのLEDは、シアン色に点灯する。MIDIデータが流れると点滅する)
 1. EWI3000m(音源)のMIDI受信設定はOMNIにする。
 LCD表示：「M:RX CHANNL OMNI」
@@ -47,13 +49,14 @@ MIDI-OUTから電源を供給する方式なので特に電源アダプタを用
    1. iPhone/IpadアプリのWIDI_Appをインストールして、(購入直後はファームウェアが古いので)bluetooth経由でファームウェアをアップデートする。  
 アップデート開始時は、Updaterというデバイスが出現するので自動的にそのデバイスと接続してデバイスをアップデートする。  
 アップデート後はリブートする必要がある。(電源を入れ直す)  
-また、アップデートでbluetooth接続ができない場合はiPhoneのbluetooh設定でいったんWIDI_Masterのデバイスを削除すると良い。
+また、アップデートでbluetooth接続ができない場合はiPhoneのbluetooh設定でいったんWIDI_Masterのデバイスを削除すると良い。  
     1. WIDI_Appでデバイス名は変更できるので複数のWIDI_Masterを使用している場合はデバイス名を変更したほうが良い。リブート後、変更は有効になる。  
     1. 以上でWIDI_Masterが有効になる。
 
 ちょっとした実験：  
 以上の設定で、MIDIの流れる方向として、EWI3000からAE-20にもMIDIデータを流すことができるので、EWI3000を吹くと、AE-20の内蔵音源を鳴らすことができると思って実験してみたがAE-02のほうで音は鳴らなかった。  
-EWI3000を吹くとWIDI_MasterのLEDが点滅しているのでMIDIデータは流れていると思われる。
+EWI3000を吹くとWIDI_MasterのLEDが点滅しているのでMIDIデータは流れていると思われる。  
+(MIDIの送信チャンネルが異なる？？？)  
 
 [Aerophone AE-20: 外部MIDI機器やDAWからAE-20の音源を鳴らす方法を教えてください。](https://rolandus.zendesk.com/hc/ja/articles/5009556342939-Aerophone-AE-20-%E5%A4%96%E9%83%A8MIDI%E6%A9%9F%E5%99%A8%E3%82%84DAW%E3%81%8B%E3%82%89AE-20%E3%81%AE%E9%9F%B3%E6%BA%90%E3%82%92%E9%B3%B4%E3%82%89%E3%81%99%E6%96%B9%E6%B3%95%E3%82%92%E6%95%99%E3%81%88%E3%81%A6%E3%81%8F%E3%81%A0%E3%81%95%E3%81%84-)
 
@@ -66,16 +69,16 @@ EWI3000を吹くとWIDI_MasterのLEDが点滅しているのでMIDIデータは�
 [EWI USB](http://ewi.akai-pro.jp/ewiusb/)  
 
 ### 0. AE-20のMIDI-OUT設定
-1. bluetooth接続の「Aerophone Pro Editor」(iPhone/iPad)を起動して、EDITOR/MIDI_OUTに入り、Breathに(1と2は定義済なので)3として\[CC07:VOLUME]を追加する。
-\# 1は\[CC11:EXPRESSION]、2は\[CC02:BREATH]として定義済みである。
-1. 設定を保存するために\[WRITE]を押す。
-「Scene Write」の画面になるので以下を入力して\[OK]を押す。
-Scene Group: User 01　(任意)
-Scene: u01-01.ExternalAria　(任意)
-Scene Name: ExternalAria　(任意)
-1. 以上で、設定が保存できた。
+1. bluetooth接続の「Aerophone Pro Editor」(iPhone/iPad)を起動して、EDITOR/MIDI_OUTに入り、Breathに(1と2は定義済なので)3として\[CC07:VOLUME]を追加する。  
+\# 1は\[CC11:EXPRESSION]、2は\[CC02:BREATH]として定義済みである。  
+1. 設定を保存するために\[WRITE]を押す。  
+「Scene Write」の画面になるので以下を入力して\[OK]を押す。  
+Scene Group: User 01　(任意)  
+Scene: u01-01.ExternalAria　(任意)  
+Scene Name: ExternalAria　(任意)  
+1. 以上で、設定が保存できた。  
 
-この設定をシーンとして呼び出すときは、AE-20本体で
+この設定をシーンとして呼び出すときは、AE-20本体で  
 1. \[SCENE](▼)を押しながら[SCENE CATEGORY]つまみを回しユーザー・バンクを選ぶ。
 1. \[SCENE](▲/▼)で、ユーザー・シーンを選ぶ。
 今回の場合、「ExternalAria」を選ぶ。
@@ -125,8 +128,8 @@ PC内蔵のbluetoothでは動作が非常に不安定だったので、なるべ
     1. PCのbluetooth設定でbluetoothをオンにする。
     1. [Bluetoothまたはその他のデバイスを追加する]を選択する。
     1. [Bluuetooth]を選択してデバイスを検索する。
-    1. WIDI_Masterが見つかったら接続する。
-    1. (自動的に起動している)LoopMIDIで仮想MIDIポートを作成する。(以下、参照のこと)
+    1. WIDI_Masterが見つかったら接続する。  
+    1. (自動的に起動している)LoopMIDIで仮想MIDIポートを作成する。(以下、参照のこと)  
 [Windowsで仮想MIDIドライバーを使用する方法解説 ](https://canplay-music.com/2019/12/14/loopmidi/)  
     1. MIDIberryを起動して入力と出力ポートを設定する。
         * 入力：AE-20(bluetooth MIDI IN)
@@ -151,16 +154,16 @@ PC内蔵のbluetoothでは動作が非常に不安定だったので、なるべ
 以下が接続手順になる：
 
 1. 「Magellan 2」をiPhone/iPadにインストールする。
-1. AE-20の電源を入れる。
-(AE-20本体で既に設定保存してあるユーザー・シーン「ExternalAria」を選択する)
+1. AE-20の電源を入れる。  
+(AE-20本体で既に設定保存してあるユーザー・シーン「ExternalAria」を選択する)  
 1. iPhone/iPadのbluetoothを有効にする。
-1. AE-20とiPhone/Ipadをbluetooth-MIDI接続する。
+1. AE-20とiPhone/Ipadをbluetooth-MIDI接続する。  
 具体的には、「Korge Gadget2」の設定「Bluetooth MIDI/Settings」でBluetooth_MIDI_DeviceリストからAE-20を選択する。
 1. 任意であるが、音色として「The ONE/ The Lead」を選択する。
 1. アプリ画面の上のほうにある\[PREFS](Preference)を押す。
-1. 設定画面に入るので以下に設定する：
-    MIDI Note in Channel: OM
-    \# OMはOMNIの意味
+1. 設定画面に入るので以下に設定する：  
+    MIDI Note in Channel: OM  
+    \# OMはOMNIの意味  
 1. この時点で、AE-20を吹くとiPhone/iPadから音が出る。
 1. 他の音源に切り替えるときは、そのままだと複数の音源から音が出ることなるので、不要であれば、無効にしたい音源のMIDI入力をオフにするか、muteがあれば、それを有効にする。
 
@@ -170,7 +173,7 @@ PC内蔵のbluetoothでは動作が非常に不安定だったので、なるべ
 
 1. 以下を準備する：
     * [ボタン電池基板取付用ホルダー　ＣＲ２０３２用（小型タイプ）](https://akizukidenshi.com/catalog/g/gP-00706/)
-    * ボタン電池　CR2032 1個
+    * ボタン電池　CR2032 1個  
 [リチウム電池　ＣＲ２０３２　ゴールデンパワー製　（５個入）](https://akizukidenshi.com/catalog/g/gB-05694/)  
 1. 以下のリンクを参考にして基板上の半田付けされている電池を外し電池ホルダに交換してCR2032を取り付ける。
     * [EWI3000m 電池交換 ＜その２＞](https://blog.goo.ne.jp/tmisoami/d/20090222)  
