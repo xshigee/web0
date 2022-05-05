@@ -1,11 +1,12 @@
 ## Welcome to xshige's beta notes
 
 # 役に立ちそうなメモの置き場
-2022/5/3現在  
+2022/5/5現在  
 
 以下のリンクをクリックして下さい：  
 
 # latest:rocket:  
+1. [EWI5000でAerophone(AE-20)を外部音源として使用する](md/EWI5000_ExtAE-20.md)    
 1. [Aerophone(AE-20)にWIDI_uhostを使用する](md/AE-20_WIDI_uhost.md)    
 1. [Aerophone(AE-20)に外部音源(VL70m)を接続する](md/AE-20_VL70m.md)    
 1. [EWI5000に外部音源(VL70m)を接続する](md/EWI5000_VL70m.md)    
