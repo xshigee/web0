@@ -26,7 +26,7 @@ iPadに以下のリンクを参考に音源をインストールする：
 [SWAM Violin [iPad]](https://applion.jp/ipad/app/1458132239/)  
 [Audio ModelingのiPadアプリ一覧](https://applion.jp/ipad/developer/1326331126/)  
 
-以下に、EWI5000向けの設定例が載っている：
+以下に、EWI5000向けの設定例が載っている：  
 [EWI5000とSWAM Saxophonesで「傷だらけの天使のテーマ」](https://ameblo.jp/yoshmeme/entry-12603686223.html)  
 
 ### 2. bluetooth-MIDI接続
@@ -53,8 +53,8 @@ MIDI-OUTから電源を供給する方式なので特に電源アダプタを用
     1. SWAM音源画面の最上行の最右端の「...」アイコンを押す。
     1. Setting/MIDI/Bluetooth_MIDIを選択する。
     1. bluetooth_MIDI_デバイス名が表示されるので
-接続したいデバイス名を選択する。　　
-今回の場合、WIDI_Masterを選択する。
+接続したいデバイス名を選択する。  
+今回の場合、WIDI_Masterを選択する。  
     1. 「Connected」が表示される。
     1. トップメニューに戻る。
     1. MIDIアイコンを押す。
@@ -68,7 +68,7 @@ MIDI-OUTから電源を供給する方式なので特に電源アダプタを用
     本格的に使うには、MAPPING_TABLEなどを変更して、さらに調整するほう良い。
     1. 終了する場合、INPUTSで表示されるデバイスを無効にする。
 そうしないと他の音源に切り替えた時も、この音源の音が出ることになる。
-または、以下にある方法でSWAM音源アプリ自身を終了させる。
+または、以下にある方法でSWAM音源アプリ自身を終了させる。  
 [iPad で App を終了する方法](https://support.apple.com/ja-jp/HT212063)  
 [iPhone や iPod touch で App を終了する方法](https://support.apple.com/ja-jp/HT201330)  
 
