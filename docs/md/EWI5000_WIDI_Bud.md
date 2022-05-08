@@ -1,5 +1,8 @@
     
-# EWI5000をWIDI_Bud経由で外部音源(Aria/Windows)と接続する  
+# EWI5000をWIDI_Bud経由で外部音源(Aria/Windows)と接続する   
+
+2022/5/8  
+WIDI_Masterの代わりにWIDI_uhostを使用する方法について追加した。  
 
 2022/5/7+     
 初版    
@@ -71,8 +74,22 @@ EWI_USBの設定らしいので、今回の場合、なにもしない。
 * EWI5000がPCとUSBケーブルで接続されたままになっている。  
 このときは、USB-MIDIのほうが優先的に選択されEWI本体のMIDI-OUTにデータが出力されないようだ。
 
+### WIDI_Masterの代わりにWIDI_uhostを使用する 
+WIDI_Masterの代わりにWIDI_uhostを使用することもできる。
+手順としては以下になる：  
+1. EWI5000からWIDI_Masterを取り外す。
+1. EWI5000と(WIDI_uhostの)USB_Host/DeviceをUSBで接続する。   
+(USB-Aオス_USB-Cのケーブル)
+1. (WIDI_uhostの)USB_PowerをUSB-CのACアダプターに接続する。 
+1. EWI5000の電源をオンにする。
+1. WIDI_Plusを起動して、接続先として「WIDI Uhost」を指定する。
+1. 音源Ariaなどを起動する。
+1. 以上でWIDI_uhostによるbluetooth-MIDI接続が有効が有効になる。
+
+
 ## AE-20に関する補足
 Aerophone(AE-20)も上の説明で「EWI5000(+WIDI_Master)」の部分をAE-20に読み替えた形で同様のことが可能である。
+
 
 ## 参考情報
 
