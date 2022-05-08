@@ -1,7 +1,7 @@
     
 # EWI5000でAerophone(AE-20)を外部音源として使用する    
 
-2022/5/5     
+2022/5/5+     
 初版    
   
 ## 概要    
@@ -46,14 +46,14 @@ Expression(EP): Low Resolution(Lr)
 ## 参考情報
 
 WIDI関連：  
-[Aerophone(AE-20)にWIDI_uhostを使用する](md/AE-20_WIDI_uhost.md)    
-[Aerophone(AE-20)に外部音源(VL70m)を接続する](md/AE-20_VL70m.md)    
-[EWI5000に外部音源(VL70m)を接続する](md/EWI5000_VL70m.md)    
-[Aerophone(AE-20)に外部音源(EWI3000m,Aria/Windows)を接続する](md/AE-20-ExternalAria.md)    
-[EWI5000に外部音源(EWI3000m,Aria/Windows)を接続する](md/EWI5000_EWI-Aria.md)    
-[EWI5000ことはじめ](md/EWI5000_EWI-GetStarted.md) 
-[EWI3000をEWI-USB(もどき)として使う(Aria/Windows編)](md/EWI3000_EWI-Aria.md)   
-[EWI3000をEWI-USB(もどき)として使う(iPhone/iPad編)](md/EWI3000_EWI-USB.md)   
+[Aerophone(AE-20)にWIDI_uhostを使用する](AE-20_WIDI_uhost.md)    
+[Aerophone(AE-20)に外部音源(VL70m)を接続する](AE-20_VL70m.md)    
+[EWI5000に外部音源(VL70m)を接続する](EWI5000_VL70m.md)    
+[Aerophone(AE-20)に外部音源(EWI3000m,Aria/Windows)を接続する](AE-20-ExternalAria.md)    
+[EWI5000に外部音源(EWI3000m,Aria/Windows)を接続する](EWI5000_EWI-Aria.md)    
+[EWI5000ことはじめ](EWI5000_EWI-GetStarted.md) 
+[EWI3000をEWI-USB(もどき)として使う(Aria/Windows編)](EWI3000_EWI-Aria.md)   
+[EWI3000をEWI-USB(もどき)として使う(iPhone/iPad編)](EWI3000_EWI-USB.md)   
 
 MIDI関連：  
 [現時点、最強のBluetooth MIDIかも!?　各種BLE-MIDI機器と自動でペアリングしてくれるWIDI Masterがスゴイ！](https://www.dtmstation.com/archives/32976.html)  
