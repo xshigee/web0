@@ -1,5 +1,8 @@
     
 # EWI5000ことはじめ    
+          
+2022/5/8  
+運指(EWI)を追加した。  
 
 2022/4/23++      
 初版    
@@ -64,6 +67,11 @@ mmは月を表す
 以下によると(18年2月ロット)以前はバッテリーの形状が異なるらしい。
 
 [パーツアイテム EWI5000用 バッテリー仕様変更のお知らせ](http://ewi.akai-pro.jp/ewi5000/data/battery_spec_change.php)  
+
+## 参考情報                                                          
+[運指(EWI)](https://w.atwiki.jp/windsynth/pages/18.html)  
+[EWIをPCで楽しむ](http://ewi.akai-pro.jp/ewi-with-pc/)  
+
 
 以上
 
