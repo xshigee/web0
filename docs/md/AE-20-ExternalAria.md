@@ -1,6 +1,9 @@
     
 # Aerophone(AE-20)に外部音源(EWI3000m,Aria/Windows)を接続する    
 
+2022/5/9  
+AE-20のMIDI-OUT設定を改版した。  
+
 2022/5/5+  
 EWI3000mのバッテリ交換を追加した。  
 
@@ -73,8 +76,13 @@ EWI3000を吹くとWIDI_MasterのLEDが点滅しているのでMIDIデータは�
 [EWI USB](http://ewi.akai-pro.jp/ewiusb/)  
 
 ### 0. AE-20のMIDI-OUT設定
-1. bluetooth接続の「Aerophone Pro Editor」(iPhone/iPad)を起動して、EDITOR/MIDI_OUTに入り、Breathに(1と2は定義済なので)3として\[CC07:VOLUME]を追加する。  
-\# 1は\[CC11:EXPRESSION]、2は\[CC02:BREATH]として定義済みである。  
+1. bluetooth接続の「Aerophone Pro Editor」(iPhone/iPad)を起動して、EDITOR/MIDI_OUTに入り、Breathに(1と2は定義済なので)3として\[CC07:VOLUME]、4として\[CC26]を追加する。　　
+これでBreathで以下がMIDIで送信されることになる。
+    1. \[CC11:EXPRESSION]
+    1. \[CC02:BREATH]
+    1. \[CC07:VOLUME]
+    1. \[CC26]
+\# \[CC26] は、Ariaの音色名の中で「TH」が付いているものが、CC26で制御されているので定義として追加する。
 1. 設定を保存するために\[WRITE]を押す。  
 「Scene Write」の画面になるので以下を入力して\[OK]を押す。  
 Scene Group: User 01　(任意)  

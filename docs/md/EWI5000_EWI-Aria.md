@@ -1,6 +1,9 @@
     
 # EWI5000に外部音源(EWI3000m,Aria/Windows)を接続する    
 
+2022/5/9  
+EWI5000のMIDI-OUT設定を改版した。  
+
 2022/5/5  
 EWI3000mのバッテリ交換を追加した。  
 
@@ -19,9 +22,12 @@ EWI5000には、USBやMIDI-OUT端子があるので、これを使って外部�
 1. PCのEWI5000_Editorを起動する。
 1. 画面で「Controller/Breath」を選択して
 以下にように設定する：  
-Breath(br): Low Resolution(Lr)  
-Volume(vo): Low Resolution(Lr)  
-Expression(EP): Low Resolution(Lr)  
+    * Breath(br): Low Resolution(Lr)  
+    * Volume(vo): Low Resolution(Lr)  
+    * Expression(EP): Low Resolution(Lr)  
+    * CC Send: 26 (enable)
+\# \[CC26] は、Ariaの音色名の中で「TH」が付いているものが、
+CC26で制御されているので設定として追加する。
 1. EWI5000_Editorを終了する。  
 1. 必要なければPCとEWI5000とのUSBケーブルを外す。  
 (Aria音源を有線接続で使用するときは、そのままとする)
