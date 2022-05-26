@@ -1,11 +1,13 @@
 ## Welcome to xshige's beta notes
 
 # 役に立ちそうなメモの置き場
-2022/5/7現在  
+2022/5/27現在  
 
 以下のリンクをクリックして下さい：  
 
 # latest:rocket:  
+1. [EWI5000をソフト音源(IFW)と接続する](md/EWI5000_IFW.md)    
+1. [EWI5000をソフト音源(Synth1)と接続する](md/EWI5000_Synth1.md)    
 1. [EWI5000をWIDI_Bud経由で外部音源(Aria/Windows)と接続する](md/EWI5000_WIDI_Bud.md)    
 1. [EWI5000にSWAM音源(@iPad)を接続する](md/EWI5000_SWAM.md)    
 1. [EWI5000でAerophone(AE-20)を外部音源として使用する](md/EWI5000_ExtAE-20.md)    
