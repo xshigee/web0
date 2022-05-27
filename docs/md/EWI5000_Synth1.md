@@ -69,8 +69,8 @@ https://www.hermannseib.com/programs/vsthostx86.zip
 1. VST画面を表示する
     1. 右上の右から3番目アイコンをクリックする
     デフォルト音色として以下が表示される：  
-    1: Synth1 brastring  
-    00:soundbank00  
+    \[1: Synth1 brastring]  
+    \[00:soundbank00]  
 
 以上でEWIと音源が接続された状態になるので、EWIを吹くとPCから音が出る。  
 吹いても音がしない場合、\[Engine/Run]でVSTを(再)起動する。  
@@ -91,7 +91,7 @@ nobはパラメータの影響度合いを制御するために変更する
 ```
 
 ### Mute/Thru機能
-* 右側のスピーカ・アイコンでMuteのon/offができる
+* 右側のスピーカ・アイコンでMuteのon/offができる  
  (「X」はMuteの状態を表す)
 * 左側のスピーカ・アイコンでThruのon/offができる  
  (「-」はThruの状態を表す)
