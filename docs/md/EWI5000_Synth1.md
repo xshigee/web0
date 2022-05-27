@@ -108,7 +108,7 @@ Aerophone(AE-20)も上の説明で「EWI5000(+WIDI_Master)」の部分をAE-20�
 
 ## 参考情報
 
-Synth1関連：
+Synth1関連：  
 [Synth1](https://daichilab.sakura.ne.jp/softsynth/index.html)  
 [【無料シンセ】Synth1のインストール方法｜おすすめプリセットのダウンロード先も紹介](https://oyu-sound.com/synth1-install/)  
 [大人気フリー(VST)Synth1を使おう！ (調整方法)](https://www.dtm-navi.com/a12.html)  
