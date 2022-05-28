@@ -1,6 +1,10 @@
     
 # EWI5000をソフト音源(IFW)と接続する   
 
+2022/5/28
+vsthost.exeのフォルダを管理者権限がいらないフォルダに変更した。  
+(そうしないと設定などが保存できないようだ)  
+
 2022/5/27     
 初版    
   
@@ -41,7 +45,7 @@ Expression(EP): Low Resolution(Lr)
 https://www.hermannseib.com/programs/vsthostx86.zip  
 \# 64ビット版もあるが、互換性の考慮から上の32ビットを使用する  
 \# たとえば、IFW(VSTi)は、64ビット版では動作しない  
-1. 解凍したvsthostx86(フォルダ)を「C:\Program Files」にコピーする  
+1. 解凍したvsthostx86(フォルダ)を「user/Documents」にコピーする  
 1. 起動しやすくするために上のフォルダにあるvsthost.exeのショートカットを作り、ディスクトップに置く  
 
 ### 4.VST_HOSTを起動する
@@ -59,6 +63,7 @@ https://www.hermannseib.com/programs/vsthostx86.zip
     (USB接続の場合、\[EWI5000]を選ぶ)  
 1. WAVEデバイスを選択する
     \[Device/Wave]を選択して以下に設定する  
+    * Input Port: \* No Wave \*  
     * Output Port: ASIO: ASIOALL v2  
     * Sample Rtae: 44100  
     * Buffer: 64 samples (音が途切れるようなら大きくする)
@@ -74,7 +79,30 @@ https://www.hermannseib.com/programs/vsthostx86.zip
 * 右側のスピーカ・アイコンでMuteのon/offができる  
  (「X」はMuteの状態を表す)
 * 左側のスピーカ・アイコンでThruのon/offができる  
- (「-」はThruの状態を表す)
+ (「-」はThruの状態を表す)           
+ 
+### Program保存
+現状の状態を保存するには以下を実行する：
+1. \[Performance/Save As ...]を選択する
+1. 保存状態を書き込むスロットを選択する  
+(未使用は、[** Init **] になっている)
+1. スロット名(Name)を入力する
+1. \[OK]をクリックする
+
+VST_HOST起動時に保存した状態に戻す場合   、  
+画面の左上のスロットのプルダウンメニューから  
+以前に保存したスロットを選択する。  
+
+### Preset保存
+現状、使用しているVST設定を保存するには以下を実行する：
+1. [Plugin/Save Bank As...]を選択する
+1. ファイル保存画面になるので、任意のファイル名で指定する。  
+注意：ファイルタイプは、自動的に\.vstpresetか\.fxbが追加される。  
+\.vstpresetは、古いバージョンのVSTの設定ファイルタイプになるようだ。  
+
+VST_HOST起動時に保存したVST設定に戻す場合  
+\[Plugin/Load Bank...] を選択し、設定ファイルを選ぶ。
+
 
 ### トラブル・シュート
 上の手順で音が出ない場合、以下のことが考えられる：
@@ -94,6 +122,9 @@ IFW関連：
 VST_HOST関連：  
 [VSTHost](https://www.hermannseib.com/english/vsthost.htm)  
 [VSTHost取説](https://www.hermannseib.com/documents/VSTHost.pdf)  
+
+[How to Run Any VST Plugin as Standalone (Without a DAW)](https://guitargearfinder.com/guides/run-vst-plugins-standalone/)  
+[VSTHostの設定と操作](https://yppts.adam.ne.jp/music/isogi/vsthost.html)  
 
 WIDI関連：  
 [EWI5000をWIDI_Bud経由で外部音源(Aria/Windows)と接続する](https://xshigee.github.io/web0/md/EWI5000_WIDI_Bud.html)  
