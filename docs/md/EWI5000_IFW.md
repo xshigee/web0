@@ -69,6 +69,7 @@ https://www.hermannseib.com/programs/vsthostx86.zip
     * Buffer: 64 samples (音が途切れるようなら大きくする)
 1. VST画面を表示する
     1. 右上の右から3番目アイコンをクリックするとVST画面が表示される
+![IFW screen shot](./PNG/EWI5000_IFW_01.png) 
     1. 画面の中の[LOAD]を押して音色ファイル(たとえば、Sound/ysmm/IFW_JUDD.xml)を選択する 
     1. 音色「IFW_JUDD」がロードされる。  
 

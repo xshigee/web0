@@ -73,6 +73,7 @@ https://www.hermannseib.com/programs/vsthostx86.zip
     * Buffer: 64 samples (音が途切れるようなら大きくする)
 1. VST画面を表示する
     1. 右上の右から3番目アイコンをクリックする
+    ![IFW screen shot](./PNG/EWI5000_Synth1_01.png) 
     デフォルト音色として以下が表示される：  
     \[1: Synth1 brastring]  
     \[00:soundbank00]  
