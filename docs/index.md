@@ -1,11 +1,12 @@
 ## Welcome to xshige's beta notes
 
 # 役に立ちそうなメモの置き場
-2022/5/27現在  
+2022/6/26現在  
 
 以下のリンクをクリックして下さい：  
 
-# latest:rocket:  
+# latest:rocket:   
+1. [dotnetでC#を動かす](md/dotnet_C#.md)  
 1. [EWI5000をソフト音源(IFW)と接続する](md/EWI5000_IFW.md)    
 1. [EWI5000をソフト音源(Synth1)と接続する](md/EWI5000_Synth1.md)    
 1. [EWI5000をWIDI_Bud経由で外部音源(Aria/Windows)と接続する](md/EWI5000_WIDI_Bud.md)    
