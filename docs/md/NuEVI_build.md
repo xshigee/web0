@@ -129,7 +129,7 @@ ls .pio/build/teensy31/firmware.elf
 
 ## 参考情報
 
-NuEVI/NuRAD関連：
+NuEVI/NuRAD関連：  
 [NuRAD Wind Controler](https://kohske.com/pages-30/)  
 [NuEVI Electric Valve Instrument](https://kohske.com/pages-31/)  
 [NuRAD (EWI/Sax etc. fingering instrument)](https://berglundinstruments.mediarif.com/nurad-ewi-sax-etc-fingering-instrument/)   
