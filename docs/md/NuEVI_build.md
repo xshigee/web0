@@ -1,7 +1,7 @@
     
 NuEVI/NuRADのビルド   
 
-2022/8/17     
+2022/8/17+     
 初版    
   
 ## 概要
@@ -47,7 +47,7 @@ sudo usermod -a -G plugdev $USER
 
 ```
 
-cd Documents
+cd ~/Documents
 git clone https://github.com/Trasselfrisyr/NuEVI
 
 ```
@@ -65,7 +65,7 @@ cd NuEVI
 gedit platformio.ini
 
 # ソースをコピーする
-cp Documents/NuEVI/NuEVI .
+cp -r ~/Documents/NuEVI/NuEVI .
 mv NuEVI src
 
 ```
@@ -94,11 +94,12 @@ lib_deps =
     https://github.com/joshnishikawa/MIDIcontroller.git
 
 ```
-NuRAD向けにビルドする場合、「build_flags　=」の「-DNURAD」(;を外す)を有効にする。
+NuRAD向けにビルドする場合、「build_flags　=」の「-DNURAD」を有効(;を外す)にする。
 
 ## ビルド
 		
 ```		
+# platformioの環境に入る(source pio_env/bin/activate)
 
 # スケッチをビルドする
 # (最初の１回はライブラリ・ツールを自動的にダウンロードする)
@@ -116,7 +117,6 @@ ls .pio/build/teensy31/firmware.elf
   # ボードをUSB接続して書き込む
   pio run -t upload
 
-
   # build結果をクリアする
   pio run -t clean
 
@@ -128,6 +128,12 @@ ls .pio/build/teensy31/firmware.elf
 ```
 
 ## 参考情報
+
+NuEVI/NuRAD関連：
+[NuRAD Wind Controler](https://kohske.com/pages-30/)  
+[NuEVI Electric Valve Instrument](https://kohske.com/pages-31/)  
+[NuRAD (EWI/Sax etc. fingering instrument)](https://berglundinstruments.mediarif.com/nurad-ewi-sax-etc-fingering-instrument/)   
+[DIY EVI-Style Windcontroller](https://hackaday.io/project/25756-diy-evi-style-windcontroller)  
 
 platformio関連：  
 [arduinoフレームワーク用platformio.ini集](https://beta-notes.way-nifty.com/blog/2021/02/post-2b331d.html)  
