@@ -1,11 +1,12 @@
 ## Welcome to xshige's beta notes
 
 # 役に立ちそうなメモの置き場
-2022/8/19現在  
+2022/8/21現在  
 
 以下のリンクをクリックして下さい：  
 
-# latest:rocket:   
+# latest:rocket:
+1. [EWI5000にMC-101(外部音源)を接続する](md/EWI5000_MC-101.md)     
 1. [WSL2にUSBデバイスを接続する](md/WSL2_USB_DEV.md)  
 1. [NuEVI/NuRADのビルド](md/NuEVI_build.md)  
 1. [dotnetでC#を動かす](md/dotnet_Cs.md)  
