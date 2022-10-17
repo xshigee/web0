@@ -7,6 +7,9 @@
 
 # latest:rocket:  
 1. [re.corder fingering chart](md/re.corder_fingering.md)  
+1. [Pico-Clock-Greenを動かす](md/Pico-Clock-Green.md)  
+1. [EWI5000にMC-101(外部音源)を接続する](md/EWI5000_MC-101.md)  
+1. [WSL2にUSBデバイスを接続する](md/WSL2_USB_DEV.md)  
 1. [NuEVI/NuRADのビルド](md/NuEVI_build.md)  
 1. [dotnetでC#を動かす](md/dotnet_Cs.md)  
 1. [EWI5000をソフト音源(IFW)と接続する](md/EWI5000_IFW.md)    
