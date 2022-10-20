@@ -39,24 +39,24 @@ WIDI_Bud_ProのUSBの中には、USB firmware, Bluetooth Firmwareの２つが内
 
 ## Ariaの場合
 1. ソフト音源Ariaを立ち上げる。
-1. Tools/Preferenceを選択して以下を設定する：
-  Input MIDI Device: Widi Bud Pro(in)
-  Output MIDI Devices: 何も設定しない (Aria自身が音源なので外部音源は不要)
-  Adudio Device API: ASIO (ASIO4ALLインストール済みの前提)
-  Audio Device: ASIO4ALL (ASIO4ALLインストール済みの前提)
-1. Tools/EWI Configuration EWI_USBの設定らしいので、今回の場合、なにもしない。
-1. 音色を選択する
+1. Tools/Preferenceを選択して以下を設定する：  
+  Input MIDI Device: Widi Bud Pro(in)  
+  Output MIDI Devices: 何も設定しない (Aria自身が音源なので外部音源は不要)  
+  Adudio Device API: ASIO (ASIO4ALLインストール済みの前提)  
+  Audio Device: ASIO4ALL (ASIO4ALLインストール済みの前提)  
+1. Tools/EWI Configuration EWI_USBの設定らしいので、今回の場合、なにもしない。  
+1. 音色を選択する  
 このままだとre.corder/Elefueの出力のCC#がAriaに合っていないので、吹いても音がでない。  
 ・そこで、CC#2(breath control)のノブをマニュアルで大きくすると、音が出るようになる。  
 ・音色によっては、これだけでは音が出ないので、CC#7(volume)のノブを回して大きくする。
 ・音程があっていない場合は、Transposeを変更する。　
 
-## re.corderのMIDI設定
-Ariaのノブを回して音が出るようにするのは面倒なのでMIDI設定を変更する方法もある。　　
+## re.corderのMIDI設定  
+Ariaのノブを回して音が出るようにするのは面倒なのでMIDI設定を変更する方法もある。  
 1. breathのCCはデフォルトでは#11(expression)になっているので、それを#2(breath control)に変更する。  
 1. MIDI-CHは、1を前提にしているので、音が出ないようなら、ここを変更する。  
 
-なお、ElefueのbreathのCC#11固定になっているので変更できない。
+なお、ElefueのbreathのCC#11固定になっているので変更できない。  
 
 参考：
 re.corderのMIDI設定のデフォルト(FAQより)
