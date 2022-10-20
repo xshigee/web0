@@ -1,7 +1,7 @@
     
 # re.corder/Elefueに外部音源(Aria/Windows)を接続する(WIDI_Bud_Pro経由)    
 
-2022/19/20      
+2022/10/20      
 初版    
   
 ## 概要    
@@ -13,8 +13,8 @@ PCにワイヤレスMIDIアダプターであるWIDI_Bud_ProのUSBドングル�
 
 ## 準備
 WIDI_Bud_Proを接続する前にドライバーが必要となるので
-以下のURLからダウンロートして解凍/インストールする。
-\# なぜかKORGのものを使用するようだ。
+以下のURLからダウンロートして解凍/インストールする。  
+\# なぜかKORGのものを使用するようだ。  
 [ダウンロード　KORG BLE-MIDI Driver/KORG BLE-MIDI Driver](https://www.korg.com/jp/support/download/driver/1/301/2887/)  
 <!--
 [https://cdn.korg.com/jp/support/download/files/b6964d9fedbff6fb708b9fb8e4514675.zip](https://cdn.korg.com/jp/support/download/files/b6964d9fedbff6fb708b9fb8e4514675.zip)  
@@ -88,8 +88,8 @@ curve= None (OFF)
 MIDIOut= 53
 ```
 
-## 参考情報
-re.corder関連：
+## 参考情報  
+re.corder関連：  
 [owner’s manual re.corder](http://www.artinoise.com/wp-content/uploads/2021/02/artinoise-recorder-manual-ENG-v10.pdf)  
 [re.corder Downloads](https://www.recorderinstruments.com/en/support-downloads/)  
 [re.corder Frequently Asked Questions](https://www.recorderinstruments.com/en/frequently-asked-questions/)    
