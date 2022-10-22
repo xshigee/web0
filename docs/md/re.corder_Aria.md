@@ -1,8 +1,8 @@
     
 # re.corder/Elefueに外部音源(Aria/Windows)を接続する(WIDI_Bud_Pro経由)    
 
-2022/10/22 
-MIDI設定をRotationのCC#52をCC#7に変更する。
+2022/10/22   
+MIDI設定をRotationのCC#52をCC#7に変更する。  
 
 2022/10/20      
 初版    
@@ -57,7 +57,7 @@ WIDI_Bud_ProのUSBの中には、USB firmware, Bluetooth Firmwareの２つが内
 ## re.corderのMIDI設定  
 Ariaのノブを回して音が出るようにするのは面倒なのでMIDI設定を変更する方法もある。  
 
-1. Pressure(breath)のCCはデフォルトでは#11(expression)になっているので、それを#2(breath control)に変更する。
+1. Pressure(breath)のCCはデフォルトでは#11(expression)になっているので、それを#2(breath control)に変更する。  
    Curveはembedded1にする。(任意)  
 1. RotationのCCはデフォルトでは#52になっているので、それを#7(volume)に変更する。  
    Curveはembedded1にする。(任意だがCurveの値によっては音がならない可能性あり)  
