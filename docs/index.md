@@ -1,11 +1,12 @@
 ## Welcome to xshige's beta notes
 
 # 役に立ちそうなメモの置き場
-2022/10/20現在  
+2022/10/23現在  
 
 以下のリンクをクリックして下さい：  
   
 # latest:rocket:  
+1. [EVI-NER(VST3)を使ってみる](md/re.corder_EVI-NER.md)  
 1. [re.corder/Elefueに外部音源(Aria/Windows)を接続する(WIDI_Bud_Pro経由)](md/re.corder_Aria.md)  
 1. [re.corder fingering chart](md/re.corder_fingering.md)  
 1. [Pico-Clock-Greenを動かす](md/Pico-Clock-Green.md)  
