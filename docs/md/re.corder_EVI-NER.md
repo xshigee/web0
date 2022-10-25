@@ -1,6 +1,9 @@
     
 # EVI-NER(VST3)を使ってみる
 
+2022/10/26  
+トラブルシュートを追加した。   
+
 2022/10/23      
 初版    
   
@@ -10,7 +13,12 @@ wind_controlerとして、EWI5000とre.corderを接続してみた。
 
 ## EVI-NER購入($15)
 [https://www.davidsonaudioandmultimedia.com/products/evi-ner](https://www.davidsonaudioandmultimedia.com/products/evi-ner)  
-上のホームページから購入したいプラグインをカートに入れ、クレジットカードで購入できる。購入時に電子メールを設定するので、そのメールアドレスに対して、ダウンロートURL、アクティベーション情報の2通のメールが送られてくる。  
+上のホームページから購入したいプラグインをカートに入れ、クレジットカードで購入できる。  
+購入時に電子メールを設定するので、そのメールアドレスに対して、ダウンロートURL「Your downloads are ready」、
+アクティベーション情報「EVI-NER Activation」の2通のメールが送られてくる。  
+\# ２つのメールの間には7時間ほどの時差があった。
+\# これは状況により変化すると思われる。
+    
     
 ## ダウンロード/インストール
 
@@ -34,16 +42,16 @@ wind_controlerとして、EWI5000とre.corderを接続してみた。
 
 ## EVI-NER実行
 
-1. EVI-NERプラグインを設定する。
+1. EVI-NERプラグインを設定する。  
 「[EWI5000をソフト音源(IFW)と接続する](https://xshigee.github.io/web0/md/EWI5000_IFW.html)」を参考にEVI-NERプラグインを設定する。  
-(IFWの部分をEVI-NERに読み替える)
+(IFWの部分をEVI-NERに読み替える)  
 
 2. vsthost.exeを実行してEVI-NERプラグインを立ち上げる。  
 VSTを立ち上げると画面の左側の[SIGNAL OUT]が「？」になっているが、これは購入直後でアクティベーションをしていないせいであるので、[SIGNAL OUT]をクリックするとアクティベーション情報の入力画面になるので  
 購入時に電子メールで送られてくる以下を入力して、アクティベートする。   
 
 「Name or Company:」、「Email:」、  
-「Serial Number Row 1:」、「Serial Number Row 2:」
+「Serial Number Row 1:」、「Serial Number Row 2:」  
 
 3. これでwind_controlerを吹くと音が出る状態になる。  
 
@@ -58,11 +66,27 @@ EWI5000とre.corderを接続して音が出ることを確認した。
 
 EWI5000のMIDI-OUT設定は  
 「[EWI5000に外部音源(EWI3000m,Aria/Windows)を接続する](https://xshigee.github.io/web0/md/EWI5000_EWI-Aria.html)」
-のMIDI-OUT設定を採用した。
+のMIDI-OUT設定を採用した。  
 
 re.corderのMIDI-OUT設定は  
 「[re.corder/Elefueに外部音源(Aria/Windows)を接続する(WIDI_Bud_Pro経由)](https://xshigee.github.io/web0/md/re.corder_Aria.html)」
-のMIDI-OUT設定を採用した。
+のMIDI-OUT設定を採用した。  
+Pressure(breath)のCurveはembedded2のほうが吹きやすいかもしれない。  
+
+## トラブルシュート      
+
+1. 急にVST(EVI-NER)画面が出なくなった。(枠のみになった)  
+
+VSTHOSTのDevice/Waveでいったん別のOutputに切り替えてから  
+従来使用していた[ASIO:ASIO4ALL v2]に切り替える。  
+   
+推測になるがVST表示画面でAudioの初期化をやっているが、
+Audioでエラーになり表示できなくなったいたらしい。  
+AudioのOutputをいったん切り替えることでAudioのエラーが
+解消して画面表示が復活した。
+  
+他のVSTでは問題なかったので、EVI-NER固有の問題のようだ。
+
                                                                 
 ## 参考情報  
 re.corder関連：  

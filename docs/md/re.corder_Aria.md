@@ -51,8 +51,8 @@ WIDI_Bud_ProのUSBの中には、USB firmware, Bluetooth Firmwareの２つが内
 1. 音色を選択する  
 このままだとre.corder/Elefueの出力のCC#がAriaに合っていないので、吹いても音がでない。  
 ・そこで、CC#2(breath control)のノブをマニュアルで大きくすると、音が出るようになる。  
-・音色によっては、これだけでは音が出ないので、CC#7(volume)のノブを回して大きくする。
-・音程があっていない場合は、Transposeを変更する。　
+・音色によっては、これだけでは音が出ないので、CC#7(volume)のノブを回して大きくする。  
+・音程があっていない場合は、Transposeを変更する。  
 
 ## re.corderのMIDI設定  
 Ariaのノブを回して音が出るようにするのは面倒なのでMIDI設定を変更する方法もある。  
