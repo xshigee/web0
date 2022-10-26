@@ -6,13 +6,13 @@
   
 ## 概要    
 wind_controler用のVST3プラグインとしてLyrihorn-2があるのでインストールして使ってみる。  
-wind_controlerとして、EWI5000とre.corderを接続してみた。 
+wind_controlerとして、EWI5000とre.corderを接続してみた。    
 \#  名前から推測するとLyriconの音色をシミュレートしたもののようである。  
 [リリコン Lyricon](https://ja.wikipedia.org/wiki/%E3%83%AA%E3%83%AA%E3%82%B3%E3%83%B3)  
 
 
 ## Lyrihorn-2購入($30)
-[https://www.davidsonaudioandmultimedia.com/collections/plugns/products/lyrihorn-2](https://www.davidsonaudioandmultimedia.com/collections/plugns/products/lyrihorn-2)
+[https://www.davidsonaudioandmultimedia.com/collections/plugns/products/lyrihorn-2](https://www.davidsonaudioandmultimedia.com/collections/plugns/products/lyrihorn-2)     
 上のホームページから購入したいプラグインをカートに入れ、クレジットカードで購入できる。  
 購入時に電子メールを設定するので、そのメールアドレスに対して、ダウンロートURL「Your downloads are ready」、
 MachineID確認要求「Lyrihorn-2 Activation」の2通のメールが送られてくる。  
