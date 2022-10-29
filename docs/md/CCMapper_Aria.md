@@ -1,7 +1,7 @@
     
 # re.corder/ElefueをCCMapper経由で外部音源(Aria/Windows)と接続する(WIDI_Bud_Pro使用)    
 
-2022/10/29      
+2022/10/29+      
 初版    
   
 ## 概要    
@@ -166,7 +166,16 @@ curve= None (OFF)
 MIDIOut= 53
 ```
 
-## 参考情報   
+## CCMapperの今後の改良点
+現在、マップしたCCの値は同じ値を使っているが、
+できればCC#に応じて値(data2)を変更できたほうが
+違う表情をつかることができると思われる。  
+
+
+## 参考情報                                    
+pygame.midi関連：  
+[PythonでMIDI](https://webmidiaudio.com/npage507.html)  
+[pygame.midi](https://runebook.dev/ja/docs/pygame/ref/midi)   
 
 loopMIDI関連：  
 [loopMIDI](https://www.tobias-erichsen.de/software/loopmidi.html)  
@@ -189,7 +198,7 @@ re.corder関連：
 
 MIDI関連：  
 [現時点、最強のBluetooth MIDIかも!?　各種BLE-MIDI機器と自動でペアリングしてくれるWIDI Masterがスゴイ！](https://www.dtmstation.com/archives/32976.html)  
-[Pocket MIDI](https://www.microsoft.com/ja-jp/p/pocket-midi/9ntv7mflbbvx?activetab=pivot:overviewtab)  
+[Midi View](https://hautetechnique.com/midi/midiview/)  
 
 ASIO関連：  
 [asio4all - ASIOドライバーのないオーディオインターフェイスをASIO対応にできるソフト](https://forest.watch.impress.co.jp/library/software/asio4all/)
