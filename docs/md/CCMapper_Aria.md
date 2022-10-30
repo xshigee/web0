@@ -164,7 +164,12 @@ MIDIOut= 52
 Z axis
 curve= None (OFF)
 MIDIOut= 53
-```
+```                                          
+
+## 改善
+使用しているPCによっては、CCMapper.pyの処理でもたつくことがあるので
+wind_controlerの出力するCC#を、1と2、または、1と11に限定したほうが良いようだ。  
+
 
 ## CCMapperの今後の改良点
 現在、マップしたCCの値は同じ値を使っているが、
