@@ -1,11 +1,12 @@
 ## Welcome to xshige's beta notes
 
 # 役に立ちそうなメモの置き場
-2022/10/30現在  
+2022/11/3現在  
 
 以下のリンクをクリックして下さい：  
   
 # latest:rocket:  
+1. [openFrameworksでCCMapperを実装する](md/CCMapper_ofx.md) 
 1. [Respiro(VST3)を使ってみる](md/Respiro.md) 
 1. [re.corder/ElefueをCCMapper経由で外部音源(Aria/Windows)と接続する(WIDI_Bud_Pro使用)](md/CCMapper_Aria.md) 
 1. [Lyrihorn 2(VST3)を使ってみる](md/re.corder_Lyrihorn-2.md)  
