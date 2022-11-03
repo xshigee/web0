@@ -37,7 +37,7 @@ C:\\of_v0.11.2_vs2017_release
 ## プロジェクト設定
 新規プロジェクトをビルドするためには,slnなどが必要であり、または既存プロジェクトのディレクトリを移動した場合は.slnなどの変更が必要となる。
 
-このためにはprojctGeneratorを使用する：
+このためにはprojctGeneratorを使用する：  
 \# 以下に置いてあるので.exeをクリックする  
 
 C:\\of_v0.11.2_vs2017_release\\projectGenerator\\projectGenerator.exe
@@ -420,7 +420,7 @@ VisualStudioでビルド中に原因不明のエラーが出たことがあっ�
 projectGeneraterのimportで再度.slnなどを作成し直すとエラーが解消した。  
 
 ## 関連情報  
-openframework関連：
+openframework関連：   
 [openFrameworksを使用して独自のMIDI生成のリアルタイムビジュアルを作成します。](https://ask.audio/articles/create-your-own-midi-generated-realtime-visuals-with-openframeworks/ja)  
 [Novation LauchpadとopenFrameworksを使ってResolumeのVJコントローラを作る : コーディング編](https://artteknika.hatenablog.com/entry/2016/09/30/223230)  
 [プロジェクトにアドオンを追加する方法](https://openframeworks.cc/ja/learning/01_basics/how_to_add_addon_to_project/)   
