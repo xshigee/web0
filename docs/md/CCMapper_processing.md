@@ -22,12 +22,12 @@ C:\\processing-4.0.1
 ## themidibus(MIDI library)
 今回のプログラムはMIDIを使用するのでMIDIlibraryを追加する。  
 
-1. 以下のurlからダウンロードして解凍する： 
+1.以下のurlからダウンロードして解凍する： 
 
 [http://smallbutdigital.com/releases/themidibus/themidibus-latest.zip](http://smallbutdigital.com/releases/themidibus/themidibus-latest.zip)  
 
 
-2. 解凍後、できたthemidibus(ディレクトリ)をDocuments\\Processing\\librariesのなかにコピーする。
+2.解凍後、できたthemidibus(ディレクトリ)をDocuments\\Processing\\librariesのなかにコピーする。
                           
 
 ## CCMapper(source code)
@@ -93,7 +93,7 @@ void controllerChange(int channel, int number, int value){
 ```
 
 ## 実行
-VisualStudioから実行するとコンソール画面が現れて以下のような表示になる。
+実行するとコンソール画面が現れて以下のような表示になる。
 
 コンソール出力例
 ```  
