@@ -1,7 +1,7 @@
     
 # CCMapper改良版(openFrameworks)  
 
-2022/11/5      
+2022/11/5+      
 初版    
   
 ## 概要    
@@ -247,6 +247,15 @@ void ofApp::exit() {
 //--------------------------------------------------------------
 void ofApp::newMidiMessage(ofxMidiMessage& msg) {
 
+	// add the latest message to the message queue
+	midiMessages.push_back(msg);
+
+	// remove any old messages if we have too many
+	while (midiMessages.size() > maxMessages) {
+		midiMessages.erase(midiMessages.begin());
+	}
+
+
 	//---------------------------------------------
 	// one MIDI message will be changed and sent.
 	//---------------------------------------------
@@ -258,11 +267,12 @@ void ofApp::newMidiMessage(ofxMidiMessage& msg) {
 			if (message.status == MIDI_NOTE_ON) {
 				midiOut.sendNoteOn(message.channel, message.pitch, message.velocity);
 				if (logOut) ofLog(OF_LOG_NOTICE, "channel:%d NoteOn pitch:%3d velocity:%3d", message.channel, message.status, message.pitch, message.velocity);
-
+				return;
 			}
 			if (message.status == MIDI_NOTE_OFF) {
 				midiOut.sendNoteOff(message.channel, message.pitch, message.velocity);
 				if (logOut) ofLog(OF_LOG_NOTICE, "channel:%d NoteOFF pitch:%3d velocity:%3d", message.channel, message.status, message.pitch, message.velocity);
+				return;
 			}
 
 		}
@@ -273,34 +283,32 @@ void ofApp::newMidiMessage(ofxMidiMessage& msg) {
 				midiOut.sendControlChange(message.channel, 2, message.value);
 				midiOut.sendControlChange(message.channel, 7, message.value);
 				midiOut.sendControlChange(message.channel, 26, message.value);
+				return;
 			}
 			else {
 				midiOut.sendControlChange(message.channel, message.control, message.value);
+				return;
 			}
 		}
 		else if(message.status == MIDI_PROGRAM_CHANGE) {
 			if (logOut) ofLog(OF_LOG_NOTICE, "channel:%d PROGRAM_CHANGE value:%3d", message.channel, message.control, message.value);				
+			return;
 		}
 		else if(message.status == MIDI_PITCH_BEND) {
 			if (logOut) ofLog(OF_LOG_NOTICE, "channel:%d PITCH_BEND value:%3d", message.channel, message.value);
+			return;
 		}
 		else if(message.status == MIDI_AFTERTOUCH) {
 			if (logOut) ofLog(OF_LOG_NOTICE, "channel:%d AT value:%3d", message.channel, message.value);
+			return;
 		}
 		else if(message.status == MIDI_POLY_AFTERTOUCH) {
 			if (logOut) ofLog(OF_LOG_NOTICE, "channel:%d POLY_AT pitch:%3d value:%3d", message.channel, message.pitch, message.value);
+			return;
 		}
 	}
 	//---------------------------------------------
 	//---------------------------------------------
-
-	// add the latest message to the message queue
-	midiMessages.push_back(msg);
-
-	// remove any old messages if we have too many
-	while (midiMessages.size() > maxMessages) {
-		midiMessages.erase(midiMessages.begin());
-	}
 }
 
 //--------------------------------------------------------------
@@ -332,7 +340,6 @@ void ofApp::mousePressed(int x, int y, int button) {
 //--------------------------------------------------------------
 void ofApp::mouseReleased() {
 }
-
 ```
 
 setup()の中の以下の部分は実行環境に依存しているので  

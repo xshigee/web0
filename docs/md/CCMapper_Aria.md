@@ -1,7 +1,7 @@
     
 # re.corder/ElefueをCCMapper経由で外部音源(Aria/Windows)と接続する(WIDI_Bud_Pro使用)    
 
-2022/10/29+      
+2022/10/29++      
 初版    
   
 ## 概要    
@@ -113,7 +113,10 @@ MIDI device list:
 ここで、wind_controlerで吹くと音が出る。
                                                                     
 なお、Ariaだけでなく、Lyrihorn-2(VST3)、EVI-NER(VST3)、IFW(VST3)も
-CCMapper経由で、そのまま使用できる。
+CCMapper経由で、そのまま使用できる。 
+
+また、以下のリンクにあるようにpyrhonスクリプトを.exe化して通常のアプリのように実行することもできる。    
+[Pythonスクリプトをexe化する](https://www.python.ambitious-engineer.com/archives/3306)   
 
 
 ## Ariaの場合
@@ -181,6 +184,7 @@ wind_controlerの出力するCC#を、1と2、または、1と11に限定した�
 pygame.midi関連：  
 [PythonでMIDI](https://webmidiaudio.com/npage507.html)  
 [pygame.midi](https://runebook.dev/ja/docs/pygame/ref/midi)   
+[Pythonスクリプトをexe化する](https://www.python.ambitious-engineer.com/archives/3306)  
 
 loopMIDI関連：  
 [loopMIDI](https://www.tobias-erichsen.de/software/loopmidi.html)  
