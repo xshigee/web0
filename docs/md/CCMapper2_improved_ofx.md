@@ -457,6 +457,13 @@ openframework関連：
 [Novation LauchpadとopenFrameworksを使ってResolumeのVJコントローラを作る : コーディング編](https://artteknika.hatenablog.com/entry/2016/09/30/223230)  
 [プロジェクトにアドオンを追加する方法](https://openframeworks.cc/ja/learning/01_basics/how_to_add_addon_to_project/)   
 [新規プロジェクトの作成](https://openframeworks.cc/ja/learning/01_basics/create_a_new_project/)  
+[Listen to events](https://openframeworks.cc/learning/06_events/event_example_how_to/)  
+[変数の値を見る](https://openframeworks.cc/ja/learning/01_basics/how_to_view_value/)  
+[ofLog](https://openframeworks.cc/documentation/utils/ofLog/)  
+[openFrameworks-コンソール表示する](https://qiita.com/y_UM4/items/99c875a7a32056d006b5)  
+[oF：Windowsのopenframeworksでコンソールウインドウを出さない方法](http://wishupon.me/?p=312)  
+[openFrameworks-Log vol.1／環境設定と導入](https://barbegenerativediary.com/tutorials/openframeworks-log-1-setup/)  
+[openFramewoks – OSC (Open Sound Control) を利用したネットワーク連携](https://yoppa.org/ma2_10/2279.html)  
                                    
 pygame.midi関連：  
 [PythonでMIDI](https://webmidiaudio.com/npage507.html)  
