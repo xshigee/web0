@@ -1,11 +1,12 @@
 ## Welcome to xshige's beta notes
 
 # 役に立ちそうなメモの置き場
-2022/11/3現在  
+2022/11/5現在  
 
 以下のリンクをクリックして下さい：  
   
 # latest:rocket:   
+1. [CCMapper改良版(openFrameworks)](md/CCMapper2_improved_ofx.md) 
 1. [processingでCCMapperを実装する](md/CCMapper_processing.md) 
 1. [openFrameworksでCCMapperを実装する](md/CCMapper_ofx.md) 
 1. [Respiro(VST3)を使ってみる](md/Respiro.md) 

@@ -1,14 +1,18 @@
     
-# openFrameworksでCCMapperを実装する  
+# CCMapper改良版(openFrameworks)  
 
-2022/11/4    
-「問題点」の記述に間違いがあったので修正した。   
-
-2022/11/3      
+2022/11/5      
 初版    
   
 ## 概要    
-「[re.corder/ElefueをCCMapper経由で外部音源(Aria/Windows)と接続する(WIDI_Bud_Pro使用)](https://xshigee.github.io/web0/md/CCMapper_Aria.html)」の続編として、pythonで実装したCCMaperをopenFrameworks(windows版)で実装してみる。
+「[openFrameworksでCCMapperを実装する](https://xshigee.github.io/web0/md/CCMapper_ofx.html)」の続編として、問題点を解消したCCMaper2をopenFrameworks(windows版)で実装した。  
+なお、記事として独立して読めるように前の記事の情報を含めた。
+
+## 改良点
+1. draw()を描画専用にした。
+1. MIDI受信のイベントハンドラーnewMidiMessage()のなかにMIDI送信の処理を含めた。
+1. オーバーヘッドを低減するためにフレームレートを下げた。
+1. ソース上のlogOutをtrueにするとバーグラフ表示を止めて、コンソールに受信したMIDI情報を表示するようにした。コンソール画面のテキストはコピーできるので、MIDI情報の解析に役立てることができる。
 
 ## 準備
 
@@ -63,7 +67,7 @@ C:\\of_v0.11.2_vs2017_release\\projectGenerator\\projectGenerator.exe
 
 あとは通常のVisualStudioの操作でビルドを行い実行する。
 
-## CCMapper(source code)
+## CCMapper2(source code)
 
 以下が今回のソースコードになる。  
 
@@ -71,12 +75,15 @@ C:\\of_v0.11.2_vs2017_release\\projectGenerator\\projectGenerator.exe
 
 置き場所は任意だが以下においた：
 
-C:\\of_v0.11.2_vs2017_release\\examples\\midi\\CCMapper\\src    
+C:\\of_v0.11.2_vs2017_release\\apps\\myApps\\CCMapper2\\src  
 
 src/ofApp.cpp
 ```cpp
-
-// CCMapper for wind controler
+// CCMapper2 for wind controler
+// improved version
+// by xshige
+// on 2022/11/5
+//---------------
 // this program is forked from midiInputExample/midiOutputExample
 // by xshige
 // on 2022/11/3
@@ -95,9 +102,16 @@ src/ofApp.cpp
 
 //--------------------------------------------------------------
 void ofApp::setup() {
+	logOut = false; // disp text log if true
+
 	//ofSetVerticalSync(true);
 	ofSetVerticalSync(false);
-	ofSetFrameRate(240);
+
+	// CHANGE frame rate to reduce overhead
+	//ofSetFrameRate(15);
+	//ofSetFrameRate(8);
+	ofSetFrameRate(4);
+	
 	ofBackground(255, 255, 255);
 	//ofSetLogLevel(OF_LOG_VERBOSE);
 
@@ -139,7 +153,7 @@ void ofApp::setup() {
 	midiIn.addListener(this);
 
 	// print received messages to the console
-	midiIn.setVerbose(true);
+	//midiIn.setVerbose(true);
 }
 
 //--------------------------------------------------------------
@@ -148,6 +162,7 @@ void ofApp::update() {
 
 //--------------------------------------------------------------
 void ofApp::draw() {
+	if (logOut) return; // do not disp bar graph if logOut
 
 	for(unsigned int i = 0; i < midiMessages.size(); ++i) {
 
@@ -175,40 +190,14 @@ void ofApp::draw() {
 				text << "\tvel: " << message.velocity;
 				ofDrawRectangle(x + (ofGetWidth()*0.2 * 2), y + 12,
 					ofMap(message.velocity, 0, 127, 0, ofGetWidth()*0.2), 10);
-
-				if (message.status == MIDI_NOTE_ON) midiOut.sendNoteOn(message.channel, message.pitch, message.velocity);
-				if (message.status == MIDI_NOTE_OFF) midiOut.sendNoteOff(message.channel, message.pitch, message.velocity);
-
-				//ofLog(OF_LOG_NOTICE, "channel:%d status:%3d pitch:%3d velocity:%3d", message.channel, message.status, message.pitch, message.velocity);
-				
-				std::this_thread::sleep_for(std::chrono::milliseconds(1));
-
 			}
-			else if(message.status == MIDI_CONTROL_CHANGE) {
-				text << "\tSTATUS: " << message.status;
+			if(message.status == MIDI_CONTROL_CHANGE) {
 				text << "\tctl: " << message.control;
 				ofDrawRectangle(x + ofGetWidth()*0.2, y + 12,
 					ofMap(message.control, 0, 127, 0, ofGetWidth()*0.2), 10);
 				text << "\tval: " << message.value;
 				ofDrawRectangle(x + ofGetWidth()*0.2 * 2, y + 12,
 					ofMap(message.value, 0, 127, 0, ofGetWidth()*0.2), 10);
-
-
-				if (message.control == 2 || message.control == 11) {
-					// for Aria
-					midiOut.sendControlChange(message.channel, 2, message.value);
-					std::this_thread::sleep_for(std::chrono::milliseconds(1));
-
-					midiOut.sendControlChange(message.channel, 7, message.value);
-					std::this_thread::sleep_for(std::chrono::milliseconds(1));
-
-					midiOut.sendControlChange(message.channel, 26, message.value);
-					std::this_thread::sleep_for(std::chrono::milliseconds(1));
-
-					//ofLog(OF_LOG_NOTICE, "channel:%d CC#:%3d value:%3d", message.channel, message.control, message.value);
-
-				} else midiOut.sendControlChange(message.channel, message.control, message.value);
-
 			}
 			else if(message.status == MIDI_PROGRAM_CHANGE) {
 				text << "\tpgm: " << message.value;
@@ -243,7 +232,6 @@ void ofApp::draw() {
 		ofSetColor(0);
 		ofDrawBitmapString(text.str(), x, y);
 		text.str(""); // clear
-
 	}
 }
 
@@ -259,11 +247,58 @@ void ofApp::exit() {
 //--------------------------------------------------------------
 void ofApp::newMidiMessage(ofxMidiMessage& msg) {
 
+	//---------------------------------------------
+	// one MIDI message will be changed and sent.
+	//---------------------------------------------
+	
+	ofxMidiMessage &message = msg;
+
+	if(message.status < MIDI_SYSEX) {
+		if(message.status == MIDI_NOTE_ON || message.status == MIDI_NOTE_OFF) {
+			if (message.status == MIDI_NOTE_ON) {
+				midiOut.sendNoteOn(message.channel, message.pitch, message.velocity);
+				if (logOut) ofLog(OF_LOG_NOTICE, "channel:%d NoteOn pitch:%3d velocity:%3d", message.channel, message.status, message.pitch, message.velocity);
+
+			}
+			if (message.status == MIDI_NOTE_OFF) {
+				midiOut.sendNoteOff(message.channel, message.pitch, message.velocity);
+				if (logOut) ofLog(OF_LOG_NOTICE, "channel:%d NoteOFF pitch:%3d velocity:%3d", message.channel, message.status, message.pitch, message.velocity);
+			}
+
+		}
+		else if(message.status == MIDI_CONTROL_CHANGE) {
+			if (logOut) ofLog(OF_LOG_NOTICE, "channel:%d CC#:%d value:%3d", message.channel, message.control, message.value);
+			if (message.control == 2 || message.control == 11) {
+				// for Aria
+				midiOut.sendControlChange(message.channel, 2, message.value);
+				midiOut.sendControlChange(message.channel, 7, message.value);
+				midiOut.sendControlChange(message.channel, 26, message.value);
+			}
+			else {
+				midiOut.sendControlChange(message.channel, message.control, message.value);
+			}
+		}
+		else if(message.status == MIDI_PROGRAM_CHANGE) {
+			if (logOut) ofLog(OF_LOG_NOTICE, "channel:%d PROGRAM_CHANGE value:%3d", message.channel, message.control, message.value);				
+		}
+		else if(message.status == MIDI_PITCH_BEND) {
+			if (logOut) ofLog(OF_LOG_NOTICE, "channel:%d PITCH_BEND value:%3d", message.channel, message.value);
+		}
+		else if(message.status == MIDI_AFTERTOUCH) {
+			if (logOut) ofLog(OF_LOG_NOTICE, "channel:%d AT value:%3d", message.channel, message.value);
+		}
+		else if(message.status == MIDI_POLY_AFTERTOUCH) {
+			if (logOut) ofLog(OF_LOG_NOTICE, "channel:%d POLY_AT pitch:%3d value:%3d", message.channel, message.pitch, message.value);
+		}
+	}
+	//---------------------------------------------
+	//---------------------------------------------
+
 	// add the latest message to the message queue
 	midiMessages.push_back(msg);
 
 	// remove any old messages if we have too many
-	while(midiMessages.size() > maxMessages) {
+	while (midiMessages.size() > maxMessages) {
 		midiMessages.erase(midiMessages.begin());
 	}
 }
@@ -317,7 +352,6 @@ setup()の中の以下の部分は実行環境に依存しているので
 
 src/ofApp,h
 ```cpp
-
 /*
  * Copyright (c) 2013 Dan Wilcox <danomatika@gmail.com>
  *
@@ -363,13 +397,12 @@ public:
 	int note, velocity;
 	int pan, bend, touch, polytouch;
 
+	bool logOut;
 };
-
 ```
 
 src/main.cpp
 ```cpp
-
 /*
  * Copyright (c) 2013 Dan Wilcox <danomatika@gmail.com>
  *
@@ -387,7 +420,6 @@ int main(){
 	ofSetupOpenGL(640, 480, OF_WINDOW);
 	ofRunApp(new ofApp());
 }
-
 ```                           
 
 ## 実行
@@ -410,19 +442,16 @@ VisualStudioから実行するとコンソール画面が現れて以下のよ�
 MIDI接続状況：  
 MIDIとしての接続は「[re.corder/ElefueをCCMapper経由で外部音源(Aria/Windows)と接続する(WIDI_Bud_Pro使用)](https://xshigee.github.io/web0/md/CCMapper_Aria.html)」と同じ接続にする。
 
-## 問題点
-openFramworksの特性上、描画フレームのリフレッシュ時にdraw()のなかで、MIDI受信バッファからデータを引き出し、処理してMIDIデータを送信しているが、そのタイミングが
-フレームレートになっており、随時受信したものを処理しているわけでない。  
-そのためMIDIデータの送信タイミングもフレームレートに従っているものになり、MIDIデータとしてスムースな流れになっていない。    
-また、フレーム描画時にMIDI受信バッファを覗きこんで、その内容をバーグラフで表示しているだけなので、その時点でMIDI送信しても、それに対応した受信したMIDIデータを受信バッファから消去していない。そのため、タイミングによっては結果的にダブったデータを送信していることがあるようだ。  
-以上の回避策としてフレームレートを上げているが最終的な解決にはなっていない。   
-
 ## トラブルシュート
 VisualStudioでビルド中に原因不明のエラーが出たことがあったが
 プロジェクトのディレクトリのなかの.vs、xxxx.slnなどを削除したあと
 projectGeneraterのimportで再度.slnなどを作成し直すとエラーが解消した。  
 
 ## 関連情報  
+CCMapper関連：  
+[processingでCCMapperを実装する](https://xshigee.github.io/web0/md/CCMapper_processing.html)  
+[python版CCMapper - re.corder/ElefueをCCMapper経由で外部音源(Aria/Windows)と接続する(WIDI_Bud_Pro使用)](https://xshigee.github.io/web0/md/CCMapper_Aria.html)  
+
 openframework関連：   
 [openFrameworksを使用して独自のMIDI生成のリアルタイムビジュアルを作成します。](https://ask.audio/articles/create-your-own-midi-generated-realtime-visuals-with-openframeworks/ja)  
 [Novation LauchpadとopenFrameworksを使ってResolumeのVJコントローラを作る : コーディング編](https://artteknika.hatenablog.com/entry/2016/09/30/223230)  
