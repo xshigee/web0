@@ -1,11 +1,12 @@
 ## Welcome to xshige's beta notes
 
 # 役に立ちそうなメモの置き場
-2022/11/5現在  
+2022/11/7現在  
 
 以下のリンクをクリックして下さい：  
   
-# latest:rocket:   
+# latest:rocket:    
+1. [CCMapper(C#版)](md/CCMapper_CS.md) 
 1. [CCMapper改良版(openFrameworks)](md/CCMapper2_improved_ofx.md) 
 1. [processingでCCMapperを実装する](md/CCMapper_processing.md) 
 1. [openFrameworksでCCMapperを実装する](md/CCMapper_ofx.md) 
