@@ -1,21 +1,14 @@
 ## Welcome to xshige's beta notes
 
 # 役に立ちそうなメモの置き場
-<<<<<<< HEAD
-2022/11/13現在  
+
+022/11/13現在  
 
 以下のリンクをクリックして下さい：  
   
 # latest:rocket:    
 1. [CCMapper(C#版/RtMidi)](md/CCMapper_CS_RtMidi.md) 
-=======
-2022/11/9  
-
-以下のリンクをクリックして下さい：  
-  
-# latest:rocket:   
 1. [ThinkPad X1 Carbon SSD/Battery交換用リンク集](md/X1_Carbon_SSD_Bat_replaced.md)  
->>>>>>> 349fbe22e40be3287bd23857195fb475566d3a6d
 1. [CCMapper(C#版)](md/CCMapper_CS.md) 
 1. [CCMapper改良版(openFrameworks)](md/CCMapper2_improved_ofx.md) 
 1. [processingでCCMapperを実装する](md/CCMapper_processing.md) 
