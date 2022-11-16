@@ -1,5 +1,8 @@
     
 # CCMapper(C#版/RtMidi)  
+                                                              
+2022/11/16  
+改良版CCMapperを追加した。  
 
 2022/11/13      
 初版    
@@ -341,6 +344,202 @@ dotnet add package Serilog.Sinks.Console -s https://www.nuget.org/api/v2
 dotnet build
 dotnet run
 
+```
+
+## 改良版CCMapper(source code)
+
+以下の点を改良した：  
+1. Mac環境では入力デバイスごとにソースを変更する必要があったが、自動で、Elefueとre.corderのどちらかを選択するようにした。  
+1. Mac環境では、(ダブって音源がNoteOn、NoteOFFを受信しないように)CCMapperでは、NoteOn、NoteOffを送信しないようにした。  
+1. Mac向けの改良であるがソースそのものはWindowsでも変更無しで動作するように考慮した。  
+
+CCMapper_CS_RtMidi/Program.cs
+```cs
+
+// CCMapper(RiMidi) for Mac
+// 2022/11/16: auto selecting input/output devices
+// 2022/11/13
+
+using System;
+using System.Collections.Generic;
+using RtMidi.Core.Devices;
+using RtMidi.Core.Messages;
+using Serilog;
+
+namespace RtMidi.Core.CCMapper
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            Log.Logger = new LoggerConfiguration()
+                //.WriteTo.ColoredConsole()
+                .WriteTo.Console()
+                //.MinimumLevel.Debug() // disp debug info.
+                .CreateLogger();
+
+            using (MidiDeviceManager.Default)
+            {
+                var p = new Program();
+            }
+        }
+
+        public Program()
+        {
+            bool logOut = true; // true to disp log on console
+
+            bool enableSendNote = true; // false will Not send note
+
+            // the following device will be opened
+            string ID0 = "WIDI Bud Pro"; // for Windows
+            string ID1 = "Elefue"; // for Mac
+            string ID2 = "re.corder"; // for Mac
+            string OD = "loopMIDI"; // for Windows/Mac
+
+            var inputList = new List<IMidiInputDevice>();
+            var outputList = new List<IMidiOutputDevice>();
+
+            // List all available MIDI API's
+            foreach (var api in MidiDeviceManager.Default.GetAvailableMidiApis())
+                Console.WriteLine($"Available API: {api}");
+
+            // Listen to all available midi devices
+            void ControlChangeHandler(IMidiInputDevice sender, in ControlChangeMessage msg)
+            {
+                if (logOut) Console.WriteLine($"[{sender.Name}] ControlChange: Channel:{msg.Channel} Control:{msg.Control} Value:{msg.Value}");
+                if (msg.Control == 11 || msg.Control == 2)
+                {
+                    // for Aria
+                    outputList[0].Send(new ControlChangeMessage(msg.Channel, 2, msg.Value));
+                    outputList[0].Send(new ControlChangeMessage(msg.Channel, 7, msg.Value));
+                    outputList[0].Send(new ControlChangeMessage(msg.Channel, 26, msg.Value));
+                }
+                else outputList[0].Send(msg);
+            }
+
+            void NoteOnHandler(IMidiInputDevice sender, in NoteOnMessage msg)
+            {
+                if (logOut) Console.WriteLine($"[{sender.Name}] NoteOn: Channel:{msg.Channel} Key:{msg.Key} Velocity:{msg.Velocity}");
+                if (enableSendNote) outputList[0].Send(msg);
+            }
+
+            void NoteOffHandler(IMidiInputDevice sender, in NoteOffMessage msg)
+            {
+                if (logOut) Console.WriteLine($"[{sender.Name}] NoteOff: Channel:{msg.Channel} Key:{msg.Key} Velocity:{msg.Velocity}");
+                if (enableSendNote) outputList[0].Send(msg);
+            }
+
+            try
+            {
+                // disp input/output devices
+                Console.WriteLine("---- INPUT DEVICE ----");
+                foreach (var inputDeviceInfo in MidiDeviceManager.Default.InputDevices)
+                {
+                    Console.WriteLine($"{inputDeviceInfo.Name}");
+                }
+                Console.WriteLine("---- OUTPUT DEVICE ----");
+                foreach (var outputDeviceInfo in MidiDeviceManager.Default.OutputDevices)
+                {
+                    Console.WriteLine($"{outputDeviceInfo.Name}");
+                }
+
+                Console.WriteLine("-----------------------");
+                foreach (var inputDeviceInfo in MidiDeviceManager.Default.InputDevices)
+                {
+                    // one device only
+                    if (inputDeviceInfo.Name.Contains(ID0))
+                    {
+                        Console.WriteLine($"Opening input:[{inputDeviceInfo.Name}]");
+
+                        var inputDevice = inputDeviceInfo.CreateDevice();
+                        inputList.Add(inputDevice);
+
+                        inputDevice.ControlChange += ControlChangeHandler;
+                        inputDevice.NoteOn += NoteOnHandler;
+                        inputDevice.NoteOff += NoteOffHandler;
+
+                        inputDevice.Open();
+
+                        break;
+                    }
+                    if (inputDeviceInfo.Name.Contains(ID1))
+                    {
+                        Console.WriteLine($"Opening input:[{inputDeviceInfo.Name}]");
+
+                        var inputDevice = inputDeviceInfo.CreateDevice();
+                        inputList.Add(inputDevice);
+
+                        inputDevice.ControlChange += ControlChangeHandler;
+                        inputDevice.NoteOn += NoteOnHandler;
+                        inputDevice.NoteOff += NoteOffHandler;
+
+                        inputDevice.Open();
+
+                        break;
+                    }
+                    if (inputDeviceInfo.Name.Contains(ID2))
+                    {
+                        Console.WriteLine($"Opening input:[{inputDeviceInfo.Name}]");
+
+                        var inputDevice = inputDeviceInfo.CreateDevice();
+                        inputList.Add(inputDevice);
+
+                        inputDevice.ControlChange += ControlChangeHandler;
+                        inputDevice.NoteOn += NoteOnHandler;
+                        inputDevice.NoteOff += NoteOffHandler;
+
+                        inputDevice.Open();
+
+                        break;
+                    }
+                }
+                //---------------------------------------------------------------------
+                foreach (var outputDeviceInfo in MidiDeviceManager.Default.OutputDevices)
+                {
+                    // one device only
+                    if (outputDeviceInfo.Name.Contains(OD))
+                    {
+                        Console.WriteLine($"Opening output:[{outputDeviceInfo.Name}]");
+
+                        // check Windows or Mac
+                        if (outputDeviceInfo.Name.Contains("bus1")) enableSendNote = false;
+                        if (!enableSendNote) Console.WriteLine("running at Mac Env.");
+                        else Console.WriteLine("running at Windows Env.");
+
+                        var outputDevice = outputDeviceInfo.CreateDevice();
+                        outputList.Add(outputDevice);
+
+                        outputDevice.Open();
+                    }
+                }
+
+                Console.WriteLine("Press 'q' key to stop...");
+                while (true)
+                {
+                    if (Console.ReadKey().Key == ConsoleKey.Q)
+                    {
+                        break;
+                    }
+                }
+            }
+            finally
+            {
+                foreach (var device in inputList)
+                {
+                    device.ControlChange -= ControlChangeHandler;
+                    device.NoteOn -= NoteOnHandler;
+                    device.NoteOff -= NoteOffHandler;
+                    device.Dispose();
+                }
+                foreach (var device in outputList)
+                {
+                    device.Dispose();
+                }
+
+            }
+        }
+    }
+}
 ```
 
 
