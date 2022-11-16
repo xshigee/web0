@@ -356,7 +356,7 @@ dotnet run
 CCMapper_CS_RtMidi/Program.cs
 ```cs
 
-// CCMapper(RiMidi) for Mac
+// CCMapper(RtMidi) for Mac
 // 2022/11/16: auto selecting input/output devices
 // 2022/11/13
 
