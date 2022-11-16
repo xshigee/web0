@@ -2,11 +2,12 @@
 
 # 役に立ちそうなメモの置き場
 
-022/11/13現在  
+2022/11/15現在  
 
 以下のリンクをクリックして下さい：  
   
 # latest:rocket:    
+1. [Macことはじめ](md/Mac_beginner.md) 
 1. [CCMapper(C#版/RtMidi)](md/CCMapper_CS_RtMidi.md) 
 1. [ThinkPad X1 Carbon SSD/Battery交換用リンク集](md/X1_Carbon_SSD_Bat_replaced.md)  
 1. [CCMapper(C#版)](md/CCMapper_CS.md) 
