@@ -2,11 +2,12 @@
 
 # 役に立ちそうなメモの置き場
 
-2022/11/17現在  
+2022/11/20現在  
 
 以下のリンクをクリックして下さい：  
   
-# latest:rocket:    
+# latest:rocket:     
+1. [Elefue/re.corderをSE-02と接続する](md/CCMapper2_SE-02.md) 
 1. [linux版openFrameworksを使う](md/ofx_linux.md) 
 1. [Macことはじめ](md/Mac_beginner.md) 
 1. [CCMapper(C#版/RtMidi)](md/CCMapper_CS_RtMidi.md) 
