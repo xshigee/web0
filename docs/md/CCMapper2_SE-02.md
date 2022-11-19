@@ -19,7 +19,7 @@ PCには、CCMapperを動作させ以下のようにMIDIデータが流れるよ
 ## 準備
 OSの種類によっては、USB-MIDIのドライバーをインストールする必要がある。
 
-1. windowsの場合
+1. windowsの場合  
 ネットに接続していれば、SE-02とPCをUSBで接続すると自動的にドライバーがインストールされる。  
 自分自身の環境では、既に以下のkorgのドライバーがインストールされていたので、それが動作しているようだ。
 
@@ -29,11 +29,13 @@ OSの種類によっては、USB-MIDIのドライバーをインストールす�
 「デバイスマネジャー」の「サウンド、ビデオ、およびゲームコントローラ」の下に  
 「SE-02」が出現する。  
 
-2. linuxの場合
+2. linuxの場合  
 linuxの場合、特にドライバーが必要でなく、SE-02をUSB接続して
-コマンドlsusbで「SE-02」が出現すれば、正常と確認できる。
+コマンドlsusbで「SE-02」が出現すれば、正常と確認できる。   
+
 出力例：  
 ```
+
 lsusb
 
 Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
@@ -47,7 +49,7 @@ Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 
 ```
 
-3. Macの場合
+3. Macの場合  
 Macの場合、以下のリンクからドライバーをダウンロードしてインストールする：  
 [https://www.roland.com/jp/products/se-02/downloads/](https://www.roland.com/jp/products/se-02/downloads/)    
 SE-02 Driver Ver.1.0.4 for macOS 11/12        
