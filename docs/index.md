@@ -7,6 +7,7 @@
 以下のリンクをクリックして下さい：  
   
 # latest:rocket:     
+1. [Mac版openFrameworksを使う](md/ofx_mac.md) 
 1. [Elefue/re.corderをSE-02と接続する](md/CCMapper2_SE-02.md) 
 1. [linux版openFrameworksを使う](md/ofx_linux.md) 
 1. [Macことはじめ](md/Mac_beginner.md) 
