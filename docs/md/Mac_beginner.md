@@ -226,16 +226,17 @@ import com.jogamp.opengl.GLProfile;
 →  
 2022/11/23  
 対応方法：  
-1.VisualCodeを起動する。 
-2.コマンドパレット(Cmd+Shift+P)から「Shell Command:Install 'code' command in PATH command」を検索/実行する。  
-3.ターミナルを再起動すると、codeが有効になる。  
+1.VisualCodeを起動する。    
+2.コマンドパレット(Cmd+Shift+P)から「Shell Command:Install 'code' command in PATH command」を検索/実行する。    
+3.ターミナルを再起動すると、codeが有効になる。    
 
 
 参照：  
-[Visual Studio Code on macOS](https://code.visualstudio.com/docs/setup/mac)「Launching from the command line」  
+[Visual Studio Code on macOS](https://code.visualstudio.com/docs/setup/mac)「Launching frovm the command line」  
 
 
 
 以上  
 
 [Go to Toplevel](https://xshigee.github.io/web0/)  
+
