@@ -1,7 +1,7 @@
     
 # Macことはじめ 
 
-2022/11/23  
+2022/11/23+  
 問題点の回避策/対応方法を追加した。  
 
 2022/11/15+++      
@@ -202,7 +202,7 @@ WindowsのloopMIDIと同じような機能を仮想MIDIデバイスとして実�
 その状態で[option]を押すと「システム情報...」に変わるのでクリックする。
 
 ## 問題点
-1. processingのスケッチは実行できない。モードを変えて、p5.jsにすると正常実行できる。  
+1.processingのスケッチは実行できない。モードを変えて、p5.jsにすると正常実行できる。  
 原因不明  
 [Download 4.0.1(August 10, 2022) MacOS(Intel 64-bit)](https://processing.org/download)  
 →  
@@ -222,13 +222,13 @@ import com.jogamp.opengl.GLProfile;
 参照：  
 [P3D & P2D window not showing on MacOS Ventura #544](https://github.com/processing/processing4/issues/544)  
 
-2. Mac用VisualCodeをインストールしても、コマンドライン(シェル上)で「code」でVisualCodeが起動できない。  
+2.Mac用VisualCodeをインストールしても、コマンドライン(シェル上)で「code」でVisualCodeが起動できない。  
 →  
 2022/11/23  
 対応方法：  
-1.VisualCodeを起動する。
-2.コマンドパレット(Cmd+Shift+P)から「Shell Command:Install 'code' command in PATH command」を検索/実行する。
-3.ターミナルを再起動すると、codeが有効になる。
+1.VisualCodeを起動する。 
+2.コマンドパレット(Cmd+Shift+P)から「Shell Command:Install 'code' command in PATH command」を検索/実行する。  
+3.ターミナルを再起動すると、codeが有効になる。  
 
 
 参照：  
