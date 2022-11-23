@@ -1,5 +1,8 @@
     
 # processingでCCMapperを実装する
+ 
+2022/11/23  
+Mac用スケッチを追加した。  
 
 2022/11/3      
 初版    
@@ -119,6 +122,63 @@ Copied to the clipboard. Use shift-click to search the web instead.
 MIDI接続状況：  
 MIDIとしての接続は「[re.corder/ElefueをCCMapper経由で外部音源(Aria/Windows)と接続する(WIDI_Bud_Pro使用)](https://xshigee.github.io/web0/md/CCMapper_Aria.html)」と同じ接続にする。
 
+
+## 追加：Mac用スケッチ
+
+CCMapperMac
+```java
+
+// CCMapper for Mac (2022/11/23)
+
+import themidibus.*;
+
+MidiBus myBus; // MidiBus instance
+
+void setup() {
+
+    size(150, 150);    // window size
+    background(255,0,255);   // window color
+
+    MidiBus.list();                     // disp MIDI device list
+    myBus = new MidiBus(this, 2, 2);    // MIDI device input/output assignment
+}
+
+void draw(){       
+}
+
+void noteOn(int channel, int pitch, int velocity) {
+  // Receive a noteOn
+  // will NOT send it at Mac Env.
+  //myBus.sendNoteOn(channel, pitch, velocity);
+
+//println("NoteOn channel:" + channel + " pitch:" + pitch +" velocity:"+ velocity);
+
+}
+
+void noteOff(int channel, int pitch, int velocity) {
+  // Receive a noteOff
+  // will NOT send it at Mac Env.
+  //myBus.sendNoteOff(channel, pitch, velocity);
+
+//println("NoteOFF channel:" + channel + " pitch:" + pitch +" velocity:"+ velocity);
+
+}
+
+void controllerChange(int channel, int number, int value){
+
+  if(number == 2 || number == 11){   // breath or expression
+    // for Aria
+    myBus.sendControllerChange(channel, 2, value);
+    myBus.sendControllerChange(channel, 7, value);
+    myBus.sendControllerChange(channel, 26, value);
+  }else{
+    myBus.sendControllerChange(channel, number, value);
+  }
+
+//println("channel:" + channel + " number:" + number +" value:"+ value);
+
+}
+```
 
 ## 関連情報   
 MidiBus(MIDI foor processing)関連：    
