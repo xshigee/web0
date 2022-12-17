@@ -6,8 +6,8 @@
   
 ## 概要    
 
-「[CCMapper3 for Win/Mac](https://xshigee.github.io/web0/md/CCMapper3_Win_Mac.html)」の記事の続きにあたる記事で、当該の記事のC#ソースコードはLinuxでは動作しないので、Linux用にOpenFrameworks(C++)で、同様の機能を実装した。
-この機能は、[WIDI Bud Pro]経由でMIDIデータをリアルタイムでCC#2またはCC#11を受信して、CC#を任意のもの(複数)に変更して音源に送信する。
+「[CCMapper3 for Win/Mac](https://xshigee.github.io/web0/md/CCMapper3_Win_Mac.html)」の記事の続きにあたる記事で、当該の記事のC#ソースコードはLinuxでは動作しないので、Linux用にOpenFrameworks(C++)で、同様の機能を実装した。    
+この機能は、[WIDI Bud Pro]経由でMIDIデータをリアルタイムでCC#2またはCC#11を受信して、CC#を任意のもの(複数)に変更して音源に送信する。   
 
 ## 準備
 linuxの場合、仮想MIDIデバイスとして、既存の[Midi Through port]を利用する。
