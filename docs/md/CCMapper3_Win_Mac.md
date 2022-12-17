@@ -772,20 +772,20 @@ CCMapper3を起動したら、次に音源を立ち上げて入力MIDIデバイ�
                                                                     
 なお、色々な音源で必要と思われるCC#を有効にしているので、Ariaだけでなく、以下の音源でも、そのまま利用できる。多数のCC#が有効になっているが、特に問題がなければ、そのままで、かまわないが、それぞれのCC#をオフする機能がある。
 
-1. Aria(USB-EWI)
-1. Lyrihorn-2(VST3)
+1. Aria(USB-EWI)  
+1. Lyrihorn-2(VST3)  
 [Lyrihorn-2](https://www.davidsonaudioandmultimedia.com/products/lyrihorn-2)  
-1. EVI-NER(VST3)
+1. EVI-NER(VST3)  
 [EVI-NER](https://www.davidsonaudioandmultimedia.com/products/evi-ner)  
-1. IFW(VST3)
-1. Respiro
+1. IFW(VST3)  
+1. Respiro  
 [RESPIRO - Physical Modeling Wind Synth](https://www.imoxplus.com/site/)
-1. TubeSynth(VST3)
+1. TubeSynth(VST3)  
 [TUBE SYNTH - VIRTUAL INSTRUMENTS](https://www.airmusictech.com/virtual-instruments/tubesynth.html)  
-1. Surge XT
+1. Surge XT  
 [SURGE XT - Free & Open Source Hybrid Synthesizer](https://surge-synthesizer.github.io/)  
 [Surge XT User Manual](https://surge-synthesizer.github.io/manual-xt/)  
-1. Vital
+1. Vital  
 [VITAL - Spectral warping wavetable synth](https://vital.audio/)  
 [Get Vital](https://vital.audio/#getvital)(フリー版もある)   
 
