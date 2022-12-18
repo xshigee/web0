@@ -62,7 +62,7 @@ def midiin_callback(event, data=None):
         status, note, velocity = message
         channel = (status & 0xF) + 1
         print("NoteOn note:%d velocity:%d" % (note, velocity))
-	curNote = note
+        curNote = note
         midiout.send_message(message)
     elif message[0] & 0xF0 == NOTE_OFF:
         status, note, velocity = message
@@ -165,7 +165,71 @@ CCMapperを起動したら、次に音源を立ち上げて入力MIDIデバイ�
 [Get Vital](https://vital.audio/#getvital)(フリー版もある)   
 
 
-## 参考情報                                    
+## port probe
+実際になにが接続されているか確認する場合、以下のプログラムを使用する：  
+
+probe_ports.py
+```python
+#!/usr/bin/env python
+#
+# probe_ports.py
+#
+"""Shows how to probe for available MIDI input and output ports."""
+
+from rtmidi import (API_LINUX_ALSA, API_MACOSX_CORE, API_RTMIDI_DUMMY,
+                    API_UNIX_JACK, API_WINDOWS_MM, MidiIn, MidiOut,
+                    get_compiled_api)
+
+try:
+    input = raw_input
+except NameError:
+    # Python 3
+    StandardError = Exception
+
+apis = {
+    API_MACOSX_CORE: "macOS (OS X) CoreMIDI",
+    API_LINUX_ALSA: "Linux ALSA",
+    API_UNIX_JACK: "Jack Client",
+    API_WINDOWS_MM: "Windows MultiMedia",
+    API_RTMIDI_DUMMY: "RtMidi Dummy"
+}
+
+available_apis = get_compiled_api()
+
+for api, api_name in sorted(apis.items()):
+    if api in available_apis:
+        try:
+            reply = input("Probe ports using the %s API? (Y/n) " % api_name)
+            if reply.strip().lower() not in ['', 'y', 'yes']:
+                continue
+        except (KeyboardInterrupt, EOFError):
+            print('')
+            break
+
+        for name, class_ in (("input", MidiIn), ("output", MidiOut)):
+            try:
+                midi = class_(api)
+                ports = midi.get_ports()
+            except StandardError as exc:
+                print("Could not probe MIDI %s ports: %s" % (name, exc))
+                continue
+
+            if not ports:
+                print("No MIDI %s ports found." % name)
+            else:
+                print("Available MIDI %s ports:\n" % name)
+
+                for port, name in enumerate(ports):
+                    print("[%i] %s" % (port, name))
+
+            print('')
+            del midi
+```
+
+## 参考情報
+python-rtmidi関連：  
+[https://github.com/SpotlightKid/python-rtmidi](https://github.com/SpotlightKid/python-rtmidi)  
+
 loopMIDI関連：  
 [loopMIDI](https://www.tobias-erichsen.de/software/loopmidi.html)  
 [loopMIDIでつなぐ](https://webmidiaudio.com/npage501.html)  
