@@ -1,7 +1,7 @@
     
 # CCMapper(RtMidi/python3)  
 
-2022/12/18      
+2022/12/18+      
 初版    
   
 ## 概要    
@@ -33,13 +33,12 @@ CCMapperのプログラムとしては以下になる：
 
 CCMapper_RtMidi.py
 ```python
-
 #!/usr/bin/env python
 #
 # CCMapper_RtMidi.py
 #
 # written by: xshige
-# 2022/12/18
+# 2022/12/19
 
 import sys
 import time
@@ -57,6 +56,7 @@ from rtmidi.midiutil import open_midioutput
 from rtmidi.midiutil import open_midiinput
 
 def midiin_callback(event, data=None):
+    global curNote
     message, deltatime = event
     if message[0] & 0xF0 == NOTE_ON:
         status, note, velocity = message
@@ -70,6 +70,11 @@ def midiin_callback(event, data=None):
         print("NoteOff note:%d velocity:%d" % (note, velocity))
         #curNote = note
         midiout.send_message(message)
+        # PATCH All Sound Off
+        #msg2 = [ALL_SOUND_OFF + channel - 1]
+        #msg2.append(120)
+        #msg2.append(0)
+        #midiout.send_message(msg2)           
     elif message[0] & 0xF0 == CONTROL_CHANGE:
         status, control, value = message
         channel = (status & 0xF) + 1
@@ -96,6 +101,13 @@ def midiin_callback(event, data=None):
             msg2.append(curNote & 0x7F)
             msg2.append(value & 0x7F)
             midiout.send_message(msg2)
+            if (value == 0):
+                # PATCH All Sound Off
+                msg2 = [ALL_SOUND_OFF + channel - 1]
+                msg2.append(120)
+                msg2.append(0)
+                midiout.send_message(msg2)
+                return           
             return
     elif message[0] & 0xF0 == CHANNEL_PRESSURE:
         value = message[0]
@@ -118,7 +130,7 @@ def midiin_callback(event, data=None):
 def main(args=None):
     
     global midiout
-    global curNote
+    #global curNote
 
     curNote = 0
 
@@ -132,7 +144,7 @@ def main(args=None):
 
     try:
         while True:
-            time.sleep(0.1)
+            time.sleep(0.01)
     except KeyboardInterrupt:
         print("Bye.")
         pass
