@@ -1,7 +1,7 @@
     
 # CCMapper(RtMidi/python3)  
 
-2022/12/18+      
+2022/12/18++      
 初版    
   
 ## 概要    
@@ -11,14 +11,23 @@
 本機能は、[WIDI Bud Pro]経由でMIDIデータをリアルタイムでCC#2またはCC#11を受信して、CC#を任意のもの(複数、AT、PPを含む)に変更して音源に送信する。Pitch_Bendは,そのまま接続されている音源に送られる。     
 
 ## 準備
-linuxの場合、仮想MIDIデバイスとして、既存の[Midi Through port]を利用する。
+1. linuxの場合  
+仮想MIDIデバイスとして、既存の[Midi Through port]を利用する。
 
 MIDI信号の流れとしては以下のようになる：
 ```
 [wind_controler(re.corder/Elfue etc)]→[WIDI Bud Pro]→(CCMapper)→[Midi Through Port]→ [PC音源]
 ```
+2. windowsの場合  
+仮想MIDIデバイスとして、[loopMIDI]を利用する。
+
+MIDI信号の流れとしては以下のようになる：
+```
+[wind_controler(re.corder/Elfue etc)]→[WIDI Bud Pro]→(CCMapper)→[loopMIDI]→ [PC音源]
+```
 
 ## 準備
+1. linuxの場合  
 以下を実行してライブラリをインストールする：  
 ```
 
@@ -27,6 +36,51 @@ sudo apt install python3-rtmidi
 ```
 pythonでありがちなpipでないので注意のこと。
 
+2. windowsの場合  
+
+以下を実行してインストールする：  
+```
+基本的には以下の方法であるが、エラーが出たので一部変更している：　
+https://spotlightkid.github.io/python-rtmidi/install-windows.html
+
+python -m pip install -U virtualenv
+python.exe -m pip install --upgrade pip
+
+python -m virtualenv rtmidi
+rtmidi\Scripts\activate
+# ここで、仮想環境rtmidiにはいる
+
+pip install -U pip setuptools
+
+pip download python-rtmidi
+tar -xzf python-rtmidi-1.4.9.tar.gz
+cd python-rtmidi-1.4.9
+python setup.py install
+
+# 以上でライブラリのインストールは完了する
+# 以下は、動作確認になる：
+
+(rtmidi) PS C:\Users\xxxx> python
+Python 3.10.1 (tags/v3.10.1:2cd268a, Dec  6 2021, 19:10:37) [MSC v.1929 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import rtmidi
+>>> rtmidi.API_WINDOWS_MM in rtmidi.get_compiled_api()
+True
+>>> midiout = rtmidi.MidiOut()
+>>> midiout.get_ports()
+['VirtualMIDISynth #1 0', 'Microsoft GS Wavetable Synth 1', 'loopMIDI Port 1 2']
+# 上のデバイスポート名は、動作環境に依存する
+>>>
+```
+
+仮想環境に該当ライブラリをインストールしたので、
+rtmidiライブラリを使用する場合は、
+以下を実行して仮想環境に入ること。  
+
+```
+rtmidi\Scripts\activate
+
+```
 
 ## CCMapper
 CCMapperのプログラムとしては以下になる：  
@@ -163,7 +217,8 @@ if __name__ == '__main__':
 
 ```
 
-CCMapperを起動したら、次に音源を立ち上げて入力MIDIデバイスを「Midi Through port」に設定する。
+CCMapperを起動したら、次に音源を立ち上げて入力MIDIデバイスを  
+linuxの場合、「Midi Through port」(windowsの場合は、「loopMIDI」)に設定する。
 
 ここで、wind_controlerで吹くと音が出る。
                                                                     
@@ -236,6 +291,24 @@ for api, api_name in sorted(apis.items()):
 
             print('')
             del midi
+```
+
+## windowsでの動作
+linuxと実行環境が異なるので、probe_ports.pyを実行して、実際のデバイスポートを確認してソースを修正する。  
+outportが'loopMIDI',inportが'WIDI Bud Pro'になるように変更する：  
+
+変更例：  
+```python
+
+    midiout, outport = open_midioutput(2) # loopMIDI for windows
+    #midiout, outport = open_midioutput(0) # Midi Through for linux
+    print("output port: '%s'" % outport)
+
+    #midiin, port_name = open_midiinput(args[0] if args else None)
+    midiin, inport = open_midiinput(1) # WIDI Bud Pro for linux/windows
+    print("input port: '%s'" % inport)
+    midiin.set_callback(midiin_callback)
+
 ```
 
 ## 参考情報
