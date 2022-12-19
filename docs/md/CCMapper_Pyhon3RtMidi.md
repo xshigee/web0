@@ -39,6 +39,7 @@ pythonでありがちなpipでないので注意のこと。
 2. windowsの場合  
 
 以下を実行してインストールする：  
+
 ```
 基本的には以下の方法であるが、エラーが出たので一部変更している：　
 https://spotlightkid.github.io/python-rtmidi/install-windows.html
