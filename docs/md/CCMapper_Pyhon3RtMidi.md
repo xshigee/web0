@@ -14,14 +14,17 @@
 1. linuxの場合  
 仮想MIDIデバイスとして、既存の[Midi Through port]を利用する。
 
-MIDI信号の流れとしては以下のようになる：
+MIDI信号の流れとしては以下のようになる： 
+
 ```
 [wind_controler(re.corder/Elfue etc)]→[WIDI Bud Pro]→(CCMapper)→[Midi Through Port]→ [PC音源]
 ```
+
 2. windowsの場合  
 仮想MIDIデバイスとして、[loopMIDI]を利用する。
 
 MIDI信号の流れとしては以下のようになる：
+
 ```
 [wind_controler(re.corder/Elfue etc)]→[WIDI Bud Pro]→(CCMapper)→[loopMIDI]→ [PC音源]
 ```
@@ -29,6 +32,7 @@ MIDI信号の流れとしては以下のようになる：
 ## 準備
 1. linuxの場合  
 以下を実行してライブラリをインストールする：  
+
 ```
 
 sudo apt install python3-rtmidi
@@ -41,8 +45,8 @@ pythonでありがちなpipでないので注意のこと。
 以下を実行してインストールする：  
 
 ```
-基本的には以下の方法であるが、エラーが出たので一部変更している：　
-https://spotlightkid.github.io/python-rtmidi/install-windows.html
+基本的には以下の方法であるが、エラーが出たので一部変更している：  
+https://spotlightkid.github.io/python-rtmidi/install-windows.html  
 
 python -m pip install -U virtualenv
 python.exe -m pip install --upgrade pip
@@ -298,7 +302,8 @@ for api, api_name in sorted(apis.items()):
 linuxと実行環境が異なるので、probe_ports.pyを実行して、実際のデバイスポートを確認してソースを修正する。  
 outportが'loopMIDI',inportが'WIDI Bud Pro'になるように変更する：  
 
-変更例：  
+変更例：                                                                    
+
 ```python
 
     midiout, outport = open_midioutput(2) # loopMIDI for windows
