@@ -48,7 +48,7 @@ python.exe -m pip install --upgrade pip
 
 python -m virtualenv rtmidi
 rtmidi\Scripts\activate
-# ここで、仮想環境rtmidiにはいる
+ここで、仮想環境rtmidiにはいる
 
 pip install -U pip setuptools
 
@@ -57,8 +57,8 @@ tar -xzf python-rtmidi-1.4.9.tar.gz
 cd python-rtmidi-1.4.9
 python setup.py install
 
-# 以上でライブラリのインストールは完了する
-# 以下は、動作確認になる：
+以上でライブラリのインストールは完了する
+以下は、動作確認になる：
 
 (rtmidi) PS C:\Users\xxxx> python
 Python 3.10.1 (tags/v3.10.1:2cd268a, Dec  6 2021, 19:10:37) [MSC v.1929 64 bit (AMD64)] on win32
@@ -69,7 +69,7 @@ True
 >>> midiout = rtmidi.MidiOut()
 >>> midiout.get_ports()
 ['VirtualMIDISynth #1 0', 'Microsoft GS Wavetable Synth 1', 'loopMIDI Port 1 2']
-# 上のデバイスポート名は、動作環境に依存する
+上のデバイスポート名は、動作環境に依存する
 >>>
 ```
 
