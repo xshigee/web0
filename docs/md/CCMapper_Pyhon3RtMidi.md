@@ -78,7 +78,7 @@ rtmidiライブラリを使用する場合は、
 以下を実行して仮想環境に入ること。  
 
 ```
-rtmidi\Scripts\activate
+. rtmidi\Scripts\activate
 
 ```
 
