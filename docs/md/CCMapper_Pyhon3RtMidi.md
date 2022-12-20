@@ -14,7 +14,7 @@ Macの記述を追加した。
 本機能は、[WIDI Bud Pro]経由でMIDIデータをリアルタイムでCC#2またはCC#11を受信して、CC#を任意のもの(複数、AT、PPを含む)に変更して音源に送信する。Pitch_Bendは,そのまま接続されている音源に送られる。     
 
 ## 準備
-1. linuxの場合  
+1.linuxの場合  
 仮想MIDIデバイスとして、既存の[Midi Through port]を利用する。
 
 MIDI信号の流れとしては以下のようになる： 
@@ -23,7 +23,7 @@ MIDI信号の流れとしては以下のようになる：
 [wind_controler(re.corder/Elfue etc)]→[WIDI Bud Pro]→(CCMapper)→[Midi Through Port]→ [PC音源]
 ```
 
-2. windowsの場合  
+2.windowsの場合  
 仮想MIDIデバイスとして、[loopMIDI]を利用する。
 
 MIDI信号の流れとしては以下のようになる：
@@ -32,7 +32,7 @@ MIDI信号の流れとしては以下のようになる：
 [wind_controler(re.corder/Elfue etc)]→[WIDI Bud Pro]→(CCMapper)→[loopMIDI]→ [PC音源]
 ```
 
-3. Macの場合  
+3.Macの場合  
 仮想MIDIデバイスとして、IACドライバを設定する。名前はWindowsに合わせて「loopMIDI」とする。
 参照：[MacのAudio MIDI設定でMIDI情報をアプリケーション間で送信する](https://support.apple.com/ja-jp/guide/audio-midi-setup/ams1013/mac)  
 
@@ -42,7 +42,7 @@ MIDI信号の流れとしては以下のようになる：
 ```
 
 ## 準備
-1. linuxの場合  
+1.linuxの場合  
 以下を実行してライブラリをインストールする：  
 
 ```
@@ -52,7 +52,7 @@ sudo apt install python3-rtmidi
 ```
 pythonでありがちなpipでないので注意のこと。
 
-2. windowsの場合  
+2.windowsの場合  
 以下を実行してインストールする：  
 \# scoopで必要なコマンドがインストール済みの前提  
 
@@ -99,7 +99,7 @@ rtmidiライブラリを使用する場合は、
 
 ```
 
-3. Macの場合  
+3.Macの場合  
 以下を実行してインストールする：  
 \# brewでpython3がインストール済みの前提
 ```
@@ -107,8 +107,8 @@ pip install python-rtmidi
 
 ```
 
-実際の実行にあたり、python3は、コマンド名として、Macではpython3になっているので、 以下のように実行すること　　
-(これに対して、linux/windowsの場合、python)　　  
+実際の実行にあたり、python3は、コマンド名として、Macではpython3になっているので、 以下のように実行すること  
+(これに対して、linux/windowsの場合、python)  
 ```
 python3 CCMapper_RtMidi.py
 
