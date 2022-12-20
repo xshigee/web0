@@ -1,6 +1,9 @@
     
 # CCMapper(RtMidi/python3)  
 
+2022/12/21  
+Macの記述を追加した。  
+
 2022/12/18++      
 初版    
   
@@ -29,6 +32,15 @@ MIDI信号の流れとしては以下のようになる：
 [wind_controler(re.corder/Elfue etc)]→[WIDI Bud Pro]→(CCMapper)→[loopMIDI]→ [PC音源]
 ```
 
+3. Macの場合  
+仮想MIDIデバイスとして、IACドライバを設定する。名前はWindowsに合わせて「loopMIDI」とする。
+参照：[MacのAudio MIDI設定でMIDI情報をアプリケーション間で送信する](https://support.apple.com/ja-jp/guide/audio-midi-setup/ams1013/mac)  
+
+MIDI信号の流れとしては以下のようになる：
+```
+[wind_controler(re.corder/Elfue etc)]→(CCMapper)→[loopMIDI(IAC)]→ [PC音源]
+```
+
 ## 準備
 1. linuxの場合  
 以下を実行してライブラリをインストールする：  
@@ -41,8 +53,8 @@ sudo apt install python3-rtmidi
 pythonでありがちなpipでないので注意のこと。
 
 2. windowsの場合  
-
 以下を実行してインストールする：  
+\# scoopで必要なコマンドがインストール済みの前提  
 
 ```
 基本的には以下の方法であるが、エラーが出たので一部変更している：  
@@ -84,6 +96,21 @@ rtmidiライブラリを使用する場合は、
 
 ```
 . rtmidi\Scripts\activate
+
+```
+
+3. Macの場合  
+以下を実行してインストールする：  
+\# brewでpython3がインストール済みの前提
+```
+pip install python-rtmidi
+
+```
+
+実際の実行にあたり、python3は、コマンド名として、Macではpython3になっているので、 以下のように実行すること　　
+(これに対して、linux/windowsの場合、python)　　  
+```
+python3 CCMapper_RtMidi.py
 
 ```
 
@@ -303,7 +330,6 @@ linuxと実行環境が異なるので、probe_ports.pyを実行して、実際�
 outportが'loopMIDI',inportが'WIDI Bud Pro'になるように変更する：  
 
 変更例：                                                                    
-
 ```python
 
     midiout, outport = open_midioutput(2) # loopMIDI for windows
@@ -316,8 +342,17 @@ outportが'loopMIDI',inportが'WIDI Bud Pro'になるように変更する：
     midiin.set_callback(midiin_callback)
 
 ```
+注意：環境依存なので、このソースのようになるとは限らない。  
+
+## Macでの動作
+linuxと実行環境が異なるので、probe_ports.pyを実行して、実際のデバイスポート(の番号)を確認してソースを修正する。  
+outportが'loopMIDI',inportが'接続しているコントローラ名'になるように変更する。
 
 ## 参考情報
+os関連：  
+[brewをインストールする/MIDI関連 - Macことはじめ](https://xshigee.github.io/web0/md/Mac_beginner.html)  
+[scoopをインストール - windows10にplatformioをインストールする(scoop版)](https://beta-notes.way-nifty.com/blog/cat24313500/index.html)    
+
 python-rtmidi関連：  
 [https://github.com/SpotlightKid/python-rtmidi](https://github.com/SpotlightKid/python-rtmidi)  
 
