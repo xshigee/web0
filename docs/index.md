@@ -2,11 +2,12 @@
 
 # 役に立ちそうなメモの置き場
 
-2022/12/18現在  
+2022/12/24現在  
 
 以下のリンクをクリックして下さい：  
   
-# latest:rocket:
+# latest:rocket: 
+1. [OSC RecSend Example(python3/C#)](md/OSCRecSendExample_py_cs.md)  
 1. [CCMapper(RtMidi/python3)](md/CCMapper_Pyhon3RtMidi.md)     
 1. [CCMapper3 for Linux](md/CCMapper3_Linux.md)     
 1. [CCMapper3 for Win/Mac](md/CCMapper3_Win_Mac.md)   
