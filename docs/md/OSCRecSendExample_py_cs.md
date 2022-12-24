@@ -449,7 +449,7 @@ internal class Program
 NuGetパッケージマネージャでインストールする。　　
 
 
-## python3の他のサンプル
+## ほかのサンプル(python3)
 
 ライブラリのインストール  
 
@@ -473,9 +473,44 @@ pip install pyliblo3
 
 ```
 
-windowsの場合  
-libloをソースからビルドする必要があるが
-上手くいかなかった。
+windowsの場合
+途中でエラーになり最後までインストールできなかったが
+途中までを掲載する：  
+
+```
+
+git clone https://github.com/radarsat1/liblo.git
+cd liblo\cmake
+cmake -G "Visual Studio 17 2022"
+
+1. liblo.sln を VisualStudio2022 で開く。
+2. (Releaseにして)ビルドする。
+3. liblo\cmake\Release に liblo.dll が生成される。
+4. liblo.dll を C:\Windows\System32 にコピーする。
+この時点で、liblo.dllがインストールされる。
+
+----------------------------------------
+以下で動作確認のテストプログラムを実行する：
+
+liblo\cmake\tools\Release> ./oscdump osc.udp://:8000
+
+iPhone(TouchOSC)にホストのIPアドレス(PCのもの)をセットして
+フェイダーなどを動かすとPC側で受信したものが表示される。
+
+liblo\cmake\tools\Release> ./oscsend 192.168.1.6 9000 /1/fader1 f 0.123
+"192.168.1.6"のところは、iPhone(TouchOSC)のIPアドレスを入れる。
+OSCメッセージがiPhone(TouchOSC)に送信される。
+----------------------------------------
+
+pip download pyliblo3
+tar -xzf pyliblo3-0.13.0.tar.gz
+cd pyliblo3-0.13.0
+
+python setup.py build
+
+ここで、エラー「'lo/lo.h':No such file or directory」になり終了！
+
+```
 
 OSCserverRecSend.py
 ```python
