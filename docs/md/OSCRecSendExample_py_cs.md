@@ -1,5 +1,8 @@
     
-# OSC RecSend Example(python3/C#)  
+# OSC RecSend Example(python3/C#/Javascript)  
+
+2022/12/25  
+Javascript(node)のサンプルを追加した。  
 
 2022/12/23      
 初版    
@@ -448,6 +451,41 @@ internal class Program
 ライブラリとして、Rug.OSCを使用しているので　　
 NuGetパッケージマネージャでインストールする。　　
 
+## Javascript(node)
+
+ライブラリを以下のようにインストールする：  
+```
+npm install node-osc
+```
+
+OSCRecSend.js
+
+```javascript
+
+const { Client, Server } = require('node-osc');
+
+const client = new Client('192.168.1.6', 9000); // IP address of iPhone(TouchOSC)
+
+var oscServer = new Server(8000, '0.0.0.0', () => {
+  console.log('OSC Server is listening');
+});
+
+oscServer.on('message', function (msg) {
+  if (msg.length == 2) console.log(`${msg[0]} ${msg[1]}`);
+  else if (msg.length == 3) console.log(`${msg[0]} ${msg[1]} ${msg[2]}`);
+  else  console.log(`Message: ${msg}`);
+  if (msg[0] == '/1/fader1') {
+
+    client.send('/1/fader2', msg[1], (err) => {
+      if (err) console.error(err);
+    });
+    client.send('/1/fader5', msg[1], (err) => {
+      if (err) console.error(err);
+    });
+
+  }
+});
+```
 
 ## ほかのサンプル(python3)
 
@@ -581,6 +619,10 @@ C#関連：
 pythonインストール関連：  
 [brewをインストールする - Macことはじめ](https://xshigee.github.io/web0/md/Mac_beginner.html)  
 [scoopをインストール - windows10にplatformioをインストールする(scoop版)](https://beta-notes.way-nifty.com/blog/cat24313500/index.html)    
+
+Javascript関連：  
+[Node.js® is an open-source, cross-platform JavaScript runtime environment](https://nodejs.org/en/)  
+[node-osc](https://www.npmjs.com/package/node-osc)  
 
 TouchOSC関連：
 [TouchOSCMk1](https://hexler.net/touchosc-mk1)(昔からあるものがMK1としてある)  
