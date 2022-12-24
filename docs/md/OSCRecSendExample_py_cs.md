@@ -473,7 +473,7 @@ pip install pyliblo3
 
 ```
 
-windowsの場合
+windowsの場合   
 途中でエラーになり最後までインストールできなかったが
 途中までを掲載する：  
 
