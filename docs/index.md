@@ -2,11 +2,12 @@
 
 # 役に立ちそうなメモの置き場
 
-2022/12/25現在  
+2022/12/28現在  
 
 以下のリンクをクリックして下さい：  
   
 # latest:rocket:  
+1. [sforzandoを使う](md/sforzando.md)  
 1. [CCMapper(Javascript(node))](md/CCMapper_JS_node.md)  
 1. [OSC RecSend Example(python3/C#/Javascript)](md/OSCRecSendExample_py_cs.md)  
 1. [CCMapper(RtMidi/python3)](md/CCMapper_Pyhon3RtMidi.md)     
