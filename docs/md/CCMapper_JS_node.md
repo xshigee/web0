@@ -1,7 +1,7 @@
     
 # CCMapper(Javascript(node))  
 
-2022/12/26  
+2022/12/26+  
 CCMapper:  
 All Note Off/All Sound Off を追加した。  
 CCViewer を追加した。  
@@ -720,6 +720,15 @@ console.log('Opened INOUT: ', input.getPortName(innum));
 
 ```
 
+windowsではコンソール画面のリフレッシュレートを下げる必要があるようなので
+以下のように修正する：
+
+```js
+//var intervalID = setInterval(update, 40);
+var intervalID = setInterval(update, 100); // for windows
+function update() {
+<省略>
+```
 
 ## 参考情報                                    
 Javascript(node)関連：  
