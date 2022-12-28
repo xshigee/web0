@@ -15,7 +15,7 @@ CCMapperと組み合わせればwind_controlerの音源としても利用でき�
 データも同じところに置いてあるので、それもダウンロードする。
 
 soundfontデータ：  
-.sf2のフリーのデータは以下に置いてあるのでダウンロードする：
+.sf2のフリーのデータは以下に置いてあるのでダウンロードする：  
 [Files for free-soundfonts-sf2-2019-04](https://archive.org/download/free-soundfonts-sf2-2019-04)  
 
 
