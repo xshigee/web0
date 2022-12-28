@@ -9,7 +9,7 @@
 CCMapperと組み合わせればwind_controlerの音源としても利用できる。
 
 ## インストール
-プログラム：　　
+プログラム：   
 [https://www.plogue.com/downloads.html#sforzando](https://www.plogue.com/downloads.html#sforzando)  
 上のurlからWindowsとMacのうち必要なものをダウンロードしてインストールする。  
 データも同じところに置いてあるので、それもダウンロードする。
@@ -20,12 +20,12 @@ soundfontデータ：
 
 
 ## 使い方
-[sforzando_guide](https://s3.amazonaws.com/sforzando/sforzando_guide.pdf)　
+[sforzando_guide](https://s3.amazonaws.com/sforzando/sforzando_guide.pdf)    
 使い方は上のリンクに詳細がのっているが
-簡単に説明すると、起動が尾、入力を「loopMIDI」にして、CCMapperを立ち上げて
-wind_controlerを接続すれば音がでる。　　
+簡単に説明すると、起動して、入力を「loopMIDI」にして、CCMapperを立ち上げて
+wind_controlerを接続すれば音が出る。    
 キーボード系の音色はとりあえず、音が出るレベルなので
-よりwind_controler向けのもの(brass,synth,organなで)にする。  
+よりwind_controler向けのもの(brass,synth,organなど)にする。  
 
 .sf2の読み込みは、[SNAPSHOT/load]で.sf2を開くと自動的に変換される。 
 (最初の１回のみ、変換結果を入れるディレクトリを指定する)  
