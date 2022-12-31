@@ -6,14 +6,15 @@
   
 ## 概要    
 
-CCMapperをjavascript+html(Web Midi)で実装した。ブラウザーは、chromeの限定されるが、Windows/Mac/Linux上で動作する。
+CCMapperをjavascript+html(Web Midi)で実装した。  
+ブラウザーは、chromeの限定されるが、Windows/Mac/Linux上で動作する。  
 この機能は、[WIDI Bud Pro]経由でMIDIデータをリアルタイムでCC#2またはCC#11を受信して、CC#を任意のもの(複数)に変更して音源に送信する。   
-webによるGUIを持っており、トランスぽーす、CCのオン/オフ(オンは緑色)を画面上で行なえる。　　 
+webによるGUIを持っており、トランスポーズ、CCのオン/オフ(オンは緑色)を画面上で行なえる。　　 
 
-なお、本プログラムは、https://fukuno.jig.jp/app/midi/midimonitor.html, https://github.com/tadfmac/poormidi のものを流用させていただいた。
+なお、本プログラムは、https://fukuno.jig.jp/app/midi/midimonitor.html と https://github.com/tadfmac/poormidi のものを流用させていただいた。
 
 ## 準備
-1.Windowsの場合、
+1.Windowsの場合  
 仮想MIDIデバイスとして、loopMIDIがインストールされている必要がある。
 参照：[loopMIDI](https://www.tobias-erichsen.de/software/loopmidi.html)  
 
@@ -23,7 +24,7 @@ MIDI信号の流れとしては以下のようになる：
 [wind_controler(re.corder/Elfue etc)]→[WIDI Bud Pro]→(CCMapper)→[loopMIDI]→ [PC音源]
 ```
 
-2.Macの場合
+2.Macの場合  
 仮想MIDIデバイスとして、IACドライバを設定する。名前はWindowsに合わせて「loopMIDI」とする。 
 参照：[仮想MIDIデバイスの設定 - Macことはじめ](https://xshigee.github.io/web0/md/Mac_beginner.html)  
 
@@ -33,7 +34,7 @@ MIDI信号の流れとしては以下のようになる：
 [wind_controler(re.corder/Elfue etc)]→(CCMapper)→[loopMIDI(IAC)]→ [PC音源]
 ```
 
-3.linuxの場合、　　
+3.linuxの場合、  
 仮想MIDIデバイスとして、既存の[Midi Through port]を利用する。
 
 MIDI信号の流れとしては以下のようになる：
@@ -61,6 +62,7 @@ CCMapper_files/poormidiM.ja
 1. スイッチが緑色のときはオンを意味して該当のCCが送信される。  
 1. オクターブ関係のボタンを押すとオクターブの値が変化して、その数値の分(半音単位)、ピッチが変わる。
 
+以下をクリックするとCCMapperが起動する(chrome)：  
 [CCMapper](html/CCMapper.html)  
 
 ## ソースコード
@@ -376,8 +378,8 @@ window.onload = function() {
 
 ```
 
-CCMapper_files/fukuno.js
-\#修正なし(オリジナルのまま)
+CCMapper_files/fukuno.js  
+\#修正なし(オリジナルのまま)  
 ```js
 
 /* fukuno.js CC BY @taisuke */
@@ -1040,7 +1042,7 @@ var getLastDayOfMonth = function(year, month) {
 };
 ```
 
-CCMapper_files/poormidiM.js
+CCMapper_files/poormidiM.js  
 ```js
 
 // proormidiM.js
