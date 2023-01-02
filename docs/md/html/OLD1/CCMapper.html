@@ -3,24 +3,16 @@
 <title>CCMapper</title>
 
 <h1>CCMapper</h1>
-<h3>2023/1/2</h3>
+<h3>2022/12/31</h3>
 
-<!-- 2023/01/02 [Velocity Fixed],[PicthBend Thru]switches, [displaying input/output device name] are added -->
-<!--            [displaying NoteOn/NoteOff Dropped count] are added -->
-<!--            [NoteOn/NoteOff transfer]switch are added -->
 <!-- 2022/12/31 modified for CCMApper -->
-<!--            written by: xshige -->
-
+<!-- 2022/12/31 written by: xshige -->
 <!-- 2022/12/31 forked from https://fukuno.jig.jp/app/midi/midimonitor.html, 
 							https://github.com/tadfmac/poormidi -->
 
+<script src="./CCMapper_files/fukuno.js"></script>
 <script src="./CCMapper_files/poormidiM.js"></script>
 <script>"use strict";
-
-// function copied from fukuno.js
-var get = function(id) {
-	return document.getElementById(id);
-};
 
 // the followings are forked from ofxMidi
 // channel voice messages
@@ -47,15 +39,9 @@ const MIDI_ACTIVE_SENSING = 0xFE;1
 const MIDI_SYSTEM_RESET = 0xFF;
 
 window.onload = function() {
-	// for debug
-	var noteNest = 0; // NoteOn/NoteOff nest count
-	var noteOnDropCnt = 0; // NoteOn Droped count
-	var noteOffDropCnt = 0; // NoteOff Droped count
-
+	
 	var transpose = 0;
 	var curPitch = 0;
-	var curVelocity = 0;
-	var fixedVelocity = 77;
 
 	var fCC1 = true;
 	var fCC2 = true;
@@ -65,13 +51,10 @@ window.onload = function() {
 	var fCC26 = true;
 	var fAT = true;
 	var fPP = true;
-	var fVFIXED = false;
-	var fPB_THRU = true;
-
-	var fXfer = true; // NoteOn/NoteOff transfer
 
 	var midi = new poormidi();
 	midi.setHandler(function(e) {
+		//const n = e.data[0]
 		var status = e.data[0]&0xF0
 		var ch = e.data[0]&0x0F
 		if (status == MIDI_CONTROL_CHANGE) {
@@ -86,61 +69,26 @@ window.onload = function() {
 				if (fAT) midi.send(MIDI_AFTERTOUCH|ch, e.data[2]);
     			// AT(PP)
     			if (fPP) midi.send(MIDI_POLY_AFTERTOUCH|ch, transpose+curPitch, e.data[2]);
-				/*
     			// patch
     			// All Note Off
     			if (e.data[2] ==  0) midi.send(MIDI_CONTROL_CHANGE|ch,123, 0);
     			// All Sound Off
     			if (e.data[2] == 0) midi.send(MIDI_CONTROL_CHANGE|ch,120, 0);
-				*/
 			}
 		}
-		else if (status == MIDI_NOTE_ON) {		
-			// debug
-			if (noteNest !== 0) {
-				console.log("***** maybe NoteOff dropped! *****");
-				if (noteOffDropCnt < Number.MAX_SAFE_INTEGER) noteOffDropCnt++;
-				else noteOffDropCnt=0;
-				console.log("NoteOnDroped:"+noteOnDropCnt);
-				console.log("NoteOffDroped:"+noteOffDropCnt);
-				noteNest =0;
-			}
-			//
-			noteNest++;
+		else if (status == MIDI_NOTE_ON) {
 			curPitch = e.data[1];
-			curVelocity = e.data[2];
-			//midi.sendNoteOn(ch,e.data[1]+transpose,e.data[2]);
-			if (fXfer) {
-				if (fVFIXED) {
-					midi.sendNoteOn(ch,e.data[1]+transpose,fixedVelocity);
-					//get("velocity").value = fixedVelocity;
-				} else {
-					midi.sendNoteOn(ch,e.data[1]+transpose,curVelocity);
-					get("velocity").value = curVelocity;
-				}
-			}
+			midi.sendNoteOn(ch,e.data[1]+transpose,e.data[2]);
 		}
 		else if (status == MIDI_NOTE_OFF) {
-			noteNest--;
 			//midi.sendNoteOff(ch,e.data[1]);
-			if (fXfer) midi.send(MIDI_NOTE_OFF|ch,e.data[1]+transpose,e.data[2]);
-			// debug
-			if (noteNest !== 0) {
-				console.log("***** maybe NoteOn dropped! *****");
-				if (noteOnDropCnt < Number.MAX_SAFE_INTEGER) noteOnDropCnt++;
-				else noteOnDropCnt=0;
-				console.log("NoteOnDroped:"+noteOnDropCnt);
-				console.log("NoteOffDroped:"+noteOffDropCnt);
-				noteNest =0;
-			}
+			midi.send(MIDI_NOTE_OFF|ch,e.data[1]+transpose,e.data[2]);		
 		}
 		else if (status == MIDI_PITCH_BEND) {
-			if (fPB_THRU) midi.send(MIDI_PITCH_BEND|ch,e.data[1],e.data[2]);
     		var int14 = e.data[2]; // 2nd byte
     		int14 <<= 7;
     		int14 |= e.data[1];
-			get("PB").value = int14-8191; // display only
-		    //if (fPB_THRU) midi.send(MIDI_PITCH_BEND|ch,e.data[1],e.data[2]);
+		    midi.send(MIDI_PITCH_BEND|ch,e.data[1],e.data[2]);
 		}
     	return;
   	});
@@ -152,109 +100,58 @@ window.onload = function() {
 		}, 1000);
 	};
 	*/
-	setTimeout(function(){
-		var dd = midi.getIOdevName();
-		get("indev").value = dd[0];//"Widi Bud Pro";
-		get("outdev").value = dd[1];//"loopMIDI";
-		if (dd[0].includes("not found")) alert("Please press 'refresh' button of Chrome broswer!");
-	},100);
-
-	// debug
-	setInterval(function(){
-		get("NoteOnDropped").value = noteOnDropCnt;
-		get("NoteOffDropped").value = noteOffDropCnt;
-	},1000);
-
-	get("PANIC").onclick = function () {
-		noteOnDropCnt = 0;
-		noteOffDropCnt = 0;
-		noteNest = 0;
-		// All Note Off
-		midi.send(MIDI_CONTROL_CHANGE|0,123, 0);
-    	// All Sound Off
-    	midi.send(MIDI_CONTROL_CHANGE|0,120, 0);
-		console.log("PANIC!");
-	}
-
 	get("octdown").onclick = function() {
 		transpose -= 12;
 		console.log("trans:"+transpose);
-		get("trans").value = transpose;
+		document.getElementById("trans").value = transpose;
 	}
 	get("octup").onclick = function() {
 		transpose += 12;
 		console.log("trans:"+transpose);
-		get("trans").value = transpose;
+		document.getElementById("trans").value = transpose;
 	}
 	get("semidown").onclick = function() {
 		transpose -= 1;
 		console.log("trans:"+transpose);
-		get("trans").value = transpose;
+		document.getElementById("trans").value = transpose;
 	}
 	get("semiup").onclick = function() {
 		transpose += 1;
 		console.log("trans:"+transpose);
-		get("trans").value = transpose;
-	}
-
-	get("transfer").onclick = function() {
-		fXfer = get("transfer").checked;
-		console.log("Xfer:"+fXfer);
+		document.getElementById("trans").value = transpose;
 	}
 
 	get("CC1").onclick = function() {
-		fCC1 = get("CC1").checked;
+		fCC1 = document.form1.CC1.checked;
 		console.log("CC1:"+fCC1);
 	}
 	get("CC2").onclick = function() {
-		fCC2 = get("CC2").checked;
+		fCC2 = document.form1.CC2.checked;
 		console.log("CC2:"+fCC2);
 	}
 	get("CC7").onclick = function() {
-		fCC7 = get("CC7").checked;
+		fCC7 = document.form1.CC7.checked;
 		console.log("CC7:"+fCC7);
 	}
 	get("CC11").onclick = function() {
-		fCC11 = get("CC11").checked;
+		fCC11 = document.form1.CC11.checked;
 		console.log("CC11:"+fCC11);
 	}
 	get("CC74").onclick = function() {
-		fCC74 = get("CC74").checked;
+		fCC74 = document.form1.CC74.checked;
 		console.log("CC74:"+fCC74);
 	}
 	get("CC26").onclick = function() {
-		fCC26 = get("CC26").checked;
+		fCC26 = document.form1.CC26.checked;
 		console.log("CC26:"+fCC26);
 	}
 	get("AT").onclick = function() {
-		fAT = get("AT").checked;
+		fAT = document.form1.AT.checked;
 		console.log("AT:"+fAT);
 	}
 	get("PP").onclick = function() {
-		fPP = get("PP").checked;
+		fPP = document.form1.PP.checked;
 		console.log("PP:"+fPP);
-	}
-
-	get("VFIXED").onclick = function() {
-		fVFIXED = get("VFIXED").checked;
-		console.log("VFIXED:"+fVFIXED);
-		if (fVFIXED) get("velocity").value = fixedVelocity;
-		else get("velocity").value = curVelocity; 
-	}
-	get("veldown").onclick = function() {
-		fixedVelocity -= 1;
-		console.log("fixedVelocity:"+fixedVelocity);
-		get("velocity").value = fixedVelocity;
-	}
-	get("velup").onclick = function() {
-		fixedVelocity += 1;
-		console.log("fixedVelocity:"+fixedVelocity);
-		get("velocity").value = fixedVelocity;
-	}
-
-	get("PB_THRU").onclick = function() {
-		fPB_THRU = get("PB_THRU").checked;
-		console.log("PB_THRU:"+fPB_THRU);
 	}
 
 };
@@ -318,9 +215,9 @@ window.onload = function() {
   position: relative;
   top: 2px;
 }
+
 </style>
 </head>
-
 <body>
 
 <!--
@@ -329,53 +226,27 @@ window.onload = function() {
 <br/>
 -->
 
-input device:
-<input type="text" id="indev" name="indev" value="" size="18">
-<br/>
-ouput device:
-<input type="text" id="outdev" name="outdev" value="" size="18">
-<br/>
-<hr>
-
-NoteOn Dropped:
-<input type="text" id="NoteOnDropped" name="NoteOnDropped" value="" size="5">
-<br/>
-NoteOff Dropped:
-<input type="text" id="NoteOffDropped" name="NoteOffDropped" value="" size="5">
-<br/>
-<button id="PANIC">PANIC</button>
-<br/>
-<hr>
-
-<label class="toggle">
-	<input class="toggle-checkbox" id="transfer" name="transfer" type="checkbox"  checked>
-	<div class="toggle-switch"></div>
-	<span class="toggle-label">NoteOn/NoteOff transfer</span>
-</label>
-<br/>
-<hr>
-
 <button id="octdown">Octave Down</button>
 <button id="octup">Octave Up</button>
 <button id="semidown">-</button>
 <button id="semiup">+</button>
 <input type="text" id="trans" name="trans" value="0" size="2">
 <br/>
-<hr>
+<br/>
 
+<form name="form1">
   <label class="toggle">
 	<input class="toggle-checkbox" id="CC1" name="CC1" type="checkbox"  checked>
 	<div class="toggle-switch"></div>
-	<span class="toggle-label">CC1(modulation wheel)</span>
+	<span class="toggle-label">CC1</span>
   </label>
   
-  <br
-  />
+  <br/>
   
   <label class="toggle">
 	<input class="toggle-checkbox" id="CC2" name="CC2" type="checkbox" checked>
 	<div class="toggle-switch"></div>
-	<span class="toggle-label">CC2(breath controller)</span>
+	<span class="toggle-label">CC2</span>
   </label>
   
   <br/>
@@ -383,7 +254,7 @@ NoteOff Dropped:
   <label class="toggle">
 	<input class="toggle-checkbox" type="checkbox"  id="CC7" name="CC7" checked>
 	<div class="toggle-switch"></div>
-	<span class="toggle-label">CC7(volume)</span>
+	<span class="toggle-label">CC7</span>
   </label>
   
   <br/>
@@ -391,7 +262,7 @@ NoteOff Dropped:
   <label class="toggle">
 	<input class="toggle-checkbox" type="checkbox" id="CC11" name="CC11" checked>
 	<div class="toggle-switch"></div>
-	<span class="toggle-label">CC11(expression)</span>
+	<span class="toggle-label">CC11</span>
   </label>
 
   <br/>
@@ -399,7 +270,7 @@ NoteOff Dropped:
   <label class="toggle">
 	<input class="toggle-checkbox" type="checkbox" id="CC74" name="CC74" checked>
 	<div class="toggle-switch"></div>
-	<span class="toggle-label">CC74(cutoff frequency)</span>
+	<span class="toggle-label">CC74</span>
   </label>
 
   <br/>
@@ -407,7 +278,7 @@ NoteOff Dropped:
   <label class="toggle">
 	<input class="toggle-checkbox" type="checkbox" id="CC26" name="CC26" checked>
 	<div class="toggle-switch"></div>
-	<span class="toggle-label">CC26(EqGain)</span>
+	<span class="toggle-label">CC26</span>
   </label>
 
   <hr> 
@@ -415,7 +286,7 @@ NoteOff Dropped:
   <label class="toggle">
 	<input class="toggle-checkbox" type="checkbox" id="AT" name="AT" checked>
 	<div class="toggle-switch"></div>
-	<span class="toggle-label">AT(channel pressure)</span>
+	<span class="toggle-label">AT</span>
   </label>
 
   <br/>
@@ -423,30 +294,12 @@ NoteOff Dropped:
   <label class="toggle">
 	<input class="toggle-checkbox" type="checkbox" id="PP" name="PP" checked>
 	<div class="toggle-switch"></div>
-	<span class="toggle-label">PP(polyphonic key pressure)</span>
+	<span class="toggle-label">PP</span>
   </label>
 
   <hr>
 
-  <label class="toggle">
-	<input class="toggle-checkbox" type="checkbox" id="VFIXED" name="VFIXED" >
-	<div class="toggle-switch"></div>
-	<span class="toggle-label">Velocity Fixed</span>
-  </label>
-  <input type="text" id="velocity" name="velocity" value="77" size="2">
-  <button id="veldown">-</button>
-  <button id="velup">+</button>
-
- <hr>
-
-  <label class="toggle">
-	<input class="toggle-checkbox" type="checkbox" id="PB_THRU" name="PB_THRU" checked>
-	<div class="toggle-switch"></div>
-	<span class="toggle-label">PitchBend Thru</span>
-  </label>
-  <input type="text" id="PB" name="PB" value="0" size="5">
-
-<hr>
+  </form>
   end of CCMapper
 
 </body></html>

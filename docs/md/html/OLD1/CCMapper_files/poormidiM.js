@@ -1,5 +1,5 @@
 // proormidiM.js
-// 2023/1/2: modified for CCMapper (last M means 'Modified')
+// 2022/12/31: modified for CCMapper (last M means 'Modified')
 
 // poormidi.js (Very Poor) Web MIDI API Wrapper
 // For Google Chrome Only :D
@@ -17,17 +17,11 @@
   const indev0 = "WIDI Bud"; // for Windows/linux
   const indev1 = "Elefue"; // for Mac
   const indev2 = "re.corder"; // for Mac
-  const indev3 = "Nu"; // for Mac (with WIDI Master/NuRAD,NuEVI)
-  const indev4 = "EWI"; // for Mac (with WIDI Master/EWI5000,EWI4000,EVI3010 etc)
-  const indev5 = "AE-"; // for Mac (Roland)
-  const indev6 = "YDS-"; // for Mac (YAMAHA)
+  const indev3 = "NuRad"; // for Mac
   const outdev0 = "loopMIDI"; // for Windows/Mac
   const outdev1 = "Midi Through"; // for linux
   var innum = 1;
   var outnum = 1;
-
-  var indevx  = "input device not found";
-  var outdevx = "output device not found";
 
   poormidi = function(){
     this.midi = null;
@@ -44,11 +38,6 @@
 
     this.failure = function(msg){
       console.log("poormidi.failure(): "+msg);
-    }.bind(this);
-
-    // new function 2023/1/1
-    this.getIOdevName = function(){
-      return [indevx,outdevx];
     }.bind(this);
 
     this.onMidiEvent = function(e){
@@ -176,31 +165,19 @@ this.send = function(){
       for(var o = it.next(); !o.done; o = it.next()){
         this.inputs.push(o.value);
         console.log("input port: "+o.value.name);
-        if (o.value.name.includes(indev0)) {
+        if ( o.value.name.indexOf(indev0) != -1) {
           innum = num;
           break;
         }
-        if (o.value.name.includes(indev1)) {
+        if ( o.value.name.indexOf(indev1) != -1) {
           innum = num;
           break;
         }
-        if (o.value.name.includes(indev2)) {
+        if ( o.value.name.indexOf(indev2) != -1) {
           innum = num;
           break;
         }
-        if (o.value.name.includes(indev3)) {
-          innum = num;
-          break;
-        }
-        if (o.value.name.includes(indev4)) {
-          innum = num;
-          break;
-        }
-        if (o.value.name.includes(indev5)) {
-          innum = num;
-          break;
-        }
-        if (o.value.name.includes(indev6)) {
+        if ( o.value.name.indexOf(indev3) != -1) {
           innum = num;
           break;
         }
@@ -220,10 +197,10 @@ this.send = function(){
       for(var o = ot.next(); !o.done; o = ot.next()){
         this.outputs.push(o.value);
         console.log("output port: "+o.value.name);
-        if (o.value.name.includes(outdev0)) {
+        if ( o.value.name.indexOf(outdev0) != -1) {
           outnum = num;
           break;
-        } else if (o.value.name.includes(outdev1)) {
+        } else if ( o.value.name.indexOf(outdev1) != -1) {
           outnum = num;
           break;
         }
@@ -232,10 +209,6 @@ this.send = function(){
       console.log("poormidi.refreshPorts() outputs: "+this.outputs.length);
       // debug
       console.log("in:"+innum+" out:"+outnum);
-      console.log(this.inputs[innum].name+" -> "+this.outputs[outnum].name);
-      // save input/output dev name
-      indevx = this.inputs[innum].name;
-      outdevx = this.outputs[outnum].name;
     }.bind(this);
 
     this.onConnect = function(e){

@@ -1,6 +1,13 @@
     
 # CCMapper(Web Midi)  
 
+2023/1/2    
+CCMapper改版：  
+[Velocity Fixed],[PicthBend Thru]switches,     
+[displaying input/output device name],    
+[displaying NoteOn/NoteOff Dropped count],    
+[NoteOn/NoteOff transfer]switch を追加した。  
+
 2022/12/31      
 初版    
   
@@ -15,7 +22,7 @@ webによるGUIを持っており、トランスポーズ、CCのオン/オフ(�
 
 ## 準備
 1.Windowsの場合  
-仮想MIDIデバイスとして、loopMIDIがインストールされている必要がある。
+仮想MIDIデバイスとして、loopMIDIがインストールされている必要がある。  
 参照：[loopMIDI](https://www.tobias-erichsen.de/software/loopmidi.html)  
 
 MIDI信号の流れとしては以下のようになる：
@@ -25,7 +32,7 @@ MIDI信号の流れとしては以下のようになる：
 ```
 
 2.Macの場合  
-仮想MIDIデバイスとして、IACドライバを設定する。名前はWindowsに合わせて「loopMIDI」とする。 
+仮想MIDIデバイスとして、IACドライバを設定する。名前はWindowsに合わせて「loopMIDI」とする。   
 参照：[仮想MIDIデバイスの設定 - Macことはじめ](https://xshigee.github.io/web0/md/Mac_beginner.html)  
 
 MIDI信号の流れとしては以下のようになる：
@@ -52,17 +59,37 @@ CCMapper.htmlをchromeで開くとCCMapperが実行される。
 ```
 
 CCMapper.html
-CCMapper_files/fukuno.js
 CCMapper_files/poormidiM.ja
 ```
 
 以下、実行画面：  
-![CCMapper_Snapshot](PNG/CCMapper_2022-12-31_111910.png) 
---
-1. スイッチが緑色のときはオンを意味して該当のCCが送信される。  
-1. オクターブ関係のボタンを押すとオクターブの値が変化して、その数値の分(半音単位)、ピッチが変わる。
+![CCMapper_Snapshot](PNG/CCMapper_2023-01-02_163612.png) 
 
-以下をクリックするとCCMapperが起動する(chrome)：  
+---
+1. スイッチが緑色のときはオンを意味する。
+1. [input device]/[output device]
+接続されているデバイスが表示される。  
+「not found」が表示されているときは、接続失敗しているので、その場合は、Chromeブラウザーのリフレッシュボタンを押す。
+1. [NoteOn Dropped]/[NoteOff Dropped]
+NoteOn または NoteOffが受信失敗していると推定された時のカウントを表示する。  
+PCなどの性能問題でブラウザーが受信失敗している確率が高いとカウントが増える。  
+[PANIC]ボタンは、[All Note Off],[All Sound Off]を送信するが、音源が、サポートしていないと効果がない。
+1. [NoteOn/NoteOff trasfer]  
+Macなど音源ホストでMIDI入力ソースを限定できない場合、入力デバイスのMIDIメッセージとCCMapper出力のメッセージがダブって送信される。
+それを避けるためにCCMapperのNoteOn/NoteOffの転送をオフできる。
+1. [Octave Down],[Octave Up],[-],[+]
+オクターブ関係のボタンを押すとオクターブの値が変化して、その数値の分(半音単位)、ピッチが変わる。
+1. 該当するCCをオン/オフできる。
+1. AT/PPをオフ/オフできる。
+1. [Velocity Fixed]
+オンすると固定のベロシティを送信する。　
+その固定値は表示されている。  
+オフすると、コントローラ自身のベロシティが転送される。  
+1. [PitchBend Thru]
+受信したPitchBendの転送をオン/オフできる。    
+数字は、受信した値を表示している。  
+
+下をクリックするとCCMapperが起動する(chrome)：  
 [CCMapper](html/CCMapper.html)  
 
 ## ソースコード
@@ -70,21 +97,30 @@ CCMapperのプログラムとしては以下を使用する：
 
 CCMapper.html
 ```html
+
 <!DOCTYPE html>
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>CCMapper</title>
 
 <h1>CCMapper</h1>
-<h3>2022/12/31</h3>
+<h3>2023/1/2</h3>
 
+<!-- 2023/01/02 [Velocity Fixed],[PicthBend Thru]switches, [displaying input/output device name] are added -->
+<!--            [displaying NoteOn/NoteOff Dropped count] are added -->
+<!--            [NoteOn/NoteOff transfer]switch are added -->
 <!-- 2022/12/31 modified for CCMApper -->
-<!-- 2022/12/31 written by: xshige -->
+<!--            written by: xshige -->
+
 <!-- 2022/12/31 forked from https://fukuno.jig.jp/app/midi/midimonitor.html, 
 							https://github.com/tadfmac/poormidi -->
 
-<script src="./CCMapper_files/fukuno.js"></script>
 <script src="./CCMapper_files/poormidiM.js"></script>
 <script>"use strict";
+
+// function copied from fukuno.js
+var get = function(id) {
+	return document.getElementById(id);
+};
 
 // the followings are forked from ofxMidi
 // channel voice messages
@@ -111,9 +147,15 @@ const MIDI_ACTIVE_SENSING = 0xFE;1
 const MIDI_SYSTEM_RESET = 0xFF;
 
 window.onload = function() {
-	
+	// for debug
+	var noteNest = 0; // NoteOn/NoteOff nest count
+	var noteOnDropCnt = 0; // NoteOn Droped count
+	var noteOffDropCnt = 0; // NoteOff Droped count
+
 	var transpose = 0;
 	var curPitch = 0;
+	var curVelocity = 0;
+	var fixedVelocity = 77;
 
 	var fCC1 = true;
 	var fCC2 = true;
@@ -123,10 +165,13 @@ window.onload = function() {
 	var fCC26 = true;
 	var fAT = true;
 	var fPP = true;
+	var fVFIXED = false;
+	var fPB_THRU = true;
+
+	var fXfer = true; // NoteOn/NoteOff transfer
 
 	var midi = new poormidi();
 	midi.setHandler(function(e) {
-		//const n = e.data[0]
 		var status = e.data[0]&0xF0
 		var ch = e.data[0]&0x0F
 		if (status == MIDI_CONTROL_CHANGE) {
@@ -141,26 +186,61 @@ window.onload = function() {
 				if (fAT) midi.send(MIDI_AFTERTOUCH|ch, e.data[2]);
     			// AT(PP)
     			if (fPP) midi.send(MIDI_POLY_AFTERTOUCH|ch, transpose+curPitch, e.data[2]);
+				/*
     			// patch
     			// All Note Off
     			if (e.data[2] ==  0) midi.send(MIDI_CONTROL_CHANGE|ch,123, 0);
     			// All Sound Off
     			if (e.data[2] == 0) midi.send(MIDI_CONTROL_CHANGE|ch,120, 0);
+				*/
 			}
 		}
-		else if (status == MIDI_NOTE_ON) {
+		else if (status == MIDI_NOTE_ON) {		
+			// debug
+			if (noteNest !== 0) {
+				console.log("***** maybe NoteOff dropped! *****");
+				if (noteOffDropCnt < Number.MAX_SAFE_INTEGER) noteOffDropCnt++;
+				else noteOffDropCnt=0;
+				console.log("NoteOnDroped:"+noteOnDropCnt);
+				console.log("NoteOffDroped:"+noteOffDropCnt);
+				noteNest =0;
+			}
+			//
+			noteNest++;
 			curPitch = e.data[1];
-			midi.sendNoteOn(ch,e.data[1]+transpose,e.data[2]);
+			curVelocity = e.data[2];
+			//midi.sendNoteOn(ch,e.data[1]+transpose,e.data[2]);
+			if (fXfer) {
+				if (fVFIXED) {
+					midi.sendNoteOn(ch,e.data[1]+transpose,fixedVelocity);
+					//get("velocity").value = fixedVelocity;
+				} else {
+					midi.sendNoteOn(ch,e.data[1]+transpose,curVelocity);
+					get("velocity").value = curVelocity;
+				}
+			}
 		}
 		else if (status == MIDI_NOTE_OFF) {
+			noteNest--;
 			//midi.sendNoteOff(ch,e.data[1]);
-			midi.send(MIDI_NOTE_OFF|ch,e.data[1]+transpose,e.data[2]);		
+			if (fXfer) midi.send(MIDI_NOTE_OFF|ch,e.data[1]+transpose,e.data[2]);
+			// debug
+			if (noteNest !== 0) {
+				console.log("***** maybe NoteOn dropped! *****");
+				if (noteOnDropCnt < Number.MAX_SAFE_INTEGER) noteOnDropCnt++;
+				else noteOnDropCnt=0;
+				console.log("NoteOnDroped:"+noteOnDropCnt);
+				console.log("NoteOffDroped:"+noteOffDropCnt);
+				noteNest =0;
+			}
 		}
 		else if (status == MIDI_PITCH_BEND) {
+			if (fPB_THRU) midi.send(MIDI_PITCH_BEND|ch,e.data[1],e.data[2]);
     		var int14 = e.data[2]; // 2nd byte
     		int14 <<= 7;
     		int14 |= e.data[1];
-		    midi.send(MIDI_PITCH_BEND|ch,e.data[1],e.data[2]);
+			get("PB").value = int14-8191; // display only
+		    //if (fPB_THRU) midi.send(MIDI_PITCH_BEND|ch,e.data[1],e.data[2]);
 		}
     	return;
   	});
@@ -172,58 +252,109 @@ window.onload = function() {
 		}, 1000);
 	};
 	*/
+	setTimeout(function(){
+		var dd = midi.getIOdevName();
+		get("indev").value = dd[0];//"Widi Bud Pro";
+		get("outdev").value = dd[1];//"loopMIDI";
+		if (dd[0].includes("not found")) alert("Please press 'refresh' button of Chrome broswer!");
+	},100);
+
+	// debug
+	setInterval(function(){
+		get("NoteOnDropped").value = noteOnDropCnt;
+		get("NoteOffDropped").value = noteOffDropCnt;
+	},1000);
+
+	get("PANIC").onclick = function () {
+		noteOnDropCnt = 0;
+		noteOffDropCnt = 0;
+		noteNest = 0;
+		// All Note Off
+		midi.send(MIDI_CONTROL_CHANGE|0,123, 0);
+    	// All Sound Off
+    	midi.send(MIDI_CONTROL_CHANGE|0,120, 0);
+		console.log("PANIC!");
+	}
+
 	get("octdown").onclick = function() {
 		transpose -= 12;
 		console.log("trans:"+transpose);
-		document.getElementById("trans").value = transpose;
+		get("trans").value = transpose;
 	}
 	get("octup").onclick = function() {
 		transpose += 12;
 		console.log("trans:"+transpose);
-		document.getElementById("trans").value = transpose;
+		get("trans").value = transpose;
 	}
 	get("semidown").onclick = function() {
 		transpose -= 1;
 		console.log("trans:"+transpose);
-		document.getElementById("trans").value = transpose;
+		get("trans").value = transpose;
 	}
 	get("semiup").onclick = function() {
 		transpose += 1;
 		console.log("trans:"+transpose);
-		document.getElementById("trans").value = transpose;
+		get("trans").value = transpose;
+	}
+
+	get("transfer").onclick = function() {
+		fXfer = get("transfer").checked;
+		console.log("Xfer:"+fXfer);
 	}
 
 	get("CC1").onclick = function() {
-		fCC1 = document.form1.CC1.checked;
+		fCC1 = get("CC1").checked;
 		console.log("CC1:"+fCC1);
 	}
 	get("CC2").onclick = function() {
-		fCC2 = document.form1.CC2.checked;
+		fCC2 = get("CC2").checked;
 		console.log("CC2:"+fCC2);
 	}
 	get("CC7").onclick = function() {
-		fCC7 = document.form1.CC7.checked;
+		fCC7 = get("CC7").checked;
 		console.log("CC7:"+fCC7);
 	}
 	get("CC11").onclick = function() {
-		fCC11 = document.form1.CC11.checked;
+		fCC11 = get("CC11").checked;
 		console.log("CC11:"+fCC11);
 	}
 	get("CC74").onclick = function() {
-		fCC74 = document.form1.CC74.checked;
+		fCC74 = get("CC74").checked;
 		console.log("CC74:"+fCC74);
 	}
 	get("CC26").onclick = function() {
-		fCC26 = document.form1.CC26.checked;
+		fCC26 = get("CC26").checked;
 		console.log("CC26:"+fCC26);
 	}
 	get("AT").onclick = function() {
-		fAT = document.form1.AT.checked;
+		fAT = get("AT").checked;
 		console.log("AT:"+fAT);
 	}
 	get("PP").onclick = function() {
-		fPP = document.form1.PP.checked;
+		fPP = get("PP").checked;
 		console.log("PP:"+fPP);
+	}
+
+	get("VFIXED").onclick = function() {
+		fVFIXED = get("VFIXED").checked;
+		console.log("VFIXED:"+fVFIXED);
+		if (fVFIXED) get("velocity").value = fixedVelocity;
+		else get("velocity").value = curVelocity; 
+	}
+	get("veldown").onclick = function() {
+		fixedVelocity -= 1;
+		console.log("fixedVelocity:"+fixedVelocity);
+		get("velocity").value = fixedVelocity;
+	}
+	get("velup").onclick = function() {
+		fixedVelocity += 1;
+		console.log("fixedVelocity:"+fixedVelocity);
+		get("velocity").value = fixedVelocity;
+	}
+
+	get("PB_THRU").onclick = function() {
+		fPB_THRU = get("PB_THRU").checked;
+		console.log("PB_THRU:"+fPB_THRU);
 	}
 
 };
@@ -287,9 +418,9 @@ window.onload = function() {
   position: relative;
   top: 2px;
 }
-
 </style>
 </head>
+
 <body>
 
 <!--
@@ -298,27 +429,53 @@ window.onload = function() {
 <br/>
 -->
 
+input device:
+<input type="text" id="indev" name="indev" value="" size="18">
+<br/>
+ouput device:
+<input type="text" id="outdev" name="outdev" value="" size="18">
+<br/>
+<hr>
+
+NoteOn Dropped:
+<input type="text" id="NoteOnDropped" name="NoteOnDropped" value="" size="5">
+<br/>
+NoteOff Dropped:
+<input type="text" id="NoteOffDropped" name="NoteOffDropped" value="" size="5">
+<br/>
+<button id="PANIC">PANIC</button>
+<br/>
+<hr>
+
+<label class="toggle">
+	<input class="toggle-checkbox" id="transfer" name="transfer" type="checkbox"  checked>
+	<div class="toggle-switch"></div>
+	<span class="toggle-label">NoteOn/NoteOff transfer</span>
+</label>
+<br/>
+<hr>
+
 <button id="octdown">Octave Down</button>
 <button id="octup">Octave Up</button>
 <button id="semidown">-</button>
 <button id="semiup">+</button>
 <input type="text" id="trans" name="trans" value="0" size="2">
 <br/>
-<br/>
+<hr>
 
-<form name="form1">
   <label class="toggle">
 	<input class="toggle-checkbox" id="CC1" name="CC1" type="checkbox"  checked>
 	<div class="toggle-switch"></div>
-	<span class="toggle-label">CC1</span>
+	<span class="toggle-label">CC1(modulation wheel)</span>
   </label>
   
-  <br/>
+  <br
+  />
   
   <label class="toggle">
 	<input class="toggle-checkbox" id="CC2" name="CC2" type="checkbox" checked>
 	<div class="toggle-switch"></div>
-	<span class="toggle-label">CC2</span>
+	<span class="toggle-label">CC2(breath controller)</span>
   </label>
   
   <br/>
@@ -326,7 +483,7 @@ window.onload = function() {
   <label class="toggle">
 	<input class="toggle-checkbox" type="checkbox"  id="CC7" name="CC7" checked>
 	<div class="toggle-switch"></div>
-	<span class="toggle-label">CC7</span>
+	<span class="toggle-label">CC7(volume)</span>
   </label>
   
   <br/>
@@ -334,7 +491,7 @@ window.onload = function() {
   <label class="toggle">
 	<input class="toggle-checkbox" type="checkbox" id="CC11" name="CC11" checked>
 	<div class="toggle-switch"></div>
-	<span class="toggle-label">CC11</span>
+	<span class="toggle-label">CC11(expression)</span>
   </label>
 
   <br/>
@@ -342,7 +499,7 @@ window.onload = function() {
   <label class="toggle">
 	<input class="toggle-checkbox" type="checkbox" id="CC74" name="CC74" checked>
 	<div class="toggle-switch"></div>
-	<span class="toggle-label">CC74</span>
+	<span class="toggle-label">CC74(cutoff frequency)</span>
   </label>
 
   <br/>
@@ -350,7 +507,7 @@ window.onload = function() {
   <label class="toggle">
 	<input class="toggle-checkbox" type="checkbox" id="CC26" name="CC26" checked>
 	<div class="toggle-switch"></div>
-	<span class="toggle-label">CC26</span>
+	<span class="toggle-label">CC26(EqGain)</span>
   </label>
 
   <hr> 
@@ -358,7 +515,7 @@ window.onload = function() {
   <label class="toggle">
 	<input class="toggle-checkbox" type="checkbox" id="AT" name="AT" checked>
 	<div class="toggle-switch"></div>
-	<span class="toggle-label">AT</span>
+	<span class="toggle-label">AT(channel pressure)</span>
   </label>
 
   <br/>
@@ -366,687 +523,41 @@ window.onload = function() {
   <label class="toggle">
 	<input class="toggle-checkbox" type="checkbox" id="PP" name="PP" checked>
 	<div class="toggle-switch"></div>
-	<span class="toggle-label">PP</span>
+	<span class="toggle-label">PP(polyphonic key pressure)</span>
   </label>
 
   <hr>
 
-  </form>
+  <label class="toggle">
+	<input class="toggle-checkbox" type="checkbox" id="VFIXED" name="VFIXED" >
+	<div class="toggle-switch"></div>
+	<span class="toggle-label">Velocity Fixed</span>
+  </label>
+  <input type="text" id="velocity" name="velocity" value="77" size="2">
+  <button id="veldown">-</button>
+  <button id="velup">+</button>
+
+ <hr>
+
+  <label class="toggle">
+	<input class="toggle-checkbox" type="checkbox" id="PB_THRU" name="PB_THRU" checked>
+	<div class="toggle-switch"></div>
+	<span class="toggle-label">PitchBend Thru</span>
+  </label>
+  <input type="text" id="PB" name="PB" value="0" size="5">
+
+<hr>
   end of CCMapper
 
 </body></html>
-
 ```
 
-CCMapper_files/fukuno.js  
-\#修正なし(オリジナルのまま)  
-```js
-
-/* fukuno.js CC BY @taisuke */
-
-'use strict';
-
-String.prototype.startsWith = function(s) {
-	return this.indexOf(s) == 0;
-};
-String.prototype.endsWith = function(s) {
-	if (s.length > this.length)
-		return false;
-	return this.lastIndexOf(s) == this.length - s.length;
-};
-/*
-Array.prototype.remove = function(o) {
-	for (var i = 0; i < this.length; i++) {
-		if (this[i] === o) {
-			this.splice(i, 1);
-			i--;
-		}
-	}
-};
-*/
-var get = function(id) {
-	return document.getElementById(id);
-};
-var create = function(tag, cls) {
-	var res = document.createElement(tag);
-	if (cls != null)
-		res.className = cls;
-	return res;
-};
-var clear = function(id) {
-	var div = typeof id == "string" ? get(id) : id;
-	while (div.hasChildNodes()) {
-		div.removeChild(div.lastChild);
-	}
-	div.scrollTop = 0;
-	div.scrollLeft = 0;
-};
-var removeAllChild = function(div) {
-	while (div.hasChildNodes()) {
-		div.removeChild(div.lastChild);
-	}
-};
-var rnd = function(n) {
-	return Math.floor(Math.random() * n);
-};
-var shuffle = function(array) {
-	for (var i = 0; i < array.length; i++) {
-		var n = rnd(array.length);
-		var tmp = array[i];
-		array[i] = array[n];
-		array[n] = tmp;
-	}
-};
-var addComma = function(num, beam) {
-	var flg = num < 0;
-	if (flg)
-		num = -num;
-	if (beam == null)
-		beam = 0;
-	if (isNaN(parseFloat(num)))
-		return num;
-	var f = parseFloat(num) - parseInt(num);
-	var s = "" + parseInt(num);
-	for (var i = 3; i < s.length; i += 4) {
-		s = s.substring(0, s.length - i) + "," + s.substring(s.length - i);
-	}
-	if (beam > 0) {
-		s += "." + fixnum(Math.floor(f * Math.pow(10, beam)), beam);
-	}
-	return (flg ? "-" : "") + s;
-};
-var removeComma = function(s, b) {
-	if (s.length == 0)
-		return s;
-	var s2 = s.replace(/,/g, "");
-	var n = parseFloat(s2);
-	if (!isNaN(n))
-		return n;
-	return s;
-};
-var fixnum = function(n, m) {
-	var s = '00000000000000000' + n;
-	return s.substring(s.length - m);
-};
-var fixfloat = function(d, beam) {
-	if (beam == 0)
-		return Math.floor(d);
-	var minus = "";
-	if (d < 0) {
-		d = -d;
-		minus = "-";
-	}
-	if (beam == null)
-		beam = 2;
-	var k = Math.pow(10, beam);
-	d *= k;
-	var m = Math.floor(d % k);
-	var s = Math.floor(d / k);
-	return minus + s + "." + fixnum(m, beam);
-};
-var dec2hex = function(n, beam) {
-	var hex = "";
-	for (var i = 0; i < beam; i++) {
-		var m = n & 0xf;
-		hex = '0123456789abcdef'.charAt(m) + hex;
-		n -= m;
-		n >>= 4;
-	}
-	return hex;
-};
-var hex2bin = function(s) {
-	var res = '';
-	for (var i = 0; i < s.length; i++) {
-		var n = '0123456789abcdef'.indexOf(s.charAt(i));
-		if (n < 0)
-			n = 0;
-		for (var j = 0; j < 4; j++) {
-			res += (n & (1 << (3 - j))) != 0 ? '1' : '0';
-		}
-	}
-	return res;
-};
-var f2s = function(f) {
-	return f.toString().match(/\n([\s\S]*)\n/)[1];
-};
-var createImage = function(s, cr, cg, cb) {
-	if (cr == null) {
-		cr = cg = cb = 0;
-	}
-	var w = 8;
-	var r = 1;
-	var wr = w * r;
-	
-	var bs = hex2bin(s);
-	var canvas = document.createElement('canvas');
-	canvas.width = wr;
-	canvas.height = wr;
-	var ctx = canvas.getContext('2d');
-	var data = ctx.createImageData(wr, wr);
-	var imgdata = data.data;
-	for (var i = 0; i < w * w; i++) {
-		var x = i % w;
-		var y = Math.floor(i / w);
-//		var b = Math.random() > .5;
-		var b = bs.charAt(i) == '1';
-		for (var j = 0; j < r; j++) {
-			for (var k = 0; k < r; k++) {
-				var idx = (x * r + j) * 4 + (y * r + k) * wr * 4;
-				imgdata[idx + 0] = b ? cr : 255;
-				imgdata[idx + 1] = b ? cg : 255;
-				imgdata[idx + 2] = b ? cb : 255;
-				imgdata[idx + 3] = b ? 255 : 0;
-			}
-		}
-	}
-	ctx.putImageData(data, 0, 0);
-	return canvas.toDataURL("image/png");
-};
-var jsonp = function(url, callback) {
-	var head = document.getElementsByTagName("head")[0];
-	var script = document.createElement("script");
-	if (callback) {
-		if (url.indexOf("?") >= 0) {
-			url += "&";
-		} else {
-			url += "?";
-		}
-		url += "callback=" + getCallbackMethod(callback);
-	}
-	script.setAttribute("src", url);
-	script.setAttribute("type", "text/javascript");
-//	script.setAttribute("id", 'jsonp');
-	head.appendChild(script);
-};
-var getCallbackMethod = function(callback) {
-	var scallback = "_cb_" + (Math.random() * 1000000 >> 0);
-	window[scallback] = function(data) {
-		window[scallback] = null;
-		callback(data);
-	};
-	return scallback;
-};
-var getXHR = function() {
-	if (window.XDomainRequest)
-		return new XDomainRequest();
-	if (window.XMLHttpRequest)
-		return new XMLHttpRequest();
-	if (window.ActiveXObject)
-		return new ActiveXObject("Microsoft.XMLHTTP");
-	return null;
-};
-var ajax = function(url, callback) {
-	var data = "";
-	var method = "GET";
-	var async = true;
-	var xhr = getXHR();
-	xhr.open(method, url, async);
-	xhr.onreadystatechange = function() {
-		if (xhr.readyState == 4) {
-			var xml = xhr.responseXML;
-			callback(xml);
-		}
-	}
-	xhr.setRequestHeader("If-Modified-Since", "Thu, 01 Jun 1970 00:00:00 GMT");
-	xhr.send(data);
-};
-const convertXML2JSON = function(xml) { // attribute無視、名前重なったら配列化
-	var f = function(xml) {
-		var json = {};
-		var text = [];
-		var hasxml = false;
-		var bkname = null;
-		for (var i = 0; i < xml.childNodes.length; i++) {
-			var node = xml.childNodes[i];
-			var name = node.nodeName;
-			if (name == "#text")
-				text.push(node.textContent);
-			else {
-				hasxml = true;
-				if (json[name] == null) {
-					json[name] = f(node);
-				} else {
-					if (!(json[name] instanceof Array)) {
-						json[name] = [ json[name] ];
-					}
-					json[name].push(f(node));
-				}
-			}
-		}
-		return hasxml ? json : text.join("");
-	};
-	return f(xml);
-};
-var debug = function(s) {
-	var d = get('debug');
-	if (d == null) {
-		d = create('div');
-		d.id = 'debug';
-		document.body.appendChild(d);
-	}
-//	d.textContent = s;
-	d.innerHTML = s;
-};
-var dump = function(o, name, target) { // default: div id=dump
-	if (target == null) {
-		debug("");
-		target = get('debug');
-	}
-	dumpInner(o, name, 0, target);
-};
-var dumpInner = function(o, name, depth, target) {
-	if (name == null)
-		name = "";
-	for (var n in o) {
-		if (typeof o[n] == "object") {
-			var div = create("div");
-			div.style.paddingLeft = (depth * 30) + "px";
-			div.textContent = n;
-			target.appendChild(div);
-			dumpInner(o[n], n, depth + 1, target);
-		} else {
-			var s = n + ": " + o[n];
-	//		alert(n + " " + o[n]);
-			var div = create("div");
-			div.style.paddingLeft = (depth * 30) + "px";
-			div.textContent = s;
-			target.appendChild(div);
-		}
-	}
-};
-var dumpxml = function(xml, comp) {
-	if (comp == null) {
-		debug("");
-		comp = get('debug');
-	}
-	var f = function(xml, n) {
-		for (var i = 0; i < xml.childNodes.length; i++) {
-			var node = xml.childNodes[i];
-			var name = node.nodeName;
-			var div = create("div");
-			var s = [];
-			s.push(name == "#text" ? node.textContent : name);
-			var att = node.attributes;
-			if (att != null && att.length > 0) {
-				s.push(" (");
-				for (var j = 0; j < att.length; j++) {
-					var at = att[j];
-					s.push(at.nodeName + "=" + at.childNodes[0].textContent);
-					if (j < att.length - 1)
-						s.push(" ");
-				}
-				s.push(")");
-			}
-			div.textContent = s.join("");
-			div.style.paddingLeft = (n * 20) + "px";
-			comp.appendChild(div);
-			f(node, n + 1);
-		}
-	};
-	f(xml, 0);
-};
-var getLanguage = function() {
-	try {
-		return (navigator.browserLanguage || navigator.language || navigator.userLanguage).substr(0, 2)
-	} catch(e) {
-	}
-	return "en";
-}
-// color util hsb2rgb rgb2hsv
-var rgb2hsv = function(rr, gg, bb) {
-	var hsv = [ 0, 0, 0 ];
-	var r = rr / 255;
-	var g = gg /255;
-	var b = bb / 255;
-	var max = Math.max(r,g,b);
-	var min = Math.min(r,g,b);
-	if (max != 0) {
-		hsv[1] = (max - min) / max;
-		if (max == r)
-			hsv[0] = 60 * (g - b) / (max - min);
-		else if (max == g)
-			hsv[0] = 60 * (b - r) / (max - min) + 120;
-		else
-			hsv[0] = 60 * (r - g) / (max - min) + 240;
-		if (hsv[0] < 0)
-			hsv[0] += 360;
-	}
-	hsv[2] = max;
-	return hsv;
-};
-var hsv2rgb = function(h, s, v) {
-	while (h < 0)
-		h += 360;
-	h %= 360;
-	if (s == 0) {
-		v *= 255;
-		return [ v, v, v ];
-	}
-	var hi = h / 60 >> 0;
-	var f = h / 60 - hi;
-	var p = v * (1 - s);
-	var q = v * (1 - f * s);
-	var t = v * (1 - (1 - f) * s);
-	var rgb = [ 1, 1, 1 ];
-	if (hi == 0)
-		rgb = [ v, t, p ];
-	else if (hi == 1)
-		rgb = [ q, v, p ];
-	else if (hi == 2)
-		rgb = [ p, v, t ];
-	else if (hi == 3)
-		rgb = [ p, q, v ];
-	else if (hi == 4)
-		rgb = [ t, p, v ];
-	else if (hi == 5)
-		rgb = [ v, p, q ];
-	rgb[0] = rgb[0] * 255 >> 0;
-	rgb[1] = rgb[1] * 255 >> 0;
-	rgb[2] = rgb[2] * 255 >> 0;
-	return rgb;
-};
-var rgb2css = function(r, g, b) {
-	if (typeof r == 'object') {
-		g = r[1];
-		b = r[2];
-		r = r[0];
-	}
-	return "#" + dec2hex(r, 2) + dec2hex(g, 2) + dec2hex(b, 2);
-};
-
-// ui (mouse & touch)
-var setUI = function(comp) { // onuidown, onuimove, onuiup
-	var istouch = 'ontouchstart' in window;
-	var usecapture = false;
-	if (istouch) {
-		comp.addEventListener("touchstart", function(e) {
-			if (this.onuidown != null)
-				if (!this.onuidown(
-					(e.changedTouches[0].pageX - this.offsetLeft) * this.ratio,
-					(e.changedTouches[0].pageY - this.offsetTop) * this.ratio
-				))
-					e.preventDefault();
-		}, usecapture);
-		comp.addEventListener("touchmove", function(e) {
-			if (this.onuimove != null)
-				if (!this.onuimove(
-					(e.changedTouches[0].pageX - this.offsetLeft) * this.ratio,
-					(e.changedTouches[0].pageY - this.offsetTop) * this.ratio
-				))
-					e.preventDefault();
-		}, usecapture);
-		comp.addEventListener("touchend", function(e) {
-			if (this.onuiup != null)
-				if (!this.onuiup(
-					(e.changedTouches[0].pageX - this.offsetLeft) * this.ratio,
-					(e.changedTouches[0].pageY - this.offsetTop) * this.ratio
-				))
-					e.preventDefault();
-		}, usecapture);
-	}
-	comp.addEventListener("mousedown", function(e) {
-		if (this.onuidown != null)
-			this.onuidown(e.offsetX * this.ratio, e.offsetY * this.ratio);
-	}, usecapture);
-	comp.addEventListener("mousemove", function(e) {
-		if (this.onuimove != null)
-			this.onuimove(e.offsetX * this.ratio, e.offsetY * this.ratio);
-	}, usecapture);
-	comp.addEventListener("mouseup", function(e) {
-		if (this.onuiup != null)
-			this.onuiup(e.offsetX * this.ratio, e.offsetY * this.ratio);
-	}, usecapture);
-};
-// canvas
-var getContext = function(canvas) {
-	var g = canvas.getContext("2d");
-	g.canvas1 = canvas;
-	g.ratio = 1;
-	g.init = function() {
-		var ua = navigator.userAgent;
-		if (ua.indexOf("iPhone") >= 0 || ua.indexOf("iPad") >= 0 || ua.indexOf("iPod") >= 0)
-			this.ratio = window.devicePixelRatio;
-		this.cw = this.canvas1.clientWidth * this.ratio;
-		this.ch = this.canvas1.clientHeight * this.ratio;
-		this.canvas1.width = this.cw;
-		this.canvas1.height = this.ch;
-		this.canvas1.ratio = this.ratio;
-		if (this.draw != null)
-			this.draw();
-	};
-	g.setColor = function(r, g, b, a) {
-		if (a == null)
-			a = 1;
-		var c = "rgba(" + r + "," + g + "," + b + "," + a + ")";
-		this.fillStyle = c;
-		this.strokeStyle = c;
-	};
-	g.drawLine = function(x1, y1, x2, y2) {
-		this.beginPath();
-		this.moveTo(x1, y1);
-		this.lineTo(x2, y2);
-		this.closePath();
-		this.stroke();
-	};
-	g.drawCircle = function(x, y, r) {
-		this.beginPath();
-		this.arc(x, y, r, 0, Math.PI * 2, false);
-		this.closePath();
-		this.stroke();
-	};
-	g.fillCircle = function(x, y, r) {
-		this.beginPath();
-		this.arc(x, y, r, 0, Math.PI * 2, false);
-		this.closePath();
-		this.fill();
-	};
-	// draw arrow
-	g.drawArrow = function(x1, y1, x2, y2, arw, arh, fill) {
-		var g = this;
-		var dx = x2 - x1;
-		var dy = y2 - y1;
-		var len = Math.sqrt(dy * dy + dx * dx);
-		var th = Math.atan2(dy, dx);
-		var th2 = th - Math.PI / 2;
-		if (len < arh * 1.5) {
-			arh = len / 1.5;
-			if (arh / 2 < arw)
-				arw = arh / 2;
-		}
-		var dx1 = Math.cos(th2) * arw;
-		var dy1 = Math.sin(th2) * arw;
-		var dx2 = Math.cos(th) * (len - arh);
-		var dy2 = Math.sin(th) * (len - arh);
-		var dx3 = Math.cos(th2) * (arh - arw);
-		var dy3 = Math.sin(th2) * (arh - arw);
-		g.beginPath();
-		g.moveTo(x1, y1);
-		g.lineTo(x1 + dx1, y1 + dy1);
-		g.lineTo(x1 + dx1 + dx2, y1 + dy1 + dy2);
-		g.lineTo(x1 + dx1 + dx2 + dx3, y1 + dy1 + dy2 + dy3);
-		g.lineTo(x2, y2);
-		g.lineTo(x1 - dx1 + dx2 - dx3, y1 - dy1 + dy2 - dy3);
-		g.lineTo(x1 - dx1 + dx2, y1 - dy1 + dy2);
-		g.lineTo(x1 - dx1, y1 - dy1);
-		g.closePath();
-		if (fill)
-			g.fill();
-		else
-			g.stroke();
-	};
-	g.fillArrow = function(x1, y1, x2, y2, arw, arh) {
-		this.drawArrow(x1, y1, x2, y2, arw, arh, true);
-	};
-	return g;
-};
-
-// net util
-
-var parseInt2 = function(n) {
-	var n = parseInt(n);
-	if (isNaN(n))
-		return "-";
-	return n;
-};
-var xml2json = function(url, callback) {
-	//var host = "fukuno.jig.jp";
-//	var host = "localhost:8080";
-//	var host = "sabae.club";
-	const host = "proxy.sabae.club";
-	var base = "https://" + host + "/proxy/ITqT5WkhCf2yn1s9?cnv=xml2json";
-	const callback2 = (sxml) => {
-		const xml = new DOMParser().parseFromString(sxml, "text/xml");
-		const res = convertXML2JSON(xml);
-		callback(res);
-	};
-	var url2 = base + "&cache=no&callback=" + getCallbackMethod(callback2) + "&url=" + encodeURI(url);
-	jsonp(url2);
-};
-var convertCSVtoArray = function(s) {
-	var res = [];
-	var st = 0;
-	var line = [];
-	var sb = null;
-	if (!s.endsWith("\n"))
-	s += "\n";
-	var len = s.length;
-	for (var i = 0; i < len; i++) {
-		var c = s.charAt(i);
-		if (c == '\r')
-		continue;
-		if (st == 0) {
-			if (c == '\n') {
-				if (line.length > 0)
-				line.push("");
-				res.push(line);
-				line = [];
-			} else if (c == ',') {
-				line.push("");
-			} else if (c == '"') {
-				sb = "";
-				st = 2;
-			} else {
-				sb = c;
-				st = 1;
-			}
-		} else if (st == 1) {
-			if (c == '\n') {
-				line.push(sb);
-				res.push(line);
-				line = [];
-				st = 0;
-				sb = null;
-			} else if (c == ',') {
-				line.push(sb);
-				sb = null;
-				st = 0;
-			} else {
-				sb += c;
-			}
-		} else if (st == 2) {
-			if (c == '"') {
-				st = 3;
-			} else {
-				sb += c;
-			}
-		} else if (st == 3) {
-			if (c == '"') {
-				sb += c;
-				st = 2;
-			} else if (c == ',') {
-				line.push(sb);
-				sb = null;
-				st = 0;
-			} else if (c == '\n') {
-				line.push(sb);
-				res.push(line);
-				line = [];
-				st = 0;
-				sb = null;
-			}
-		}
-	}
-	if (sb != null)
-	line.push(sb);
-	if (line.length > 0)
-	res.push(line);
-	return res;
-	
-	/* // いい加減バージョン
-	var lines = s.split("\n");
-	var res = [];
-	for (var i = 0; i < lines.length; i++) {
-		var ar = lines[i].split(",");
-		res.push(ar);
-	}
-	return res;
-	*/
-};
-var getJSON = function(url, callback, enc) {
-	if (url.endsWith(".csv")) {
-		getRawJSON(url, enc ? enc : "SJIS", function(csv) {
-			callback(convertCSVtoArray(csv));
-		});
-	} else if (url.endsWith(".xml") || url.endsWith(".rdf")) {
-		getXMLJSON(url, callback);
-	} else {
-		alert("not support type : " + url);
-	}
-};
-var getXMLJSON = function(url, callback) {
-//	var host = "sabae.club";
-	//var host = "fukuno.jig.jp";
-	var host = "proxy.sabae.club";
-	var cnv = "xml2json";
-	var base = "https://" + host + "/proxy/ITqT5WkhCf2yn1s9?cnv=" + cnv;
-	var url2 = base + "&cache=no&callback=" + getCallbackMethod(callback) + "&url=" + encodeURI(url);
-	jsonp(url2);
-};
-var getRawJSON = function(url, srcenc, callback) {
-	//var host = "sabae.club";
-//	host = "localhost:8080";
-	//var host = "fukuno.jig.jp";
-	var host = "proxy.sabae.club";
-	var cache = "no";
-	var base = "https://" + host + "/proxy/ITqT5WkhCf2yn1s9?";
-	var url2 = base + "cnv=json&srcenc=" + srcenc + "&cache="  + cache + "&callback=" + getCallbackMethod(callback) + "&url=" + encodeURIComponent(url);
-	jsonp(url2);
-};
-var getResizedImageURL = function(url, w, h) {
-//	var host = "sabae.club";
-	var host = "fukuno.jig.jp";
-	var base = "https://" + host + "/proxy/ITqT5WkhCf2yn1s9?cnv=jpeg-rs-" + w + "x" + h;
-	var url2 = base + "&cache=yes&url=" + encodeURI(url);
-	return url2;
-};
-
-var getMapLink = function(lat, lng) {
-	return "https://maps.google.com/?ll=" + lat + "," + lng;
-};
-var getSearchLink = function(s) {
-	return "https://search.yahoo.co.jp/search?tt=c&ei=UTF-8&fr=sfp_as&aq=-1&oq=&p=" + encodeURIComponent(s) + "&meta=vc%3D";
-};
-var getLastDayOfMonth = function(year, month) {
-	if (month == 0) {
-		month = 12;
-		year--;
-	} else if (month == 13) {
-		month = 1;
-		year++;
-	} else if (month == 2) {
-		if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0)
-			return 29;
-		return 28;
-	}
-	return 30 + (month + Math.floor(month / 8)) % 2;
-};
-```
 
 CCMapper_files/poormidiM.js  
 ```js
 
 // proormidiM.js
-// 2022/12/31: modified for CCMapper (last M means 'Modified')
+// 2023/1/2: modified for CCMapper (last M means 'Modified')
 
 // poormidi.js (Very Poor) Web MIDI API Wrapper
 // For Google Chrome Only :D
@@ -1064,11 +575,17 @@ CCMapper_files/poormidiM.js
   const indev0 = "WIDI Bud"; // for Windows/linux
   const indev1 = "Elefue"; // for Mac
   const indev2 = "re.corder"; // for Mac
-  const indev3 = "NuRad"; // for Mac
+  const indev3 = "Nu"; // for Mac (with WIDI Master/NuRAD,NuEVI)
+  const indev4 = "EWI"; // for Mac (with WIDI Master/EWI5000,EWI4000,EVI3010 etc)
+  const indev5 = "AE-"; // for Mac (Roland)
+  const indev6 = "YDS-"; // for Mac (YAMAHA)
   const outdev0 = "loopMIDI"; // for Windows/Mac
   const outdev1 = "Midi Through"; // for linux
   var innum = 1;
   var outnum = 1;
+
+  var indevx  = "input device not found";
+  var outdevx = "output device not found";
 
   poormidi = function(){
     this.midi = null;
@@ -1085,6 +602,11 @@ CCMapper_files/poormidiM.js
 
     this.failure = function(msg){
       console.log("poormidi.failure(): "+msg);
+    }.bind(this);
+
+    // new function 2023/1/1
+    this.getIOdevName = function(){
+      return [indevx,outdevx];
     }.bind(this);
 
     this.onMidiEvent = function(e){
@@ -1212,19 +734,31 @@ this.send = function(){
       for(var o = it.next(); !o.done; o = it.next()){
         this.inputs.push(o.value);
         console.log("input port: "+o.value.name);
-        if ( o.value.name.indexOf(indev0) != -1) {
+        if (o.value.name.includes(indev0)) {
           innum = num;
           break;
         }
-        if ( o.value.name.indexOf(indev1) != -1) {
+        if (o.value.name.includes(indev1)) {
           innum = num;
           break;
         }
-        if ( o.value.name.indexOf(indev2) != -1) {
+        if (o.value.name.includes(indev2)) {
           innum = num;
           break;
         }
-        if ( o.value.name.indexOf(indev3) != -1) {
+        if (o.value.name.includes(indev3)) {
+          innum = num;
+          break;
+        }
+        if (o.value.name.includes(indev4)) {
+          innum = num;
+          break;
+        }
+        if (o.value.name.includes(indev5)) {
+          innum = num;
+          break;
+        }
+        if (o.value.name.includes(indev6)) {
           innum = num;
           break;
         }
@@ -1244,10 +778,10 @@ this.send = function(){
       for(var o = ot.next(); !o.done; o = ot.next()){
         this.outputs.push(o.value);
         console.log("output port: "+o.value.name);
-        if ( o.value.name.indexOf(outdev0) != -1) {
+        if (o.value.name.includes(outdev0)) {
           outnum = num;
           break;
-        } else if ( o.value.name.indexOf(outdev1) != -1) {
+        } else if (o.value.name.includes(outdev1)) {
           outnum = num;
           break;
         }
@@ -1256,6 +790,10 @@ this.send = function(){
       console.log("poormidi.refreshPorts() outputs: "+this.outputs.length);
       // debug
       console.log("in:"+innum+" out:"+outnum);
+      console.log(this.inputs[innum].name+" -> "+this.outputs[outnum].name);
+      // save input/output dev name
+      indevx = this.inputs[innum].name;
+      outdevx = this.outputs[outnum].name;
     }.bind(this);
 
     this.onConnect = function(e){
@@ -1274,13 +812,17 @@ this.send = function(){
 
 動作環境のよる修正部分：  
 以下の部分、Macの場合、入力デバイスに該当するものがなければ修正する。  
-\# Elefue,re.corder,NuRadは登録済みなので修正不要
+\# たぶん、大抵のものは登録済みなので修正不要だと思われる
 ```js
 
   const indev0 = "WIDI Bud"; // for Windows/linux
   const indev1 = "Elefue"; // for Mac
   const indev2 = "re.corder"; // for Mac
-  const indev3 = "NuRad"; // for Mac
+  const indev3 = "Nu"; // for Mac (with WIDI Master/NuRAD,NuEVI)
+  const indev4 = "EWI"; // for Mac (with WIDI Master/EWI5000,EWI4000,EVI3010 etc)
+  const indev5 = "AE-"; // for Mac (Roland)
+  const indev6 = "YDS-"; // for Mac (YAMAHA)
+
 ```
 
 CCMapperを起動したら、次に音源を立ち上げて入力MIDIデバイスをlinuxの場合は「Midi Through port」(windows/Macの場合は「loopMIDI port」)に設定する。
@@ -1327,7 +869,6 @@ Web MIDI関連：
 [Web MIDI Monitor](https://fukuno.jig.jp/app/midi/midimonitor.html)  
 [Web MIDI API (日本語訳) 2015年3月17日版ワーキングドラフト](https://g200kg.github.io/web-midi-api-ja/)  
 [Getting Started With The Web MIDI API](https://www.smashingmagazine.com/2018/03/web-midi-api/)  
-
 
 Javascript(node)関連：  
 [Node.js® is an open-source, cross-platform JavaScript runtime environment](https://nodejs.org/en/)  
