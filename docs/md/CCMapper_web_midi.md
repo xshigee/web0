@@ -1,7 +1,7 @@
     
 # CCMapper(Web Midi)  
 
-2023/1/2    
+2023/1/2+    
 CCMapper改版：  
 [Velocity Fixed],[PicthBend Thru]switches,     
 [displaying input/output device name],    
@@ -67,25 +67,25 @@ CCMapper_files/poormidiM.ja
 
 ---
 1. スイッチが緑色のときはオンを意味する。
-1. [input device]/[output device]
+1. [input device]/[output device]  
 接続されているデバイスが表示される。  
 「not found」が表示されているときは、接続失敗しているので、その場合は、Chromeブラウザーのリフレッシュボタンを押す。
-1. [NoteOn Dropped]/[NoteOff Dropped]
+1. [NoteOn Dropped]/[NoteOff Dropped]  
 NoteOn または NoteOffが受信失敗していると推定された時のカウントを表示する。  
 PCなどの性能問題でブラウザーが受信失敗している確率が高いとカウントが増える。  
 [PANIC]ボタンは、[All Note Off],[All Sound Off]を送信するが、音源が、サポートしていないと効果がない。
 1. [NoteOn/NoteOff trasfer]  
 Macなど音源ホストでMIDI入力ソースを限定できない場合、入力デバイスのMIDIメッセージとCCMapper出力のメッセージがダブって送信される。
 それを避けるためにCCMapperのNoteOn/NoteOffの転送をオフできる。
-1. [Octave Down],[Octave Up],[-],[+]
+1. [Octave Down],[Octave Up],[-],[+]  
 オクターブ関係のボタンを押すとオクターブの値が変化して、その数値の分(半音単位)、ピッチが変わる。
-1. 該当するCCをオン/オフできる。
-1. AT/PPをオフ/オフできる。
-1. [Velocity Fixed]
-オンすると固定のベロシティを送信する。　
+1. 該当するCCをオン/オフできる。  
+1. AT/PPをオフ/オフできる。  
+1. [Velocity Fixed]  
+オンすると固定のベロシティを送信する。  
 その固定値は表示されている。  
 オフすると、コントローラ自身のベロシティが転送される。  
-1. [PitchBend Thru]
+1. [PitchBend Thru]  
 受信したPitchBendの転送をオン/オフできる。    
 数字は、受信した値を表示している。  
 
