@@ -1,12 +1,20 @@
     
 # CCMapper(Web Midi)  
 
+2023/1/4    
+CCMapper改版：  
+以下を追加した:  
+Transfering CC1 if [CC1] switch off,  
+Convert&Transfering CC52 to PitchBend if [CC51] swich off,  
+displaying a control# and value of unknown CCxx  
+
 2023/1/2+    
 CCMapper改版：  
+以下を追加した:  
 [Velocity Fixed],[PicthBend Thru]switches,     
-[displaying input/output device name],    
-[displaying NoteOn/NoteOff Dropped count],    
-[NoteOn/NoteOff transfer]switch を追加した。  
+displaying input/output device name,    
+displaying NoteOn/NoteOff Dropped count,    
+[NoteOn/NoteOff transfer]switch  
 
 2022/12/31      
 初版    
@@ -63,31 +71,35 @@ CCMapper_files/poormidiM.ja
 ```
 
 以下、実行画面：  
-![CCMapper_Snapshot](PNG/CCMapper_2023-01-02_163612.png) 
+![CCMapper_Snapshot](PNG/CCMapper_2023-01-04_205051.png) 
 
 ---
-1. スイッチが緑色のときはオンを意味する。
+1. スイッチが緑色のときはオンを意味する。オンの場合、受信したCC#2からCC＃11の値を、control#を変更して転送する。
 1. [input device]/[output device]  
 接続されているデバイスが表示される。  
 「not found」が表示されているときは、接続失敗しているので、その場合は、Chromeブラウザーのリフレッシュボタンを押す。
+1. [Unknown CCxx]は、認識しないCCを受信した際に、control#とvalueを表示する。予めプログラム(CCMapper.html)で無視しているCCは、Unknown扱いにしない。
 1. [NoteOn Dropped]/[NoteOff Dropped]  
 NoteOn または NoteOffが受信失敗していると推定された時のカウントを表示する。  
 PCなどの性能問題でブラウザーが受信失敗している確率が高いとカウントが増える。  
 [PANIC]ボタンは、[All Note Off],[All Sound Off]を送信するが、音源が、サポートしていないと効果がない。
 1. [NoteOn/NoteOff trasfer]  
-Macなど音源ホストでMIDI入力ソースを限定できない場合、入力デバイスのMIDIメッセージとCCMapper出力のメッセージがダブって送信される。
+Macなど音源ホストでMIDI入力ソースを限定できない場合(＝複数の入力をがある場合)、入力デバイスのMIDIメッセージとCCMapper出力のメッセージがダブって送信される。
 それを避けるためにCCMapperのNoteOn/NoteOffの転送をオフできる。
 1. [Octave Down],[Octave Up],[-],[+]  
 オクターブ関係のボタンを押すとオクターブの値が変化して、その数値の分(半音単位)、ピッチが変わる。
-1. 該当するCCをオン/オフできる。  
+1. CC1がオフの場合、外部からのCC1をそのまま転送する。vCC1の値は外部から受信した値が表示される。
+1. それぞれ該当するCCをオン/オフできる。
+1. [Convert CC52 ...]は、オンの場合、受信したCC#52の値を、PitchBendに変換して送信する。デフォルトではre.corderの回転に対応してCC#52が出力されるので、それを利用している。(実験的な機能)
 1. AT/PPをオフ/オフできる。  
 1. [Velocity Fixed]  
 オンすると固定のベロシティを送信する。  
-その固定値は表示されている。  
+その固定値を表示されている。  
 オフすると、コントローラ自身のベロシティが転送される。  
 1. [PitchBend Thru]  
 受信したPitchBendの転送をオン/オフできる。    
-数字は、受信した値を表示している。  
+数字は、受信した値を表示している。
+コントローラに慣れていなくてPitchBendが煩わしい場合、オフにする。  
 
 下をクリックするとCCMapperが起動する(chrome)：  
 [CCMapper](html/CCMapper.html)  
@@ -100,11 +112,17 @@ CCMapper.html
 
 <!DOCTYPE html>
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>CCMapper</title>
+<title>CCMapper 2022/1/4</title>
 
 <h1>CCMapper</h1>
-<h3>2023/1/2</h3>
+<h3>2023/1/4</h3>
 
+<!-- 2023/01/04 The flollowing are added:
+        Transfering CC1 if [CC1] switch off,
+        Convert&Transfering CC52 to PitchBend if [CC51] swich off
+        [displaying a control# and value of unknown CCxx]
+-->
+<!-- 2023/01/03 [displaying NoteOn/NoteOff Dropped count] are added -->
 <!-- 2023/01/02 [Velocity Fixed],[PicthBend Thru]switches, [displaying input/output device name] are added -->
 <!--            [displaying NoteOn/NoteOff Dropped count] are added -->
 <!--            [NoteOn/NoteOff transfer]switch are added -->
@@ -157,12 +175,13 @@ window.onload = function() {
 	var curVelocity = 0;
 	var fixedVelocity = 77;
 
-	var fCC1 = true;
+	var fCC1 = false;
 	var fCC2 = true;
 	var fCC7 = true;
 	var fCC11 = true;
 	var fCC74 = true;
 	var fCC26 = true;
+	var fCC52 = false;
 	var fAT = true;
 	var fPP = true;
 	var fVFIXED = false;
@@ -175,6 +194,20 @@ window.onload = function() {
 		var status = e.data[0]&0xF0
 		var ch = e.data[0]&0x0F
 		if (status == MIDI_CONTROL_CHANGE) {
+			if (e.data[1] == 1) { // modulation wheel
+				if (!fCC1) midi.sendCtlChange(ch,1,e.data[2]);
+				get("vCC1").value = e.data[2];
+				return;
+			}
+			if (e.data[1] == 52) { // C52 for re.corder
+				var int14 = e.data[2]*get("vCC52X").value+8191;
+				var b1 = 0x7F&(int14>>7);
+				var b0 = 0x7F&int14;
+				get("vCC52PB").value = int14-8191; // display only
+				get("vCC52").value = e.data[2]; // display only
+				if (fCC52) midi.send(MIDI_PITCH_BEND|ch,b0,b1);
+				return;
+			}
 			if (e.data[1] == 11 || e.data[1] == 2) {
 				if (fCC1) midi.sendCtlChange(ch,1,e.data[2]);
 				if (fCC2) midi.sendCtlChange(ch,2,e.data[2]);
@@ -193,11 +226,36 @@ window.onload = function() {
     			// All Sound Off
     			if (e.data[2] == 0) midi.send(MIDI_CONTROL_CHANGE|ch,120, 0);
 				*/
+			} else {
+				// the following CC#s ignored(will not transfer)
+				// case of EWI5000/EWI Solo 
+				if (e.data[1] == 7) return; // CC#7(volume) ignored 
+				if (e.data[1] == 5) return; // CC#5(portament) ignore
+				//
+				if (e.data[1] == 34) return; // CC#34(Hires/Breath Controler) ignored
+				if (e.data[1] == 39) return; // CC#39(Hires/Volume) ignored (solo only?)
+				if (e.data[1] == 43) return; // CC#43(Hires/Expression) ignored (solo only?)
+				//
+				if (e.data[1] == 65) return; // CC#65(Portament) ignored
+				if (e.data[1] == 66) return; // CC#66(Sostenuto) ignored
+				if (e.data[1] == 68) return; // CC#68(Legate) ignored
+				if (e.data[1] == 74) return; // CC#74(cutoff freq) ignored
+				if (e.data[1] == 88) return; // CC#88(Hires/NoteOn) ignored
+				if (e.data[1] == 102) return; // ignored
+				if (e.data[1] == 103) return; // ignored
+				if (e.data[1] == 104) return; // CC#104(legate time) ignored
+				// Roland AE-20
+				if (e.data[1] == 32) return; // CC#32(Bank Select LSB) ignored
+				//
+				get("vXX").value = e.data[1]; // control#
+				get("vCCxx").value = e.data[2]; // values
+				return;
 			}
 		}
-		else if (status == MIDI_NOTE_ON) {		
+		if (status == MIDI_NOTE_ON) {		
 			// debug
 			if (noteNest !== 0) {
+				midi.sendNoteOff(ch,e.data[1]+transpose); // 2022/1/4 patch 
 				console.log("***** maybe NoteOff dropped! *****");
 				if (noteOffDropCnt < Number.MAX_SAFE_INTEGER) noteOffDropCnt++;
 				else noteOffDropCnt=0;
@@ -212,18 +270,18 @@ window.onload = function() {
 			//midi.sendNoteOn(ch,e.data[1]+transpose,e.data[2]);
 			if (fXfer) {
 				if (fVFIXED) {
-					midi.sendNoteOn(ch,e.data[1]+transpose,fixedVelocity);
-					//get("velocity").value = fixedVelocity;
+					midi.sendNoteOn(ch,curPitch+transpose,fixedVelocity);
+					get("velocity").value = fixedVelocity;
 				} else {
-					midi.sendNoteOn(ch,e.data[1]+transpose,curVelocity);
+					midi.sendNoteOn(ch,curPitch+transpose,curVelocity);
 					get("velocity").value = curVelocity;
 				}
 			}
+			return;
 		}
-		else if (status == MIDI_NOTE_OFF) {
+		if (status == MIDI_NOTE_OFF) {
 			noteNest--;
-			//midi.sendNoteOff(ch,e.data[1]);
-			if (fXfer) midi.send(MIDI_NOTE_OFF|ch,e.data[1]+transpose,e.data[2]);
+			if (fXfer) midi.sendNoteOff(ch,e.data[1]+transpose);
 			// debug
 			if (noteNest !== 0) {
 				console.log("***** maybe NoteOn dropped! *****");
@@ -233,14 +291,15 @@ window.onload = function() {
 				console.log("NoteOffDroped:"+noteOffDropCnt);
 				noteNest =0;
 			}
+			return;
 		}
-		else if (status == MIDI_PITCH_BEND) {
+		if (status == MIDI_PITCH_BEND) {
 			if (fPB_THRU) midi.send(MIDI_PITCH_BEND|ch,e.data[1],e.data[2]);
     		var int14 = e.data[2]; // 2nd byte
     		int14 <<= 7;
     		int14 |= e.data[1];
 			get("PB").value = int14-8191; // display only
-		    //if (fPB_THRU) midi.send(MIDI_PITCH_BEND|ch,e.data[1],e.data[2]);
+			return;
 		}
     	return;
   	});
@@ -273,6 +332,9 @@ window.onload = function() {
 		midi.send(MIDI_CONTROL_CHANGE|0,123, 0);
     	// All Sound Off
     	midi.send(MIDI_CONTROL_CHANGE|0,120, 0);
+		// clear unknow CCxx status
+		get("vXX").value = 0;
+		get("vCCxx").value = 0;
 		console.log("PANIC!");
 	}
 
@@ -325,6 +387,10 @@ window.onload = function() {
 	get("CC26").onclick = function() {
 		fCC26 = get("CC26").checked;
 		console.log("CC26:"+fCC26);
+	}
+	get("CC52").onclick = function() {
+		fCC52 = get("CC52").checked;
+		console.log("CC52:"+fCC52);
 	}
 	get("AT").onclick = function() {
 		fAT = get("AT").checked;
@@ -437,6 +503,12 @@ ouput device:
 <br/>
 <hr>
 
+Unknown CCxx: 
+control 
+<input type="text" id="vXX" name="vXX" value="0" size="2">
+value
+<input type="text" id="vCCxx" name="vCCxx" value="0" size="2">
+<br/>
 NoteOn Dropped:
 <input type="text" id="NoteOnDropped" name="NoteOnDropped" value="" size="5">
 <br/>
@@ -464,10 +536,12 @@ NoteOff Dropped:
 <hr>
 
   <label class="toggle">
-	<input class="toggle-checkbox" id="CC1" name="CC1" type="checkbox"  checked>
+	<input class="toggle-checkbox" id="CC1" name="CC1" type="checkbox"  >
 	<div class="toggle-switch"></div>
 	<span class="toggle-label">CC1(modulation wheel)</span>
   </label>
+  vCC1: 
+  <input type="text" id="vCC1" name="vCC1" value="0" size="2">
   
   <br
   />
@@ -496,11 +570,13 @@ NoteOff Dropped:
 
   <br/>
   
+  
   <label class="toggle">
 	<input class="toggle-checkbox" type="checkbox" id="CC74" name="CC74" checked>
 	<div class="toggle-switch"></div>
 	<span class="toggle-label">CC74(cutoff frequency)</span>
   </label>
+
 
   <br/>
   
@@ -510,6 +586,21 @@ NoteOff Dropped:
 	<span class="toggle-label">CC26(EqGain)</span>
   </label>
 
+  <br/>
+
+  <label class="toggle">
+	<input class="toggle-checkbox" type="checkbox" id="CC52" name="CC52" >
+	<div class="toggle-switch"></div>
+	<span class="toggle-label">Convert CC52(rotation) to PB</span>
+  </label>
+  vCC52: 
+  <input type="text" id="vCC52" name="vCCC52" value="0" size="2">
+  x
+  <input type="text" id="vCC52X" name="vCCC52X" value="100" size="2">  
+  vPB:
+  <input type="text" id="vCC52PB" name="vCC52PB" value="0" size="2">
+  <br/>
+  
   <hr> 
 
   <label class="toggle">
@@ -551,7 +642,6 @@ NoteOff Dropped:
 
 </body></html>
 ```
-
 
 CCMapper_files/poormidiM.js  
 ```js
@@ -840,9 +930,7 @@ CCMapperを起動したら、次に音源を立ち上げて入力MIDIデバイ�
 
 
 ## 設定方法
-起動時、実装されているCC＃が全て有効になっているので、大体の音源が、ブレスに対応して発音できる。
-またトランスポーズのキーがあり、オクターブ単位または半音単位で上下できる。  
-有効/無効の切り替えはないが、PitchBendは、Wind_Controlerの出力がそのまま音源に転送される。
+起動時、必要と思われるCC＃が全て有効になっているので、大体の音源が、ブレスに対応して発音できる。音源の音色に依存するが、発音してみて不都合があるようなら、問題のCCをオフにする。  
 
 ## Surge XT のインストール
 deb形式のものをダウンロードしてインストールする。
@@ -863,6 +951,14 @@ vital
 ```
 
 ## 参考情報   
+CC関連：  
+[MIDI CC List for Continuous Controllers](https://anotherproducer.com/online-tools-for-musicians/midi-cc-list/)  
+[AE-30_AE-20_Parameter_Guide_jpn04_W.pdf](https://static.roland.com/assets/media/pdf/AE-30_AE-20_Parameter_Guide_jpn04_W.pdf)  
+[EWI5000_user_guide_JPv1.1.pdf](http://ewi.akai-pro.jp/ewi5000/data/EWI5000_user_guide_JPv1.1.pdf)  
+[Web_EWI Solo User guide_v1.6_R1_JP.pdf](http://ewi.akai-pro.jp/ewi-solo/data/Web_EWI%20Solo%20User%20guide_v1.6_R1_JP.pdf)  
+[NuEVI日本語取扱説明書V1.0(download)](https://kohske.com/relays/download/40/313/44//?file=/files/libs/1940/202111010342207577.pdf)  
+[NuRAD　非公式マニュアル(仮)公開(Nov.19.2022更新)](https://note.com/windsynth/n/n73176f347e02)  
+
 Web MIDI関連：    
 [Web MIDI APIを扱うためのMIDI基礎知識](https://zenn.dev/okunokentaro/articles/01f9reeb0d7mc8110knpfra4tk)  
 [Web MIDI APIの動作テスト](https://webmidiaudio.com/npage102.html)  

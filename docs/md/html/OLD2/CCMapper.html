@@ -1,16 +1,10 @@
 <!DOCTYPE html>
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>CCMapper 2022/1/4</title>
+<title>CCMapper</title>
 
 <h1>CCMapper</h1>
-<h3>2023/1/4</h3>
+<h3>2023/1/2</h3>
 
-<!-- 2023/01/04 The flollowing are added:
-        Transfering CC1 if [CC1] switch off,
-        Convert&Transfering CC52 to PitchBend if [CC51] swich off
-        [displaying a control# and value of unknown CCxx]
--->
-<!-- 2023/01/03 [displaying NoteOn/NoteOff Dropped count] are added -->
 <!-- 2023/01/02 [Velocity Fixed],[PicthBend Thru]switches, [displaying input/output device name] are added -->
 <!--            [displaying NoteOn/NoteOff Dropped count] are added -->
 <!--            [NoteOn/NoteOff transfer]switch are added -->
@@ -63,13 +57,12 @@ window.onload = function() {
 	var curVelocity = 0;
 	var fixedVelocity = 77;
 
-	var fCC1 = false;
+	var fCC1 = true;
 	var fCC2 = true;
 	var fCC7 = true;
 	var fCC11 = true;
 	var fCC74 = true;
 	var fCC26 = true;
-	var fCC52 = false;
 	var fAT = true;
 	var fPP = true;
 	var fVFIXED = false;
@@ -82,20 +75,6 @@ window.onload = function() {
 		var status = e.data[0]&0xF0
 		var ch = e.data[0]&0x0F
 		if (status == MIDI_CONTROL_CHANGE) {
-			if (e.data[1] == 1) { // modulation wheel
-				if (!fCC1) midi.sendCtlChange(ch,1,e.data[2]);
-				get("vCC1").value = e.data[2];
-				return;
-			}
-			if (e.data[1] == 52) { // C52 for re.corder
-				var int14 = e.data[2]*get("vCC52X").value+8191;
-				var b1 = 0x7F&(int14>>7);
-				var b0 = 0x7F&int14;
-				get("vCC52PB").value = int14-8191; // display only
-				get("vCC52").value = e.data[2]; // display only
-				if (fCC52) midi.send(MIDI_PITCH_BEND|ch,b0,b1);
-				return;
-			}
 			if (e.data[1] == 11 || e.data[1] == 2) {
 				if (fCC1) midi.sendCtlChange(ch,1,e.data[2]);
 				if (fCC2) midi.sendCtlChange(ch,2,e.data[2]);
@@ -114,36 +93,11 @@ window.onload = function() {
     			// All Sound Off
     			if (e.data[2] == 0) midi.send(MIDI_CONTROL_CHANGE|ch,120, 0);
 				*/
-			} else {
-				// the following CC#s ignored(will not transfer)
-				// case of EWI5000/EWI Solo 
-				if (e.data[1] == 7) return; // CC#7(volume) ignored 
-				if (e.data[1] == 5) return; // CC#5(portament) ignore
-				//
-				if (e.data[1] == 34) return; // CC#34(Hires/Breath Controler) ignored
-				if (e.data[1] == 39) return; // CC#39(Hires/Volume) ignored (solo only?)
-				if (e.data[1] == 43) return; // CC#43(Hires/Expression) ignored (solo only?)
-				//
-				if (e.data[1] == 65) return; // CC#65(Portament) ignored
-				if (e.data[1] == 66) return; // CC#66(Sostenuto) ignored
-				if (e.data[1] == 68) return; // CC#68(Legate) ignored
-				if (e.data[1] == 74) return; // CC#74(cutoff freq) ignored
-				if (e.data[1] == 88) return; // CC#88(Hires/NoteOn) ignored
-				if (e.data[1] == 102) return; // ignored
-				if (e.data[1] == 103) return; // ignored
-				if (e.data[1] == 104) return; // CC#104(legate time) ignored
-				// Roland AE-20
-				if (e.data[1] == 32) return; // CC#32(Bank Select LSB) ignored
-				//
-				get("vXX").value = e.data[1]; // control#
-				get("vCCxx").value = e.data[2]; // values
-				return;
 			}
 		}
-		if (status == MIDI_NOTE_ON) {		
+		else if (status == MIDI_NOTE_ON) {		
 			// debug
 			if (noteNest !== 0) {
-				midi.sendNoteOff(ch,e.data[1]+transpose); // 2022/1/4 patch 
 				console.log("***** maybe NoteOff dropped! *****");
 				if (noteOffDropCnt < Number.MAX_SAFE_INTEGER) noteOffDropCnt++;
 				else noteOffDropCnt=0;
@@ -158,18 +112,18 @@ window.onload = function() {
 			//midi.sendNoteOn(ch,e.data[1]+transpose,e.data[2]);
 			if (fXfer) {
 				if (fVFIXED) {
-					midi.sendNoteOn(ch,curPitch+transpose,fixedVelocity);
-					get("velocity").value = fixedVelocity;
+					midi.sendNoteOn(ch,e.data[1]+transpose,fixedVelocity);
+					//get("velocity").value = fixedVelocity;
 				} else {
-					midi.sendNoteOn(ch,curPitch+transpose,curVelocity);
+					midi.sendNoteOn(ch,e.data[1]+transpose,curVelocity);
 					get("velocity").value = curVelocity;
 				}
 			}
-			return;
 		}
-		if (status == MIDI_NOTE_OFF) {
+		else if (status == MIDI_NOTE_OFF) {
 			noteNest--;
-			if (fXfer) midi.sendNoteOff(ch,e.data[1]+transpose);
+			//midi.sendNoteOff(ch,e.data[1]);
+			if (fXfer) midi.send(MIDI_NOTE_OFF|ch,e.data[1]+transpose,e.data[2]);
 			// debug
 			if (noteNest !== 0) {
 				console.log("***** maybe NoteOn dropped! *****");
@@ -179,15 +133,14 @@ window.onload = function() {
 				console.log("NoteOffDroped:"+noteOffDropCnt);
 				noteNest =0;
 			}
-			return;
 		}
-		if (status == MIDI_PITCH_BEND) {
+		else if (status == MIDI_PITCH_BEND) {
 			if (fPB_THRU) midi.send(MIDI_PITCH_BEND|ch,e.data[1],e.data[2]);
     		var int14 = e.data[2]; // 2nd byte
     		int14 <<= 7;
     		int14 |= e.data[1];
 			get("PB").value = int14-8191; // display only
-			return;
+		    //if (fPB_THRU) midi.send(MIDI_PITCH_BEND|ch,e.data[1],e.data[2]);
 		}
     	return;
   	});
@@ -220,9 +173,6 @@ window.onload = function() {
 		midi.send(MIDI_CONTROL_CHANGE|0,123, 0);
     	// All Sound Off
     	midi.send(MIDI_CONTROL_CHANGE|0,120, 0);
-		// clear unknow CCxx status
-		get("vXX").value = 0;
-		get("vCCxx").value = 0;
 		console.log("PANIC!");
 	}
 
@@ -275,10 +225,6 @@ window.onload = function() {
 	get("CC26").onclick = function() {
 		fCC26 = get("CC26").checked;
 		console.log("CC26:"+fCC26);
-	}
-	get("CC52").onclick = function() {
-		fCC52 = get("CC52").checked;
-		console.log("CC52:"+fCC52);
 	}
 	get("AT").onclick = function() {
 		fAT = get("AT").checked;
@@ -391,12 +337,6 @@ ouput device:
 <br/>
 <hr>
 
-Unknown CCxx: 
-control 
-<input type="text" id="vXX" name="vXX" value="0" size="2">
-value
-<input type="text" id="vCCxx" name="vCCxx" value="0" size="2">
-<br/>
 NoteOn Dropped:
 <input type="text" id="NoteOnDropped" name="NoteOnDropped" value="" size="5">
 <br/>
@@ -424,12 +364,10 @@ NoteOff Dropped:
 <hr>
 
   <label class="toggle">
-	<input class="toggle-checkbox" id="CC1" name="CC1" type="checkbox"  >
+	<input class="toggle-checkbox" id="CC1" name="CC1" type="checkbox"  checked>
 	<div class="toggle-switch"></div>
 	<span class="toggle-label">CC1(modulation wheel)</span>
   </label>
-  vCC1: 
-  <input type="text" id="vCC1" name="vCC1" value="0" size="2">
   
   <br
   />
@@ -458,13 +396,11 @@ NoteOff Dropped:
 
   <br/>
   
-  
   <label class="toggle">
 	<input class="toggle-checkbox" type="checkbox" id="CC74" name="CC74" checked>
 	<div class="toggle-switch"></div>
 	<span class="toggle-label">CC74(cutoff frequency)</span>
   </label>
-
 
   <br/>
   
@@ -474,21 +410,6 @@ NoteOff Dropped:
 	<span class="toggle-label">CC26(EqGain)</span>
   </label>
 
-  <br/>
-
-  <label class="toggle">
-	<input class="toggle-checkbox" type="checkbox" id="CC52" name="CC52" >
-	<div class="toggle-switch"></div>
-	<span class="toggle-label">Convert CC52(rotation) to PB</span>
-  </label>
-  vCC52: 
-  <input type="text" id="vCC52" name="vCCC52" value="0" size="2">
-  x
-  <input type="text" id="vCC52X" name="vCCC52X" value="100" size="2">  
-  vPB:
-  <input type="text" id="vCC52PB" name="vCC52PB" value="0" size="2">
-  <br/>
-  
   <hr> 
 
   <label class="toggle">
