@@ -2,11 +2,12 @@
 
 # 役に立ちそうなメモの置き場
 
-2023/1/2現在  
+2023/1/9現在  
 
 以下のリンクをクリックして下さい：  
   
-# latest:rocket:  
+# latest:rocket:   
+1. [CCMapper(NAudio.Midi) for Windows](md/CCMapper_NAudio_Midi.md)  
 1. [CCMapper(Web Midi)](md/CCMapper_web_midi.md)  
 1. [sforzandoを使う](md/sforzando.md)  
 1. [CCMapper(Javascript(node))](md/CCMapper_JS_node.md)  
