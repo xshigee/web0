@@ -1,6 +1,11 @@
     
 # CCMapper(Web Midi)  
 
+2023/1/8  
+CCMapper改版：  
+以下を追加した: 
+[Update] sw if off will not update display to reduce overhead (default:off)  
+
 2023/1/4    
 CCMapper改版：  
 以下を追加した:  
@@ -71,7 +76,7 @@ CCMapper_files/poormidiM.ja
 ```
 
 以下、実行画面：  
-![CCMapper_Snapshot](PNG/CCMapper_2023-01-04_205051.png) 
+![CCMapper_Snapshot](PNG/CCMapper_2023-01-09_095153.png) 
 
 ---
 1. スイッチが緑色のときはオンを意味する。オンの場合、受信したCC#2からCC＃11の値を、control#を変更して転送する。
@@ -83,6 +88,9 @@ CCMapper_files/poormidiM.ja
 NoteOn または NoteOffが受信失敗していると推定された時のカウントを表示する。  
 PCなどの性能問題でブラウザーが受信失敗している確率が高いとカウントが増える。  
 [PANIC]ボタンは、[All Note Off],[All Sound Off]を送信するが、音源が、サポートしていないと効果がない。
+1. [Update on display]スイッチ
+オーバーヘッドを減らすために、表示のアップデートをオフにできる。  
+(デフォルトはオフ)
 1. [NoteOn/NoteOff trasfer]  
 Macなど音源ホストでMIDI入力ソースを限定できない場合(＝複数の入力をがある場合)、入力デバイスのMIDIメッセージとCCMapper出力のメッセージがダブって送信される。
 それを避けるためにCCMapperのNoteOn/NoteOffの転送をオフできる。
@@ -112,12 +120,16 @@ CCMapper.html
 
 <!DOCTYPE html>
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>CCMapper 2022/1/4</title>
+<title>CCMapper 2022/1/7</title>
 
 <h1>CCMapper</h1>
-<h3>2023/1/4</h3>
+<h3>2023/1/7</h3>
 
-<!-- 2023/01/04 The flollowing are added:
+<!-- 2023/01/07 The flollowings are added:
+        [Update] sw if off will not update display to reduce overhead (default:off),
+-->
+
+<!-- 2023/01/04 The flollowings are added:
         Transfering CC1 if [CC1] switch off,
         Convert&Transfering CC52 to PitchBend if [CC51] swich off
         [displaying a control# and value of unknown CCxx]
@@ -170,6 +182,8 @@ window.onload = function() {
 	var noteOnDropCnt = 0; // NoteOn Droped count
 	var noteOffDropCnt = 0; // NoteOff Droped count
 
+	var fUpdate = false; // false to prevent update display for reduce overhead
+
 	var transpose = 0;
 	var curPitch = 0;
 	var curVelocity = 0;
@@ -196,15 +210,15 @@ window.onload = function() {
 		if (status == MIDI_CONTROL_CHANGE) {
 			if (e.data[1] == 1) { // modulation wheel
 				if (!fCC1) midi.sendCtlChange(ch,1,e.data[2]);
-				get("vCC1").value = e.data[2];
+				if (fUpdate) get("vCC1").value = e.data[2];
 				return;
 			}
 			if (e.data[1] == 52) { // C52 for re.corder
 				var int14 = e.data[2]*get("vCC52X").value+8191;
 				var b1 = 0x7F&(int14>>7);
 				var b0 = 0x7F&int14;
-				get("vCC52PB").value = int14-8191; // display only
-				get("vCC52").value = e.data[2]; // display only
+				if (fUpdate) get("vCC52PB").value = int14-8191; // display only
+				if (fUpdate) get("vCC52").value = e.data[2]; // display only
 				if (fCC52) midi.send(MIDI_PITCH_BEND|ch,b0,b1);
 				return;
 			}
@@ -271,10 +285,10 @@ window.onload = function() {
 			if (fXfer) {
 				if (fVFIXED) {
 					midi.sendNoteOn(ch,curPitch+transpose,fixedVelocity);
-					get("velocity").value = fixedVelocity;
+					if (fUpdate) get("velocity").value = fixedVelocity;
 				} else {
 					midi.sendNoteOn(ch,curPitch+transpose,curVelocity);
-					get("velocity").value = curVelocity;
+					if (fUpdate) get("velocity").value = curVelocity;
 				}
 			}
 			return;
@@ -298,7 +312,7 @@ window.onload = function() {
     		var int14 = e.data[2]; // 2nd byte
     		int14 <<= 7;
     		int14 |= e.data[1];
-			get("PB").value = int14-8191; // display only
+			if (fUpdate) get("PB").value = int14-8191; // display only
 			return;
 		}
     	return;
@@ -316,7 +330,7 @@ window.onload = function() {
 		get("indev").value = dd[0];//"Widi Bud Pro";
 		get("outdev").value = dd[1];//"loopMIDI";
 		if (dd[0].includes("not found")) alert("Please press 'refresh' button of Chrome broswer!");
-	},100);
+	},1000); // 2023/1/7: 100 -> 1000
 
 	// debug
 	setInterval(function(){
@@ -336,6 +350,11 @@ window.onload = function() {
 		get("vXX").value = 0;
 		get("vCCxx").value = 0;
 		console.log("PANIC!");
+	}
+
+	get("Update").onclick = function() {
+		fUpdate = get("Update").checked;
+		console.log("update:"+fUpdate);
 	}
 
 	get("octdown").onclick = function() {
@@ -516,6 +535,12 @@ NoteOff Dropped:
 <input type="text" id="NoteOffDropped" name="NoteOffDropped" value="" size="5">
 <br/>
 <button id="PANIC">PANIC</button>
+&ThickSpace;&ThickSpace;
+<label class="toggle">
+	<input class="toggle-checkbox" id="Update" name="Update" type="checkbox"  >
+	<div class="toggle-switch"></div>
+	<span class="toggle-label">Update on display</span>
+</label>
 <br/>
 <hr>
 
@@ -950,7 +975,11 @@ which vital
 vital
 ```
 
-## 参考情報   
+## 参考情報  
+MIDI tool関連：  
+[Protokol - A responsive heavy duty console for troubleshooting control protocols](https://hexler.net/protokol#get)  
+MIDIトラフィックをモニターできるツール。(お勧め)  
+
 CC関連：  
 [MIDI CC List for Continuous Controllers](https://anotherproducer.com/online-tools-for-musicians/midi-cc-list/)  
 [AE-30_AE-20_Parameter_Guide_jpn04_W.pdf](https://static.roland.com/assets/media/pdf/AE-30_AE-20_Parameter_Guide_jpn04_W.pdf)  
