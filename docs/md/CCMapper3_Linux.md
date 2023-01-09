@@ -1,5 +1,5 @@
     
-# CCMapper3 for Linux  
+# CCMapper3(ofxRtMidi) for Linux  
 
 2022/12/18      
 初版    
