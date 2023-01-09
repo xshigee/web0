@@ -1,5 +1,8 @@
     
-# CCMapper3 for Win/Mac  
+# CCMapper3(RiMidi) for Win/Mac  
+
+2023/1/9  
+使用しているライブラリを明確化した。  
 
 2022/12/17      
 初版    
@@ -27,6 +30,13 @@ MIDI信号の流れとしては以下のようになる：
 MIDI信号の流れとしては以下のようになる：
 ```
 [wind_controler(re.corder/Elfue etc)]→(CCMapper3)→[loopMIDI(IAC)]→ [PC音源]
+```
+
+## 使用ライブラリ
+以下のライブラリをNuGetマネージャーでインストールしてプログラムに組み込む：　　
+```
+RtMidi.Core
+Serilog.Sinks.Console
 ```
 
 ## CCMapper3
@@ -1198,7 +1208,11 @@ namespace RtMidi.Core.CCViewer
 }
 ```
 
-## 参考情報                                    
+## 参考情報           
+MIDI tool関連：  
+[Protokol - A responsive heavy duty console for troubleshooting control protocols](https://hexler.net/protokol#get)  
+MIDIトラフィックをモニターできるツール。(お勧め)  
+
 C#ビルド方法(参考)：  
 [CCMapper(C#版/RtMidi)](https://xshigee.github.io/web0/md/CCMapper_CS_RtMidi.html)  
 
