@@ -95,11 +95,11 @@ python3 flet_CCMapper.py
 
 3.linuxの場合  
 以下を実行してライブラリをインストールする：   
-\# Flet実行時にエラーなったので、それを回避するために、 
+\# Flet実行時にエラーなったので、それを回避するために、     
 \# pythonの仮想環境を設定している  
 ```
-sudo apt-get update
-sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgs
+sudo apt update
+sudo apt install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgs
 # GStreamerをインストールしている 
 
 # pythonの仮想環境fletを設定する
@@ -107,7 +107,7 @@ python -m venv flet
 . ./flet/bin/activate
 
 sudo apt install python3-rtmidi  
-#pythonでありがちなpipでないので注意のこと。
+# pythonでありがちなpipでないので注意のこと。
 
 pip install flet
 
