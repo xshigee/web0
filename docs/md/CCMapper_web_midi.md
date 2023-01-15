@@ -72,7 +72,7 @@ CCMapper.htmlをchromeで開くとCCMapperが実行される。
 ```
 
 CCMapper.html
-CCMapper_files/poormidiM.ja
+CCMapper_files/poormidiM.js
 ```
 
 以下、実行画面：  
