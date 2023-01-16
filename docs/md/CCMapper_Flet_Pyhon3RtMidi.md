@@ -181,8 +181,8 @@ Flet_CCMapper.py
 # flet_CCMapper_RtMidi.py
 #
 # written by: xshige
-# 2023/1/16: bug fix: device name chaged for YDS-150
-# 2023/1/15
+# 2023/1/16: added device name(USB-MIDI) for YDS-150
+# 2023/1/15: 1st version
 
 # related URLs
 # https://github.com/flet-dev/flet
@@ -342,7 +342,8 @@ def main(page):
     ID3 = "Nu" # for Mac (with WIDI Master/NuRAD,NuEVI)
     ID4 = "EWI" # for Mac (with WIDI Master/EWI5000,EWI4000,EVI3010 etc)
     ID5 = "AE-" # for Mac (Roland)
-    ID6 = "Saxophone" #"YDS-" # for Mac (YAMAHA)
+    ID6 = "YDS-" # for Mac (YAMAHA)
+    ID7 = "Saxophone" # for USB-MIDI (YAMAHA)
     OD0 = "loopMIDI" # for Windows/Mac
     OD1 = "Midi Throu" # for Linux
     # OD = "SE-0" # 
@@ -382,6 +383,9 @@ def main(page):
             indev = n
             break
         if (ID6 in inport):
+            indev = n
+            break
+        if (ID7 in inport):
             indev = n
             break
     #print(indev)
