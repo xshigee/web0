@@ -1,6 +1,12 @@
     
 # CCMapper(Web Midi)  
 
+2023/1/16  
+CCMapper改版：  
+以下を追加した:  
+added input device name(USB-MIDI) for YDS-150  
+change NoteOn to NoteOff if velocity is zero (patch for NuRad)  
+
 2023/1/8  
 CCMapper改版：  
 以下を追加した: 
@@ -120,20 +126,25 @@ CCMapper.html
 
 <!DOCTYPE html>
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>CCMapper 2022/1/7</title>
+<title>CCMapper 2023/1/16</title>
 
 <h1>CCMapper</h1>
-<h3>2023/1/7</h3>
+<h3>2023/1/16</h3>
+
+<!-- 2023/1/16
+	change NoteOn to NoteOff if velocity is zero (patch for NuRad)
+-->
 
 <!-- 2023/01/07 The flollowings are added:
-        [Update] sw if off will not update display to reduce overhead (default:off),
+    [Update] sw if off will not update display to reduce overhead (default:off),
 -->
 
 <!-- 2023/01/04 The flollowings are added:
-        Transfering CC1 if [CC1] switch off,
-        Convert&Transfering CC52 to PitchBend if [CC51] swich off
-        [displaying a control# and value of unknown CCxx]
+    Transfering CC1 if [CC1] switch off,
+    Convert&Transfering CC52 to PitchBend if [CC51] swich off
+    [displaying a control# and value of unknown CCxx]
 -->
+
 <!-- 2023/01/03 [displaying NoteOn/NoteOff Dropped count] are added -->
 <!-- 2023/01/02 [Velocity Fixed],[PicthBend Thru]switches, [displaying input/output device name] are added -->
 <!--            [displaying NoteOn/NoteOff Dropped count] are added -->
@@ -207,6 +218,54 @@ window.onload = function() {
 	midi.setHandler(function(e) {
 		var status = e.data[0]&0xF0
 		var ch = e.data[0]&0x0F
+
+		if (status == MIDI_NOTE_OFF) {
+			noteNest--;
+			if (fXfer) midi.sendNoteOff(ch,e.data[1]+transpose);
+			// debug
+			if (noteNest !== 0) {
+				console.log("***** maybe NoteOn dropped! *****");
+				if (noteOnDropCnt < Number.MAX_SAFE_INTEGER) noteOnDropCnt++;
+				else noteOnDropCnt=0;
+				console.log("NoteOnDroped:"+noteOnDropCnt);
+				console.log("NoteOffDroped:"+noteOffDropCnt);
+				noteNest =0;
+			}
+			return;
+		}		
+		if (status == MIDI_NOTE_ON) {
+			if (e.data[2] == 0 && fXfer) {
+            // change NoteOn to NoteOff (patch 2023/1/16 for NuRad)
+				if (fXfer) midi.sendNoteOff(ch,e.data[1]+transpose);
+				return
+			}		
+			// debug
+			if (noteNest !== 0) {
+				// TEMPO FIX: does not work correctly //midi.sendNoteOff(ch,e.data[1]+transpose); // 2023/1/16 
+				console.log("***** maybe NoteOff dropped! *****");
+				if (noteOffDropCnt < Number.MAX_SAFE_INTEGER) noteOffDropCnt++;
+				else noteOffDropCnt=0;
+				console.log("NoteOnDroped:"+noteOnDropCnt);
+				console.log("NoteOffDroped:"+noteOffDropCnt);
+				noteNest =0;
+			}
+			//
+			noteNest++;
+			curPitch = e.data[1];
+			curVelocity = e.data[2];
+			//midi.sendNoteOn(ch,e.data[1]+transpose,e.data[2]);
+			if (fXfer) {
+				if (fVFIXED) {
+					midi.sendNoteOn(ch,curPitch+transpose,fixedVelocity);
+					if (fUpdate) get("velocity").value = fixedVelocity;
+				} else {
+					midi.sendNoteOn(ch,curPitch+transpose,curVelocity);
+					if (fUpdate) get("velocity").value = curVelocity;
+				}
+			}
+			return;
+		}
+
 		if (status == MIDI_CONTROL_CHANGE) {
 			if (e.data[1] == 1) { // modulation wheel
 				if (!fCC1) midi.sendCtlChange(ch,1,e.data[2]);
@@ -266,47 +325,7 @@ window.onload = function() {
 				return;
 			}
 		}
-		if (status == MIDI_NOTE_ON) {		
-			// debug
-			if (noteNest !== 0) {
-				midi.sendNoteOff(ch,e.data[1]+transpose); // 2022/1/4 patch 
-				console.log("***** maybe NoteOff dropped! *****");
-				if (noteOffDropCnt < Number.MAX_SAFE_INTEGER) noteOffDropCnt++;
-				else noteOffDropCnt=0;
-				console.log("NoteOnDroped:"+noteOnDropCnt);
-				console.log("NoteOffDroped:"+noteOffDropCnt);
-				noteNest =0;
-			}
-			//
-			noteNest++;
-			curPitch = e.data[1];
-			curVelocity = e.data[2];
-			//midi.sendNoteOn(ch,e.data[1]+transpose,e.data[2]);
-			if (fXfer) {
-				if (fVFIXED) {
-					midi.sendNoteOn(ch,curPitch+transpose,fixedVelocity);
-					if (fUpdate) get("velocity").value = fixedVelocity;
-				} else {
-					midi.sendNoteOn(ch,curPitch+transpose,curVelocity);
-					if (fUpdate) get("velocity").value = curVelocity;
-				}
-			}
-			return;
-		}
-		if (status == MIDI_NOTE_OFF) {
-			noteNest--;
-			if (fXfer) midi.sendNoteOff(ch,e.data[1]+transpose);
-			// debug
-			if (noteNest !== 0) {
-				console.log("***** maybe NoteOn dropped! *****");
-				if (noteOnDropCnt < Number.MAX_SAFE_INTEGER) noteOnDropCnt++;
-				else noteOnDropCnt=0;
-				console.log("NoteOnDroped:"+noteOnDropCnt);
-				console.log("NoteOffDroped:"+noteOffDropCnt);
-				noteNest =0;
-			}
-			return;
-		}
+		
 		if (status == MIDI_PITCH_BEND) {
 			if (fPB_THRU) midi.send(MIDI_PITCH_BEND|ch,e.data[1],e.data[2]);
     		var int14 = e.data[2]; // 2nd byte
@@ -327,6 +346,8 @@ window.onload = function() {
 	*/
 	setTimeout(function(){
 		var dd = midi.getIOdevName();
+		// debug
+		console.log(dd)
 		get("indev").value = dd[0];//"Widi Bud Pro";
 		get("outdev").value = dd[1];//"loopMIDI";
 		if (dd[0].includes("not found")) alert("Please press 'refresh' button of Chrome broswer!");
@@ -672,7 +693,8 @@ CCMapper_files/poormidiM.js
 ```js
 
 // proormidiM.js
-// 2023/1/2: modified for CCMapper (last M means 'Modified')
+// 2023/1/16: added input device name(USB-MIDI) for YDS-150
+// 2023/1/ 2: modified for CCMapper (last M means 'Modified')
 
 // poormidi.js (Very Poor) Web MIDI API Wrapper
 // For Google Chrome Only :D
@@ -694,6 +716,7 @@ CCMapper_files/poormidiM.js
   const indev4 = "EWI"; // for Mac (with WIDI Master/EWI5000,EWI4000,EVI3010 etc)
   const indev5 = "AE-"; // for Mac (Roland)
   const indev6 = "YDS-"; // for Mac (YAMAHA)
+  const indev7 = "Saxophone" // for USB-MIDI (YAMAHA)
   const outdev0 = "loopMIDI"; // for Windows/Mac
   const outdev1 = "Midi Through"; // for linux
   var innum = 1;
@@ -874,6 +897,10 @@ this.send = function(){
           break;
         }
         if (o.value.name.includes(indev6)) {
+          innum = num;
+          break;
+        }
+        if (o.value.name.includes(indev7)) {
           innum = num;
           break;
         }
