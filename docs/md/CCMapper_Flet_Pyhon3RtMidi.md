@@ -1,6 +1,10 @@
     
 # Flet_CCMapper(RtMidi/python3)  
 
+2023/1/18  
+CCMapper改版：  
+glide/portamento support  
+
 2023/1/15+        
 初版    
   
@@ -143,7 +147,7 @@ python3 flet_CCMapper.py
 ---
 
 
-![CCMapper_Snapshot](PNG/flet_CCMapper_2023-01-15_174736.png) 
+![CCMapper_Snapshot](PNG/flet_CCMapper_2023-01-18_215737.png) 
 
 ---
 
@@ -168,19 +172,24 @@ AT/PPをオフ/オフできる。オンの場合、入力されたCC#2/CC#11か�
 オンすると固定のベロシティを送信する。その固定値を表示しており、[+][-] で変更できる。オフすると、コントローラ自身のベロシティが転送される。  
 1. [PitchBend Thru]  
 受信したPitchBendの転送をオン/オフできる。    
-コントローラに慣れていなくてPitchBendが煩わしい場合、オフにできる。 
+コントローラに慣れていなくてPitchBendが煩わしい場合、オフにできる。
+1. [Portamento(Glide) Thru]
+受信したPortamento(Glide)関係のMIDIメッセージの転送をオン/オフできる。  
+(デフォルトはオン)  
+
 
 ## ソースコード
 CCMapperのプログラムとしては以下を使用する：  
 
 Flet_CCMapper.py
-```python               
+```python
 
 #!/usr/bin/env python
 #
 # flet_CCMapper_RtMidi.py
 #
 # written by: xshige
+# 2023/1/18: glide/portamento support
 # 2023/1/16: added device name(USB-MIDI) for YDS-150
 # 2023/1/15: 1st version
 
@@ -190,6 +199,7 @@ Flet_CCMapper.py
 # https://veliugurguney.com/blog/post/real_time_midi_in_python_using_sched_and_rtmidi
 # https://courses.ideate.cmu.edu/16-375/f2021/text/code/midi-examples.html
 
+import os
 import sys
 
 import flet as ft
@@ -216,9 +226,9 @@ def midiin_callback(event, data=None):
         channel = (status & 0xF) + 1
         print("NoteOff note:%d velocity:%d" % (note, velocity))
         message[1] = curNote
-        if (XFER.value):
-            midiout.send_message(message)
+        if (XFER.value): midiout.send_message(message)
         return
+
     elif message[0] & 0xF0 == NOTE_ON:
         status, note, velocity = message
         channel = (status & 0xF) + 1
@@ -234,65 +244,71 @@ def midiin_callback(event, data=None):
         transpose = int(trans.value)
         curNote = note+transpose
         message[1] = curNote
-        if (VFIX.value):
-            message[2] = int(vel.value)
-        if (XFER.value):
-            midiout.send_message(message)
+        if (VFIX.value): message[2] = int(vel.value)
+        if (XFER.value): midiout.send_message(message)
         return
+    
     elif message[0] & 0xF0 == CONTROL_CHANGE:
         status, control, value = message
         channel = (status & 0xF) + 1
         print("CONTROL_CHANGE control:%d value:%d" % (control, value))
         if (control == 1): # Incomming Modulation Wheel
-            if (not CC1.value):
-                midiout.send_message(message)
-                return
+            if (not CC1.value): midiout.send_message(message)
+            return
+        # portamento/glide support
+        if (control == 65): # portamento on/off
+            if (PORTA.value): midiout.send_message(message)
+            return
+        if (control == 5): # portamento/glide time
+            if (PORTA.value): midiout.send_message(message)
+            return
+        if (control == 84): # portamento control
+            if (PORTA.value): midiout.send_message(message)
+            return
+        #----------------------
         if ((control == 2)|(control == 11)):
             message[1] = 1
-            if (CC1.value):
-                midiout.send_message(message)
+            if (CC1.value): midiout.send_message(message)
             message[1] = 2
-            if (CC2.value):
-                midiout.send_message(message)
+            if (CC2.value): midiout.send_message(message)
             message[1] = 7
-            if (CC7.value):
-                midiout.send_message(message)
+            if (CC7.value): midiout.send_message(message)
             message[1] = 11
-            if (CC11.value):
-                midiout.send_message(message)
+            if (CC11.value): midiout.send_message(message)
             message[1] = 74
-            if (CC74.value):
-               midiout.send_message(message)
+            if (CC74.value): midiout.send_message(message)
             message[1] = 26
-            if (CC26.value):
-                midiout.send_message(message)
+            if (CC26.value): midiout.send_message(message)
             # AT
             msg2 = [CHANNEL_PRESSURE + channel - 1]
             msg2.append(value & 0x7F)
-            if (AT.value):
-                midiout.send_message(msg2)
+            if (AT.value): midiout.send_message(msg2)
             # PP
             msg2 = [POLY_PRESSURE + channel - 1]
             msg2.append(curNote & 0x7F)
             msg2.append(value & 0x7F)
-            if (PP.value):
-                midiout.send_message(msg2)
+            if (PP.value): midiout.send_message(msg2)
             return
+        else: # other CC
+            # other messsage
+            if (OTHER.value):
+                midiout.send_message(message)
+                print("********** unexpected CC **********")
+                print(hex(message[0]),message[1],message[3])
+                return
+    #--------------------------------------------------------
     elif message[0] & 0xF0 == CHANNEL_PRESSURE:
-        if (not AT.value):
-            midiout.send_message(message)
+        if (not AT.value): midiout.send_message(message)
         value = message[1] # bug fix 2023/1/12
         channel = (status & 0xF) + 1
         print("AT(CHANNEL_PRESSURE) value:%d" % (value))
     elif message[0] & 0xF0 == POLY_PRESSURE:
-        if (not PP.value):
-            midiout.send_message(message)
+        if (not PP.value): midiout.send_message(message)
         status, note, value = message
         channel = (status & 0xF) + 1
         print("PP(POLY_PRESSURE) note:%d value:%d" % (note, value))
     elif message[0] & 0xF0 == PITCH_BEND:
-        if (PB.value):
-            midiout.send_message(message)
+        if (PB.value): midiout.send_message(message)
         int14 = message[2] # 2nd byte
         int14 = (int14<<7)
         int14 = (int14|(message[1]&0x7F))
@@ -302,8 +318,8 @@ def midiin_callback(event, data=None):
         # other messsage
         if (OTHER.value):
             midiout.send_message(message)
-        print("********** unexpected message **********")
-        print(hex(message[0]),message[1],message[3])
+            print("********** unexpected message **********")
+            print(hex(message[0]),message[1],message[3])
 
 #---------------------------------------------------------
 
@@ -326,12 +342,15 @@ def panic(e):
 
 def main(page):
     global midiout
-    
+
+    ver = "2023/1/18" # version
+
     # flet related variable
-    global CC1,CC2,CC7,CC11,CC74,CC26,AT,PP,PB
+    global CC1,CC2,CC7,CC11,CC74,CC26,AT,PP,PB,PORTA
     global XFER,OTHER,VFIX
     global trans,vel
 
+    print(ver)
     print("Running at: "+page.platform)
     print(ft.get_platform()) # you also can use it 
 
@@ -393,13 +412,13 @@ def main(page):
 
     if (outdev == -1):
         print("**** output device not found! *****")
-        sys.exit()
+        sys.exit(-1)
     midiout.open_port(outdev) # loopMIDI for windows/mac, Midi Through for linux
     print("output port: '%s'" % outport)
 
     if (indev == -1):
         print("**** input device not found! *****")
-        sys.exit()
+        sys.exit(-1)
     midiin.open_port(indev) # WIDI Bud Pro for linux/windows, dev name for mac
     print("input port: '%s'" % inport)
     midiin.set_callback(midiin_callback)
@@ -617,6 +636,16 @@ def main(page):
     )
     PBL = ft.Text("PitchBend Thru",weight="bold")
 
+    PORTA = ft.Switch(
+        #label="Poartamento(Glid) Thru", 
+        #label_position=ft.LabelPosition.LEFT,
+        value = True,
+        active_color="GREEN"
+    )
+    PORTAL = ft.Text("Portamento(Glide) Thru",weight="bold")
+
+    #-------------------------------------
+
     page.add(
         #ttl,
         #ft.Row([outdev,indev]),
@@ -639,7 +668,7 @@ def main(page):
         HLINE,
         ft.Row([VFIX,VFIXL,vel,velup,veldwn]),
         HLINE,
-        ft.Row([PB,PBL]), 
+        ft.Row([PB,PBL,PORTA,PORTAL]), 
         endApp)
 
 #ft.app(target=main, view=ft.WEB_BROWSER)
