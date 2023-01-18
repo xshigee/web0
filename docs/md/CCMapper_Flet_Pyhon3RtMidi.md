@@ -1,7 +1,7 @@
     
 # Flet_CCMapper(RtMidi/python3)  
 
-2023/1/18  
+2023/1/18+  
 CCMapper改版：  
 glide/portamento support  
 
@@ -697,6 +697,11 @@ CCMapperを起動したら、入出力MIDIデバイスは自動的に設定さ�
 MIDI tool関連：  
 [Protokol - A responsive heavy duty console for troubleshooting control protocols](https://hexler.net/protokol#get)  
 MIDIトラフィックをモニターできるツール。(お勧め)  
+
+MIDI関連：  
+[ポルタメントで滑らかに音をつなぐ](https://dtm-hyper.com/midicc/portament.html)  
+[Legato Pedal](http://midi.teragonaudio.com/tech/midispec/leg.htm)  
+[MIDI CC List for Continuous Controllers](https://anotherproducer.com/online-tools-for-musicians/midi-cc-list/)  
 
 Flet関連：  
 [Flet app framework ](https://github.com/flet-dev/flet)  
