@@ -1,6 +1,9 @@
     
 # CCMapper3(RiMidi) for Win/Mac  
 
+2023/1/23  
+コード改善(PANIC追加など)  
+
 2023/1/9  
 使用しているライブラリを明確化した。  
 
@@ -47,6 +50,20 @@ CCMapper3_cs_RtMidi/Program.cs
 
 // CCMapper3(RiMidi) for Win/Mac
 // written by:xshige
+// 2023/1/22
+
+//--------------------------------
+
+// 2023/1/22
+// Panic button
+// z
+
+// 2023/1/5
+// PitchBen(d) transefer
+// d toggle
+
+// Velocity F(i)xed
+// i toggle
 
 // 2022/12/15
 // Pitch Bend transfer
@@ -108,8 +125,12 @@ using RtMidi.Core.Messages;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
+using System.Text.RegularExpressions;
+using System.Threading.Channels;
 
 namespace RtMidi.Core.CCMapper
 {
@@ -118,15 +139,17 @@ namespace RtMidi.Core.CCMapper
         int limit127(int x, float m)
         {
             int rv = (int)((float)x * m);
-            if (127 <= rv) rv = 127;
+            if (127 <= rv)
+                rv = 127;
             return rv;
         }
 
         public static void Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
-                //.WriteTo.ColoredConsole()
-                .WriteTo.Console()
+            //.WriteTo.ColoredConsole()
+            .WriteTo
+                .Console()
                 //.MinimumLevel.Debug() // disp debug info.
                 .CreateLogger();
 
@@ -145,19 +168,23 @@ namespace RtMidi.Core.CCMapper
 
             float cc1mod = 1;
 
-            bool logOut = true; // true to disp log on console
+            bool logOut = false; //20023/1/9 // true to disp log on console
 
             bool enableSendNote = true; // false will Note send note
 
-            bool enableCC1 = true; // true will send CC1
+            bool enableCC1 = false; // 2023/1/5: true will send CC1, false will send received CC1
             bool enableCC74 = true; // true will send CC74
             bool enableAT = true; // true will send AT
             bool enablePP = true;
             bool enableVL = true; // volume
-            bool enableBC = true;  // breath
+            bool enableBC = true; // breath
             bool enableCC26 = true; // EqGain
-            bool enableEX = true; // Expression
-            bool enableOTHER = true; // other CC
+            bool enableEX = false; // Expression
+            bool enableOTHER = false; // 2023/1/5: other CC
+
+            bool enablePB = true; //  2023/1/5: true will send PB
+            bool enableVFixed = false; // 2023/1/5
+            int VFixedValue = 77; // 2023/1/5
 
             bool chgCC1 = false; // true will change mod value
             bool chgCC74 = false;
@@ -167,75 +194,112 @@ namespace RtMidi.Core.CCMapper
             bool chgBC = false;
             bool chgEX = false;
 
-            // the following device will be opened
-            string ID0 = "WIDI Bud Pro"; // for Windows
-            string ID1 = "Elefue"; // for Mac
-            string ID2 = "re.corder"; // for Mac
-            string ID3 = "NuRad"; // for Mac
-            string OD = "loopMIDI"; // for Windows/Mac
-            //string OD = "SE-0"; // for Mac
-
+            // MIDI devices
             var inputList = new List<IMidiInputDevice>();
             var outputList = new List<IMidiOutputDevice>();
 
-            // List all available MIDI API's
-            foreach (var api in MidiDeviceManager.Default.GetAvailableMidiApis())
-                Console.WriteLine($"Available API: {api}");
+            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            // Event Handlers
 
             // Listen to all available midi devices
             void ControlChangeHandler(IMidiInputDevice sender, in ControlChangeMessage msg)
             {
-                if (logOut) Console.WriteLine($"[{sender.Name}] ControlChange: Channel:{msg.Channel} Control:{msg.Control} Value:{msg.Value}");
+                if (logOut)
+                    Console.WriteLine(
+                        $"[{sender.Name}] ControlChange: Channel:{msg.Channel} Control:{msg.Control} Value:{msg.Value}"
+                    );
                 if (msg.Control == 11 || msg.Control == 2)
                 {
                     // for Aria
                     if (enableBC)
                     {
-                        if (chgBC) outputList[0].Send(new ControlChangeMessage(msg.Channel, 2,
-                            limit127(msg.Value, cc1mod)));
-                        else outputList[0].Send(new ControlChangeMessage(msg.Channel, 2, msg.Value));
+                        if (chgBC)
+                            outputList[0].Send(
+                                new ControlChangeMessage(
+                                    msg.Channel,
+                                    2,
+                                    limit127(msg.Value, cc1mod)
+                                )
+                            );
+                        else
+                            outputList[0].Send(new ControlChangeMessage(msg.Channel, 2, msg.Value));
                     }
                     if (enableVL)
                     {
-                        if (chgVL) outputList[0].Send(new ControlChangeMessage(msg.Channel, 7,
-                            limit127(msg.Value, cc1mod)));
-                        else outputList[0].Send(new ControlChangeMessage(msg.Channel, 7, msg.Value));
+                        if (chgVL)
+                            outputList[0].Send(
+                                new ControlChangeMessage(
+                                    msg.Channel,
+                                    7,
+                                    limit127(msg.Value, cc1mod)
+                                )
+                            );
+                        else
+                            outputList[0].Send(new ControlChangeMessage(msg.Channel, 7, msg.Value));
                     }
-                    if (enableCC26) outputList[0].Send(new ControlChangeMessage(msg.Channel, 26, msg.Value));
+                    if (enableCC26)
+                        outputList[0].Send(new ControlChangeMessage(msg.Channel, 26, msg.Value));
 
                     // Expression added
                     if (enableEX)
                     {
-                        if (chgEX) outputList[0].Send(new ControlChangeMessage(msg.Channel, 11,
-                            limit127(msg.Value, cc1mod)));
-                        else outputList[0].Send(new ControlChangeMessage(msg.Channel, 11, msg.Value));
+                        if (chgEX)
+                            outputList[0].Send(
+                                new ControlChangeMessage(
+                                    msg.Channel,
+                                    11,
+                                    limit127(msg.Value, cc1mod)
+                                )
+                            );
+                        else
+                            outputList[0].Send(
+                                new ControlChangeMessage(msg.Channel, 11, msg.Value)
+                            );
                     }
 
                     // CC1 added
                     if (enableCC1)
                     {
-                        if (chgCC1) outputList[0].Send(new ControlChangeMessage(msg.Channel, 1,
-                                limit127(msg.Value, cc1mod)));
-                        else outputList[0].Send(new ControlChangeMessage(msg.Channel, 1, msg.Value));
+                        if (chgCC1)
+                            outputList[0].Send(
+                                new ControlChangeMessage(
+                                    msg.Channel,
+                                    1,
+                                    limit127(msg.Value, cc1mod)
+                                )
+                            );
+                        else
+                            outputList[0].Send(new ControlChangeMessage(msg.Channel, 1, msg.Value));
                     }
 
                     // CC74 added
                     if (enableCC74)
                     {
-                        if (chgCC74) outputList[0].Send(new ControlChangeMessage(msg.Channel, 74,
-                                limit127(msg.Value, cc1mod)));
-                        else outputList[0].Send(new ControlChangeMessage(msg.Channel, 74, msg.Value));
+                        if (chgCC74)
+                            outputList[0].Send(
+                                new ControlChangeMessage(
+                                    msg.Channel,
+                                    74,
+                                    limit127(msg.Value, cc1mod)
+                                )
+                            );
+                        else
+                            outputList[0].Send(
+                                new ControlChangeMessage(msg.Channel, 74, msg.Value)
+                            );
                     }
 
                     // Aftertouch for Channel
                     if (enableAT)
                     {
-                        if (chgAT) outputList[0].Send(new ChannelPressureMessage(msg.Channel,
-                                limit127(msg.Value, cc1mod)));
-                        else outputList[0].Send(new ChannelPressureMessage(msg.Channel, msg.Value));
+                        if (chgAT)
+                            outputList[0].Send(
+                                new ChannelPressureMessage(msg.Channel, limit127(msg.Value, cc1mod))
+                            );
+                        else
+                            outputList[0].Send(new ChannelPressureMessage(msg.Channel, msg.Value));
 
                         //outputList[0].Send(new PitchBendMessage(msg.Channel, msg.Value));
-
                     }
 
                     // Aftertouch for key
@@ -246,46 +310,189 @@ namespace RtMidi.Core.CCMapper
                         iKey += transpose;
                         var eKey = (Enums.Key)Enum.ToObject(typeof(Enums.Key), iKey);
 
-                        if (chgPP) outputList[0].Send(new PolyphonicKeyPressureMessage(curMsg.Channel, eKey,
-                                limit127(msg.Value, cc1mod)));
-                        else outputList[0].Send(new PolyphonicKeyPressureMessage(curMsg.Channel, eKey, msg.Value));
+                        if (chgPP)
+                            outputList[0].Send(
+                                new PolyphonicKeyPressureMessage(
+                                    curMsg.Channel,
+                                    eKey,
+                                    limit127(msg.Value, cc1mod)
+                                )
+                            );
+                        else
+                            outputList[0].Send(
+                                new PolyphonicKeyPressureMessage(curMsg.Channel, eKey, msg.Value)
+                            );
                     }
                 }
-                else
+
+                if (msg.Control == 1)
                 {
-                    if (enableOTHER) outputList[0].Send(msg);
+                    if (!enableCC1)
+                        outputList[0].Send(new ControlChangeMessage(msg.Channel, 1, msg.Value));
+                }
+
+                // the following CC ignore(not sent)
+                if (msg.Control == 102)
+                    return; // EWI5000
+                if (msg.Control == 103)
+                    return; // EWI5000
+                if (msg.Control == 123)
+                    return; // EWI5000 (All Note Off)
+                if (msg.Control == 7)
+                    return; // EWI5000
+                if (msg.Control == 68)
+                    return; // EWI5000
+                if (msg.Control == 74)
+                    return; // EWI5000
+                if (msg.Control == 34)
+                    return; // CC#34(Hires/Breath Controler) ignored
+                if (msg.Control == 39)
+                    return; // CC#39(Hires/Volume) ignored
+                if (msg.Control == 43)
+                    return; // CC#43(Hires/Expression) ignored
+                if (msg.Control == 88)
+                    return; // CC#88(Hires/NoteOn) ignored
+                // portamento/glide support
+                if (msg.Control == 65)
+                { // portamento on/off
+                    outputList[0].Send(new ControlChangeMessage(msg.Channel, 65, msg.Value));
+                    //if (PORTA.value) {
+                    //    midiout.send_message(message);
+                    //    return;
+                    //}
+                    if (msg.Control == 5)
+                    { // portamento/glide time
+                        outputList[0].Send(new ControlChangeMessage(msg.Channel, 5, msg.Value));
+                        //if (PORTA.value) {
+                        //    midiout.send_message(message);
+                        //    return;
+                        //}
+                    }
+                    if (msg.Control == 84)
+                    { // portamento control
+                        outputList[0].Send(new ControlChangeMessage(msg.Channel, 84, msg.Value));
+                        //if (PORTA.value) {
+                        //    midiout.send_message(message);
+                        //    return;
+                        //}
+                    }
+                    if (msg.Control == 104)
+                    { // Legato Time (EWI5000)
+                        outputList[0].Send(new ControlChangeMessage(msg.Channel, 104, msg.Value));
+                        //if (PORTA.value) {
+                        //    midiout.send_message(message);
+                        //    return;
+                        //}
+                    }
+                    //----------------------
+                    else // other CC
+                    {
+                        if (enableOTHER)
+                            outputList[0].Send(msg);
+                        return;
+                    }
                 }
             }
 
             void NoteOnHandler(IMidiInputDevice sender, in NoteOnMessage msg)
             {
-                if (logOut) Console.WriteLine($"[{sender.Name}] NoteOn: Channel:{msg.Channel} Key:{msg.Key} Velocity:{msg.Velocity}");
-
-                curMsg = msg;
+                if (logOut)
+                    Console.WriteLine(
+                        $"[{sender.Name}] NoteOn: Channel:{msg.Channel} Key:{msg.Key} Velocity:{msg.Velocity}"
+                    );
 
                 // convert enums to int for transpose
-                int iKey = (int)msg.Key;
+                int iKey = (int)msg.Key; // bug fixed 2023/1/8: NG:curMsg.Key;
                 iKey += transpose;
                 var eKey = (Enums.Key)Enum.ToObject(typeof(Enums.Key), iKey);
 
-                if (enableSendNote) outputList[0].Send(new NoteOnMessage(msg.Channel, eKey, msg.Velocity));
+                // change NoteOn to NoteOff (patch 2023/1/21 for NuRad)
+                if (msg.Velocity == 0)
+                {
+                    outputList[0].Send(new NoteOffMessage(msg.Channel, eKey, msg.Velocity));
+                    return;
+                }
+
+                curMsg = msg;
+
+                // 2023/1/5
+                int vv;
+                if (enableVFixed)
+                    vv = VFixedValue;
+                else
+                    vv = msg.Velocity;
+                //
+                if (enableSendNote)
+                    outputList[0].Send(new NoteOnMessage(msg.Channel, eKey, vv));
             }
 
             void NoteOffHandler(IMidiInputDevice sender, in NoteOffMessage msg)
             {
-                if (logOut) Console.WriteLine($"[{sender.Name}] NoteOff: Channel:{msg.Channel} Key:{msg.Key} Velocity:{msg.Velocity}");
+                if (logOut)
+                    Console.WriteLine(
+                        $"[{sender.Name}] NoteOff: Channel:{msg.Channel} Key:{msg.Key} Velocity:{msg.Velocity}"
+                    );
 
                 // convert enums to int for transpose
-                int iKey = (int)msg.Key;
+                int iKey = (int)msg.Key; // bug fixed 2023/1/8: NG:curMsg.Key;
                 iKey += transpose;
                 var eKey = (Enums.Key)Enum.ToObject(typeof(Enums.Key), iKey);
 
-                if (enableSendNote) outputList[0].Send(new NoteOffMessage(msg.Channel, eKey, msg.Velocity));
+                if (enableSendNote)
+                    outputList[0].Send(new NoteOffMessage(msg.Channel, eKey, msg.Velocity));
+            }
+
+            void ChannelPressureHandler(IMidiInputDevice sender, in ChannelPressureMessage msg)
+            {
+                outputList[0].Send(new ChannelPressureMessage(msg.Channel, msg.Pressure));
+            }
+
+            void PolyphonicKeyPressureHandler(
+                IMidiInputDevice sender,
+                in PolyphonicKeyPressureMessage msg
+            )
+            {
+                outputList[0].Send(
+                    new PolyphonicKeyPressureMessage(msg.Channel, msg.Key, msg.Pressure)
+                );
             }
 
             void PitchBendHandler(IMidiInputDevice sender, in PitchBendMessage msg)
             {
-                outputList[0].Send(new PitchBendMessage(msg.Channel, msg.Value));
+                if (enablePB)
+                    outputList[0].Send(new PitchBendMessage(msg.Channel, msg.Value));
+            }
+
+            //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+            void Panic()
+            {
+                var eChannel = (Enums.Channel)Enum.ToObject(typeof(Enums.Channel), 1);
+
+                // All Sound Off
+                outputList[0].Send(new ControlChangeMessage(eChannel, 120, 0));
+                // All Note Off
+                outputList[0].Send(new ControlChangeMessage(eChannel, 123, 0));
+            }
+
+            //-------------------------------------------------------------------------
+
+            // the following device will be opened
+            string ID0 = "WIDI Bud Pro"; // for Windows/Linux
+            string ID1 = "Elefue"; // for Mac
+            string ID2 = "re.corder"; // for Mac
+            string ID3 = "Nu"; // for Mac (with WIDI Master/NuRAD,NuEVI)
+            string ID4 = "EWI"; // for Mac (with WIDI Master/EWI5000,EWI4000,EVI3010 etc)
+            string ID5 = "AE-"; // for Mac (Roland)
+            string ID6 = "YDS-"; // for Mac (YAMAHA)
+            string ID7 = "Saxophone"; // for USB-MIDI (YAMAHA)
+            string OD = "loopMIDI"; // for Windows/Mac
+            //string OD = "SE-0"; // for Mac
+
+            // List all available MIDI API's
+            foreach (var api in MidiDeviceManager.Default.GetAvailableMidiApis())
+            {
+                Console.WriteLine($"Available API: {api}");
             }
 
             try
@@ -319,10 +526,14 @@ namespace RtMidi.Core.CCMapper
 
                         inputDevice.PitchBend += PitchBendHandler;
 
+                        inputDevice.ChannelPressure += ChannelPressureHandler;
+                        inputDevice.PolyphonicKeyPressure += PolyphonicKeyPressureHandler;
+
                         inputDevice.Open();
 
                         break;
                     }
+                    //Console.WriteLine("ID1");
                     if (inputDeviceInfo.Name.Contains(ID1))
                     {
                         Console.WriteLine($"Opening input:[{inputDeviceInfo.Name}]");
@@ -336,10 +547,14 @@ namespace RtMidi.Core.CCMapper
 
                         inputDevice.PitchBend += PitchBendHandler;
 
+                        inputDevice.ChannelPressure += ChannelPressureHandler;
+                        inputDevice.PolyphonicKeyPressure += PolyphonicKeyPressureHandler;
+
                         inputDevice.Open();
 
                         break;
                     }
+                    //Console.WriteLine("ID2");
                     if (inputDeviceInfo.Name.Contains(ID2))
                     {
                         Console.WriteLine($"Opening input:[{inputDeviceInfo.Name}]");
@@ -353,10 +568,14 @@ namespace RtMidi.Core.CCMapper
 
                         inputDevice.PitchBend += PitchBendHandler;
 
+                        inputDevice.ChannelPressure += ChannelPressureHandler;
+                        inputDevice.PolyphonicKeyPressure += PolyphonicKeyPressureHandler;
+
                         inputDevice.Open();
 
                         break;
                     }
+                    //Console.WriteLine("ID3");
                     if (inputDeviceInfo.Name.Contains(ID3))
                     {
                         Console.WriteLine($"Opening input:[{inputDeviceInfo.Name}]");
@@ -370,11 +589,99 @@ namespace RtMidi.Core.CCMapper
 
                         inputDevice.PitchBend += PitchBendHandler;
 
+                        inputDevice.ChannelPressure += ChannelPressureHandler;
+                        inputDevice.PolyphonicKeyPressure += PolyphonicKeyPressureHandler;
+
+                        inputDevice.Open();
+
+                        break;
+                    }
+                    //Console.WriteLine("ID4");
+                    if (inputDeviceInfo.Name.Contains(ID4))
+                    {
+                        Console.WriteLine($"Opening input:[{inputDeviceInfo.Name}]");
+
+                        var inputDevice = inputDeviceInfo.CreateDevice();
+                        inputList.Add(inputDevice);
+
+                        inputDevice.ControlChange += ControlChangeHandler;
+                        inputDevice.NoteOn += NoteOnHandler;
+                        inputDevice.NoteOff += NoteOffHandler;
+
+                        inputDevice.PitchBend += PitchBendHandler;
+
+                        inputDevice.ChannelPressure += ChannelPressureHandler;
+                        inputDevice.PolyphonicKeyPressure += PolyphonicKeyPressureHandler;
+
+                        inputDevice.Open();
+
+                        break;
+                    }
+                    //Console.WriteLine("ID5");
+                    if (inputDeviceInfo.Name.Contains(ID5))
+                    {
+                        Console.WriteLine($"Opening input:[{inputDeviceInfo.Name}]");
+
+                        var inputDevice = inputDeviceInfo.CreateDevice();
+                        inputList.Add(inputDevice);
+
+                        inputDevice.ControlChange += ControlChangeHandler;
+                        inputDevice.NoteOn += NoteOnHandler;
+                        inputDevice.NoteOff += NoteOffHandler;
+
+                        inputDevice.PitchBend += PitchBendHandler;
+
+                        inputDevice.ChannelPressure += ChannelPressureHandler;
+                        inputDevice.PolyphonicKeyPressure += PolyphonicKeyPressureHandler;
+
+                        inputDevice.Open();
+
+                        break;
+                    }
+                    //Console.WriteLine("ID6");
+                    if (inputDeviceInfo.Name.Contains(ID6))
+                    {
+                        Console.WriteLine($"Opening input:[{inputDeviceInfo.Name}]");
+
+                        var inputDevice = inputDeviceInfo.CreateDevice();
+                        inputList.Add(inputDevice);
+
+                        inputDevice.ControlChange += ControlChangeHandler;
+                        inputDevice.NoteOn += NoteOnHandler;
+                        inputDevice.NoteOff += NoteOffHandler;
+
+                        inputDevice.PitchBend += PitchBendHandler;
+
+                        inputDevice.ChannelPressure += ChannelPressureHandler;
+                        inputDevice.PolyphonicKeyPressure += PolyphonicKeyPressureHandler;
+
+                        inputDevice.Open();
+
+                        break;
+                    }
+                    //Console.WriteLine("ID7");
+                    if (inputDeviceInfo.Name.Contains(ID7))
+                    {
+                        Console.WriteLine($"Opening input:[{inputDeviceInfo.Name}]");
+
+                        var inputDevice = inputDeviceInfo.CreateDevice();
+                        inputList.Add(inputDevice);
+
+                        inputDevice.ControlChange += ControlChangeHandler;
+                        inputDevice.NoteOn += NoteOnHandler;
+                        inputDevice.NoteOff += NoteOffHandler;
+
+                        inputDevice.PitchBend += PitchBendHandler;
+
+                        inputDevice.ChannelPressure += ChannelPressureHandler;
+                        inputDevice.PolyphonicKeyPressure += PolyphonicKeyPressureHandler;
+
                         inputDevice.Open();
 
                         break;
                     }
                 }
+
                 //---------------------------------------------------------------------
                 foreach (var outputDeviceInfo in MidiDeviceManager.Default.OutputDevices)
                 {
@@ -389,8 +696,10 @@ namespace RtMidi.Core.CCMapper
                         if (!enableSendNote) Console.WriteLine("running at Mac Env.");
                         else Console.WriteLine("running at Windows Env.");
                         */
-                        if (outputDeviceInfo.Name.Contains("bus1")) Console.WriteLine("running at Mac Env.");
-                        else Console.WriteLine("running at Windows Env.");
+                        if (outputDeviceInfo.Name.Contains("bus1"))
+                            Console.WriteLine("running at Mac Env.");
+                        else
+                            Console.WriteLine("running at Windows Env.");
 
                         var outputDevice = outputDeviceInfo.CreateDevice();
                         outputList.Add(outputDevice);
@@ -399,7 +708,9 @@ namespace RtMidi.Core.CCMapper
                     }
                 }
 
-                Console.WriteLine("MW(CC1)/BC/VL/EX/CF(CC74)/CC26/AT(CP/PP)/other/Tranpose PitchBend_xfer support version");
+                Console.WriteLine(
+                    "MW(CC1)/BC/VL/EX/CF(CC74)/CC26/AT(CP/PP)/other/PANIC/Tranpose PitchBend_xfer support version"
+                );
                 Console.WriteLine("Press 'q' key to stop...");
                 while (true)
                 {
@@ -531,8 +842,10 @@ namespace RtMidi.Core.CCMapper
                         Console.WriteLine("");
 
                         enableAT = (!enableAT);
-                        if (enableAT) Console.WriteLine("AT(CP) enabled");
-                        else Console.WriteLine("AT(CP) disabled");
+                        if (enableAT)
+                            Console.WriteLine("AT(CP) enabled");
+                        else
+                            Console.WriteLine("AT(CP) disabled");
 
                         prevC = c.Key;
                     }
@@ -541,8 +854,10 @@ namespace RtMidi.Core.CCMapper
                         Console.WriteLine("");
 
                         enableCC74 = (!enableCC74);
-                        if (enableCC74) Console.WriteLine("CF(CC74) enabled");
-                        else Console.WriteLine("CF(CC74) disabled");
+                        if (enableCC74)
+                            Console.WriteLine("CF(CC74) enabled");
+                        else
+                            Console.WriteLine("CF(CC74) disabled");
 
                         prevC = c.Key;
                     }
@@ -551,8 +866,10 @@ namespace RtMidi.Core.CCMapper
                         Console.WriteLine("");
 
                         enableCC1 = (!enableCC1);
-                        if (enableCC1) Console.WriteLine("MW(CC1) enabled");
-                        else Console.WriteLine("MW(CC1) disabled");
+                        if (enableCC1)
+                            Console.WriteLine("MW(CC1) enabled");
+                        else
+                            Console.WriteLine("MW(CC1) disabled");
 
                         prevC = c.Key;
                     }
@@ -561,75 +878,111 @@ namespace RtMidi.Core.CCMapper
                         Console.WriteLine("");
 
                         enablePP = (!enablePP);
-                        if (enablePP) Console.WriteLine("AT(PP) enabled");
-                        else Console.WriteLine("AT(PP) disabled");
+                        if (enablePP)
+                            Console.WriteLine("AT(PP) enabled");
+                        else
+                            Console.WriteLine("AT(PP) disabled");
 
                         prevC = c.Key;
-
                     }
                     if (c.Key == ConsoleKey.B)
                     {
                         Console.WriteLine("");
 
                         enableBC = (!enableBC);
-                        if (enableBC) Console.WriteLine("BC enabled");
-                        else Console.WriteLine("BC disabled");
+                        if (enableBC)
+                            Console.WriteLine("BC enabled");
+                        else
+                            Console.WriteLine("BC disabled");
 
                         prevC = c.Key;
-
                     }
                     if (c.Key == ConsoleKey.V)
                     {
                         Console.WriteLine("");
 
                         enableVL = (!enableVL);
-                        if (enableVL) Console.WriteLine("VL enabled");
-                        else Console.WriteLine("VL disabled");
+                        if (enableVL)
+                            Console.WriteLine("VL enabled");
+                        else
+                            Console.WriteLine("VL disabled");
 
                         prevC = c.Key;
-
                     }
                     if (c.Key == ConsoleKey.E)
                     {
                         Console.WriteLine("");
 
                         enableCC26 = (!enableCC26);
-                        if (enableCC26) Console.WriteLine("CC26 enabled");
-                        else Console.WriteLine("CC26 disabled");
+                        if (enableCC26)
+                            Console.WriteLine("CC26 enabled");
+                        else
+                            Console.WriteLine("CC26 disabled");
 
                         //prevC = c.Key;
-
                     }
                     if (c.Key == ConsoleKey.X)
                     {
                         Console.WriteLine("");
 
                         enableEX = (!enableEX);
-                        if (enableEX) Console.WriteLine("EX enabled");
-                        else Console.WriteLine("EX disabled");
+                        if (enableEX)
+                            Console.WriteLine("EX enabled");
+                        else
+                            Console.WriteLine("EX disabled");
 
                         prevC = c.Key;
-
                     }
                     if (c.Key == ConsoleKey.O)
                     {
                         Console.WriteLine("");
 
                         enableOTHER = (!enableOTHER);
-                        if (enableOTHER) Console.WriteLine("Other enabled");
-                        else Console.WriteLine("Other disabled");
+                        if (enableOTHER)
+                            Console.WriteLine("Other enabled");
+                        else
+                            Console.WriteLine("Other disabled");
 
                         //prevC = c.Key;
-
                     }
+                    // 2023/1/5
+                    if (c.Key == ConsoleKey.D)
+                    {
+                        Console.WriteLine("");
+
+                        enablePB = (!enablePB);
+                        if (enablePB)
+                            Console.WriteLine("PB enabled");
+                        else
+                            Console.WriteLine("PB disabled");
+                    }
+                    if (c.Key == ConsoleKey.I)
+                    {
+                        Console.WriteLine("");
+
+                        enableVFixed = (!enableVFixed);
+                        if (enableVFixed)
+                            Console.WriteLine("Velocity Fixed");
+                        else
+                            Console.WriteLine("Velociry Dynamic");
+                    }
+
                     //---------------------------------------------
                     if (c.Key == ConsoleKey.S)
                     {
                         Console.WriteLine("");
 
                         // disp setup status
-                        Console.WriteLine("chgCC1:{0} chgCC74:{1} chgAT:{2} chgPP:{3} chgVL:{4} chgBC:{5} mod:x{6}",
-                            chgCC1, chgCC74, chgAT, chgPP, chgVL, chgBC, cc1mod);
+                        Console.WriteLine(
+                            "chgCC1:{0} chgCC74:{1} chgAT:{2} chgPP:{3} chgVL:{4} chgBC:{5} mod:x{6}",
+                            chgCC1,
+                            chgCC74,
+                            chgAT,
+                            chgPP,
+                            chgVL,
+                            chgBC,
+                            cc1mod
+                        );
                     }
                     //---------------------------------------------
                     // None Fixed Modifier
@@ -664,7 +1017,6 @@ namespace RtMidi.Core.CCMapper
                             chgPP = true;
 
                             Console.WriteLine("AT(PP) changed modifier");
-
                         }
 
                         if (prevC == ConsoleKey.V)
@@ -673,7 +1025,6 @@ namespace RtMidi.Core.CCMapper
                             chgVL = true;
 
                             Console.WriteLine("VL changed modifier");
-
                         }
 
                         if (prevC == ConsoleKey.B)
@@ -682,11 +1033,18 @@ namespace RtMidi.Core.CCMapper
                             chgBC = true;
 
                             Console.WriteLine("BC changed modifier");
-
                         }
                         // disp setup status
-                        Console.WriteLine("chgCC1:{0} chgCC74:{1} chgAT:{2} chgPP:{3} chgVL:{4} chgBC:{5} mod:x{6}",
-                            chgCC1, chgCC74, chgAT, chgPP, chgVL, chgBC, cc1mod);
+                        Console.WriteLine(
+                            "chgCC1:{0} chgCC74:{1} chgAT:{2} chgPP:{3} chgVL:{4} chgBC:{5} mod:x{6}",
+                            chgCC1,
+                            chgCC74,
+                            chgAT,
+                            chgPP,
+                            chgVL,
+                            chgBC,
+                            cc1mod
+                        );
                     }
                     // Fixed Modifier(x1)
                     if (c.Key == ConsoleKey.F)
@@ -727,7 +1085,6 @@ namespace RtMidi.Core.CCMapper
                             chgVL = false;
 
                             Console.WriteLine("VL fixed modifier");
-
                         }
                         if (prevC == ConsoleKey.B)
                         {
@@ -735,11 +1092,18 @@ namespace RtMidi.Core.CCMapper
                             chgBC = false;
 
                             Console.WriteLine("BC fixed modifier");
-
                         }
                         // disp setup status
-                        Console.WriteLine("chgCC1:{0} chgCC74:{1} chgAT:{2} chgPP:{3} chgVL:{4} chgBC:{5} mod:x{6}",
-                            chgCC1, chgCC74, chgAT, chgPP, chgVL, chgBC, cc1mod);
+                        Console.WriteLine(
+                            "chgCC1:{0} chgCC74:{1} chgAT:{2} chgPP:{3} chgVL:{4} chgBC:{5} mod:x{6}",
+                            chgCC1,
+                            chgCC74,
+                            chgAT,
+                            chgPP,
+                            chgVL,
+                            chgBC,
+                            cc1mod
+                        );
                     }
                     //---------------------------------------------
                     // SendNore toggle
@@ -748,14 +1112,23 @@ namespace RtMidi.Core.CCMapper
                         Console.WriteLine("");
 
                         enableSendNote = (!enableSendNote);
-                        if (enableSendNote) Console.WriteLine("SendNote enabled");
-                        else Console.WriteLine("SendNote disabled");
-
+                        if (enableSendNote)
+                            Console.WriteLine("SendNote enabled");
+                        else
+                            Console.WriteLine("SendNote disabled");
                     }
 
+                    //---------------------------------------------
+                    // Panic
+                    if (c.Key == ConsoleKey.Z)
+                    {
+                        Console.WriteLine("");
+                        Panic();
+                        Console.WriteLine("PANIC Done!");
+                    }
                     //===========================================
                 }
-            }
+            } //try
             finally
             {
                 foreach (var device in inputList)
@@ -764,13 +1137,15 @@ namespace RtMidi.Core.CCMapper
                     device.NoteOn -= NoteOnHandler;
                     device.NoteOff -= NoteOffHandler;
                     device.PitchBend -= PitchBendHandler;
+                    device.ChannelPressure -= ChannelPressureHandler;
+                    device.PolyphonicKeyPressure -= PolyphonicKeyPressureHandler;
+
                     device.Dispose();
                 }
                 foreach (var device in outputList)
                 {
                     device.Dispose();
                 }
-
             }
         }
     }
@@ -806,6 +1181,10 @@ CCMapper3を起動したら、次に音源を立ち上げて入力MIDIデバイ�
 有効/無効の切り替えはないが、PitchBendは、Wind_Controlerの出力がそのまま音源に転送される。
 
 ```
+
+PANIC button::
+z
+
 CC switches::
 CC1(MW): [m] toggle
 CC2(Breath Control): [b] toggle
