@@ -1,6 +1,10 @@
     
 # Flet_CCMapper(RtMidi/python3)  
 
+2023/1/23  
+CCMapper改版：  
+code refined  
+
 2023/1/18+  
 CCMapper改版：  
 glide/portamento support  
@@ -189,6 +193,9 @@ Flet_CCMapper.py
 # flet_CCMapper_RtMidi.py
 #
 # written by: xshige
+# 2023/1/22: code refined
+# 2023/1/20: compare order is changed to reduce overhead
+# 2023/1/19: Hires Messages are ignored
 # 2023/1/18: glide/portamento support
 # 2023/1/16: added device name(USB-MIDI) for YDS-150
 # 2023/1/15: 1st version
@@ -225,8 +232,17 @@ def midiin_callback(event, data=None):
         status, note, velocity = message
         channel = (status & 0xF) + 1
         print("NoteOff note:%d velocity:%d" % (note, velocity))
-        message[1] = curNote
+        #message[1] = curNote # 2023/1/22 REMOVED
         if (XFER.value): midiout.send_message(message)
+        """
+        if (XFER.value):
+            # experimental code
+            # All Sound Off
+            msg = [CONTROL_CHANGE + channel - 1]
+            msg.append(120)
+            msg.append(0)
+            midiout.send_message(msg)
+        """
         return
 
     elif message[0] & 0xF0 == NOTE_ON:
@@ -252,20 +268,6 @@ def midiin_callback(event, data=None):
         status, control, value = message
         channel = (status & 0xF) + 1
         print("CONTROL_CHANGE control:%d value:%d" % (control, value))
-        if (control == 1): # Incomming Modulation Wheel
-            if (not CC1.value): midiout.send_message(message)
-            return
-        # portamento/glide support
-        if (control == 65): # portamento on/off
-            if (PORTA.value): midiout.send_message(message)
-            return
-        if (control == 5): # portamento/glide time
-            if (PORTA.value): midiout.send_message(message)
-            return
-        if (control == 84): # portamento control
-            if (PORTA.value): midiout.send_message(message)
-            return
-        #----------------------
         if ((control == 2)|(control == 11)):
             message[1] = 1
             if (CC1.value): midiout.send_message(message)
@@ -289,12 +291,41 @@ def midiin_callback(event, data=None):
             msg2.append(value & 0x7F)
             if (PP.value): midiout.send_message(msg2)
             return
+        # the following CC ignore(not sent)
+        if (control == 102): return # EWI5000
+        if (control == 103): return # EWI5000
+        if (control == 123): return # EWI5000 (All Note Off)
+        if (control == 7): return # EWI5000
+        if (control == 68): return # EWI5000
+        if (control == 74): return # EWI5000
+        if (control == 34): return # CC#34(Hires/Breath Controler) ignored
+        if (control == 39): return # CC#39(Hires/Volume) ignored
+        if (control == 43): return # CC#43(Hires/Expression) ignored 
+        if (control == 88): return # CC#88(Hires/NoteOn) ignored
+        # Incomming Modulation Wheel
+        if (control == 1):
+            if (not CC1.value): midiout.send_message(message)
+            return
+        # portamento/glide support
+        if (control == 65): # portamento on/off
+            if (PORTA.value): midiout.send_message(message)
+            return
+        if (control == 5): # portamento/glide time
+            if (PORTA.value): midiout.send_message(message)
+            return
+        if (control == 84): # portamento control
+            if (PORTA.value): midiout.send_message(message)
+            return
+        if (control == 104): # Legato Time (EWI5000)
+            if (PORTA.value): midiout.send_message(message)
+            return
+        #----------------------
         else: # other CC
             # other messsage
             if (OTHER.value):
                 midiout.send_message(message)
                 print("********** unexpected CC **********")
-                print(hex(message[0]),message[1],message[3])
+                print(hex(message[0]),message[1],message[2])
                 return
     #--------------------------------------------------------
     elif message[0] & 0xF0 == CHANNEL_PRESSURE:
@@ -319,20 +350,18 @@ def midiin_callback(event, data=None):
         if (OTHER.value):
             midiout.send_message(message)
             print("********** unexpected message **********")
-            print(hex(message[0]),message[1],message[3])
+            print(hex(message[0]),message[1],message[2])
 
 #---------------------------------------------------------
 
 def panic(e):
     channel = 1
     # All Sound Off
-    #msg = [ALL_SOUND_OFF + channel - 1]
     msg = [CONTROL_CHANGE + channel - 1]
     msg.append(120)
     msg.append(0)
     midiout.send_message(msg)
     # All Note Off
-    #msg = [ALL_NOTES_OFF + channel - 1]
     msg = [CONTROL_CHANGE + channel - 1]
     msg.append(123)
     msg.append(0)
@@ -343,7 +372,7 @@ def panic(e):
 def main(page):
     global midiout
 
-    ver = "2023/1/18" # version
+    ver = "2023/1/22" # version
 
     # flet related variable
     global CC1,CC2,CC7,CC11,CC74,CC26,AT,PP,PB,PORTA
@@ -366,7 +395,7 @@ def main(page):
     OD0 = "loopMIDI" # for Windows/Mac
     OD1 = "Midi Throu" # for Linux
     # OD = "SE-0" # 
-
+ 
     # search OUTPUT/INPUT device
     outdev = -1
     midiout = MidiOut()
@@ -692,6 +721,296 @@ CCMapperを起動したら、入出力MIDIデバイスは自動的に設定さ�
 ## 特別対応
 
 ファームウェアのバージョンで、異なる可能性があるが、現在、所有のNuRadの場合、(バグか仕様かは不明だが)NoteOffの代わりにベロシティがゼロのNoteOnを送っているようだ。今のところ実害はないがCCMapperでベロシティがゼロのNoteOnは、NoteOffに変換して転送している。
+
+## GUI無し版
+上のGUI有り版だとソフト音源の処理が重い場合、  
+GUIのオーバーヘッドが気になるときがあったので  
+以下にGUI無し版も用意した：  
+
+ad_CCMapper_RtMidi.py
+```python
+
+#!/usr/bin/env python
+#
+# ad_CCMapper_RtMidi.py
+# (simple version: no flags)
+#
+# written by: xshige
+# 2023/1 /22: added ad(Auto Device select), code refined
+# 2022/12/19: 1st version
+
+import sys
+import time
+
+from rtmidi.midiconstants import (ALL_NOTES_OFF, ALL_SOUND_OFF, BALANCE, BANK_SELECT_LSB,
+                                  BANK_SELECT_MSB, BREATH_CONTROLLER, CHANNEL_PRESSURE,
+                                  CHANNEL_VOLUME, CONTROL_CHANGE, DATA_ENTRY_LSB, DATA_ENTRY_MSB,
+                                  END_OF_EXCLUSIVE, EXPRESSION_CONTROLLER, FOOT_CONTROLLER,
+                                  LOCAL_CONTROL, MIDI_TIME_CODE, MODULATION, NOTE_OFF, NOTE_ON,
+                                  NRPN_LSB, NRPN_MSB, PAN, PITCH_BEND, POLY_PRESSURE,
+                                  PROGRAM_CHANGE, RESET_ALL_CONTROLLERS, RPN_LSB, RPN_MSB,
+                                  SONG_POSITION_POINTER, SONG_SELECT, TIMING_CLOCK)
+
+#from rtmidi.midiutil import open_midioutput
+#from rtmidi.midiutil import open_midiinput
+from rtmidi import MidiIn
+from rtmidi import MidiOut
+
+def midiin_callback(event, data=None):
+    global curNote
+    message, deltatime = event
+
+    if message[0] & 0xF0 == NOTE_OFF:  # NoteOff is FIRST PRIORITY! 
+        status, note, velocity = message
+        channel = (status & 0xF) + 1
+        print("NoteOff note:%d velocity:%d" % (note, velocity))
+        #message[1] = curNote # 2023/1/22 REMOVED
+        midiout.send_message(message)    
+        """
+        # experimental code
+        # All Sound Off
+        msg = [CONTROL_CHANGE + channel - 1]
+        msg.append(120)
+        msg.append(0)
+        midiout.send_message(msg)
+        """
+
+    elif message[0] & 0xF0 == NOTE_ON:
+        status, note, velocity = message
+        channel = (status & 0xF) + 1
+        print("NoteOn note:%d velocity:%d" % (note, velocity))
+        if (velocity == 0):
+            # change NoteOn to NoteOff (patch 2023/1/15 for NuRad)
+            message[0] = NOTE_OFF + channel - 1
+            #transpose = int(trans.value)
+            #curNote = note+transpose
+            #message[1] = curNote
+            midiout.send_message(message)
+            return
+        curNote = note
+        midiout.send_message(message)
+
+    elif message[0] & 0xF0 == CONTROL_CHANGE:
+        status, control, value = message
+        channel = (status & 0xF) + 1
+        print("CONTROL_CHANGE control:%d value:%d" % (control, value))
+        if ((control == 2)|(control == 11)):
+            #message[1] = 1
+            #midiout.send_message(message)
+            message[1] = 2
+            midiout.send_message(message)
+            message[1] = 7
+            midiout.send_message(message)
+            message[1] = 11
+            midiout.send_message(message)
+            message[1] = 74
+            midiout.send_message(message)
+            message[1] = 26
+            midiout.send_message(message)
+            # AT
+            msg2 = [CHANNEL_PRESSURE + channel - 1]
+            msg2.append(value & 0x7F)
+            midiout.send_message(msg2)
+            # PP
+            msg2 = [POLY_PRESSURE + channel - 1]
+            msg2.append(curNote & 0x7F)
+            msg2.append(value & 0x7F)
+            midiout.send_message(msg2)
+            """
+            if (value == 0):
+                # PATCH All Sound Off (2023/1/21)
+                msg2 = [CONTROL_CHANGE + channel - 1]
+                msg2.append(120)
+                msg2.append(0)
+                midiout.send_message(msg2)
+                return
+            """          
+            return
+        # the following CC ignore(not sent)
+        if (control == 102): return # EWI5000
+        if (control == 103): return # EWI5000
+        if (control == 123): return # EWI5000 (All Note Off)
+        if (control == 7): return # EWI5000
+        if (control == 68): return # EWI5000
+        if (control == 74): return # EWI5000
+        if (control == 34): return # CC#34(Hires/Breath Controler) ignored
+        if (control == 39): return # CC#39(Hires/Volume) ignored
+        if (control == 43): return # CC#43(Hires/Expression) ignored 
+        if (control == 88): return # CC#88(Hires/NoteOn) ignored
+        # Incomming Modulation Wheel
+        if (control == 1):
+            #if (not CC1.value): midiout.send_message(message)
+            midiout.send_message(message)
+            return
+        # portamento/glide support
+        if (control == 65): # portamento on/off
+            #if (PORTA.value): midiout.send_message(message)
+            midiout.send_message(message)
+            return
+        if (control == 5): # portamento/glide time
+            #if (PORTA.value): midiout.send_message(message)
+            midiout.send_message(message)
+            return
+        if (control == 84): # portamento control
+            #if (PORTA.value): midiout.send_message(message)
+            midiout.send_message(message)
+            return
+        if (control == 104): # Legato Time (EWI5000)
+            #if (PORTA.value): midiout.send_message(message)
+            midiout.send_message(message)
+            return
+        #----------------------
+        else:
+            # other CC messsage
+            midiout.send_message(message)
+            print("********** unexpected CC **********")
+            print(hex(message[0]),message[1],message[2])
+            return
+            #if (OTHER.value):
+            #    midiout.send_message(message)
+            #    print("********** unexpected CC **********")
+            #    print(hex(message[0]),message[1],message[3])
+            #    return
+    #--------------------------------------------------------
+    elif message[0] & 0xF0 == CHANNEL_PRESSURE:
+        value = message[0]
+        channel = (status & 0xF) + 1
+        print("AT(CHANNEL_PRESSURE) value:%d" % (value))
+    elif message[0] & 0xF0 == POLY_PRESSURE:
+        status, note, value = message
+        channel = (status & 0xF) + 1
+        print("PP(POLY_PRESSURE) note:%d value:%d" % (note, value))
+    elif message[0] & 0xF0 == PITCH_BEND:
+        value = message[0]
+        print("PITCH_BEND value:%d" % (value))
+        midiout.send_message(message)
+        return
+    else:
+        print("********** unexpected message **********")
+        print(hex(message[0]),message[1],message[2])
+        return
+#---------------------------------------------------------
+
+def panic(e):
+    channel = 1
+    # All Sound Off
+    msg = [CONTROL_CHANGE + channel - 1]
+    msg.append(120)
+    msg.append(0)
+    midiout.send_message(msg)
+    # All Note Off
+    msg = [CONTROL_CHANGE + channel - 1]
+    msg.append(123)
+    msg.append(0)
+    midiout.send_message(msg)
+
+#---------------------------------------------------------
+
+def main(args=None):
+    global midiout
+    
+    # the following device will be opened
+    ID0 = "WIDI Bud Pro" # for Windows/Linux
+    ID1 = "Elefue" # for Mac
+    ID2 = "re.corder" # for Mac
+    ID3 = "Nu" # for Mac (with WIDI Master/NuRAD,NuEVI)
+    ID4 = "EWI" # for Mac (with WIDI Master/EWI5000,EWI4000,EVI3010 etc)
+    ID5 = "AE-" # for Mac (Roland)
+    ID6 = "YDS-" # for Mac (YAMAHA)
+    ID7 = "Saxophone" # for USB-MIDI (YAMAHA)
+    OD0 = "loopMIDI" # for Windows/Mac
+    OD1 = "Midi Throu" # for Linux
+
+    # search OUTPUT/INPUT device
+    outdev = -1
+    midiout = MidiOut()
+    for n, outport in enumerate(midiout.get_ports()):
+        if (OD0 in outport):
+            outdev = n
+            break
+        if (OD1 in outport):
+            outdev = n
+            break
+    #print(outdev)
+
+    indev = -1
+    midiin = MidiIn()
+    for n, inport in enumerate(midiin.get_ports()):
+        #print(n,inport)
+        if (ID0 in inport):
+            indev = n
+            break
+        if (ID1 in inport):
+            indev = n
+            break
+        if (ID2 in inport):
+            inndev = n
+            break
+        if (ID3 in inport):
+            indev = n
+            break
+        if (ID4 in inport):
+            indev = n
+            break
+        if (ID5 in inport):
+            indev = n
+            break
+        if (ID6 in inport):
+            indev = n
+            break
+        if (ID7 in inport):
+            indev = n
+            break
+    #print(indev)
+    # end of search OUTPUT/INPUT device
+    
+    if (outdev == -1):
+        print("**** output device not found! *****")
+        sys.exit(-1)
+    midiout.open_port(outdev) # loopMIDI for windows/mac, Midi Through for linux
+    print("output port: '%s'" % outport)
+
+    if (indev == -1):
+        print("**** input device not found! *****")
+        sys.exit(-1)
+    midiin.open_port(indev) # WIDI Bud Pro for linux/windows, dev name for mac
+    print("input port: '%s'" % inport)
+    midiin.set_callback(midiin_callback)
+    #-----------------------------------------------------
+    
+    """
+    midiout, outport = open_midioutput(outdev) # loopMIDI for windows
+    #midiout, outport = open_midioutput(0) # Midi Through for linux
+    print("output port: '%s'" % outport)
+
+    #midiin, port_name = open_midiinput(args[0] if args else None)
+    midiin, inport = open_midiinput(indev) # WIDI Bud Pro for linux/windows
+    print("input port: '%s'" % inport)
+    midiin.set_callback(midiin_callback)
+    """
+    #-----------------------------------------------------
+    print("PLEASE set MIDI CONTROL switch ON when AE-20 connected! (DON'T FOREGET IT)")
+    #-----------------------------------------------------
+    
+    try:
+        while True:
+            time.sleep(0.01)
+    except KeyboardInterrupt:
+        print("Bye.")
+        pass
+    finally:
+        midiin.close_port()
+        del midiin
+        midiout.close_port()
+        del midiout 
+
+
+if __name__ == '__main__':
+    import sys
+    sys.exit(main(sys.argv[1:]) or 0)
+
+#=====================================-
+```
 
 ## 参考情報 
 MIDI tool関連：  
