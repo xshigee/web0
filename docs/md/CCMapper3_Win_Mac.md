@@ -1151,10 +1151,11 @@ namespace RtMidi.Core.CCMapper
     }
 }
 ```
-CCMapper3を起動したら、次に音源を立ち上げて入力MIDIデバイスを「loopMIDI port」に設定する。
 
-ここで、wind_controlerで吹くと音が出る。
-                                                                    
+CCMapper3を起動したら、次に音源を立ち上げて入力MIDIデバイスを「loopMIDI port」に設定する。ここで、wind_controlerで吹くと音が出る。
+Macの場合、WIDI_Bud経由でないので、あらかじめ、bluetooth対応controlerを接続(ペアリング)しておく必要がある。  
+また、USB-MIDI対応controlerの場合、PC/Macに接続すると自動認識して、そのまま使用できる。  
+                                                                 
 なお、色々な音源で必要と思われるCC#を有効にしているので、Ariaだけでなく、以下の音源でも、そのまま利用できる。多数のCC#が有効になっているが、特に問題がなければ、そのままで、かまわないが、それぞれのCC#をオフする機能がある。
 
 1. Aria(USB-EWI)  
