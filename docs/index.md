@@ -2,11 +2,12 @@
 
 # 役に立ちそうなメモの置き場
 
-2023/1/15現在  
+2023/1/28現在  
 
 以下のリンクをクリックして下さい：  
   
-# latest:rocket:    
+# latest:rocket:  
+1. [OSC_CCMapper3(RiMidi) for Win/Mac](md/OSC_CCMapper3_Win_Mac.md)    
 1. [Flet_CCMapper(RtMidi/python3)](md/CCMapper_Flet_Pyhon3RtMidi.md)  
 1. [CCMapper(NAudio.Midi) for Windows](md/CCMapper_NAudio_Midi.md)  
 1. [CCMapper(Web Midi)](md/CCMapper_web_midi.md)  
