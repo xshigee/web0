@@ -2,11 +2,12 @@
 
 # 役に立ちそうなメモの置き場
 
-2023/3/6現在  
+2023/3/8現在  
 
 以下のリンクをクリックして下さい：  
   
 # latest:rocket:  
+1. [WSL2で音を鳴らす](md/WSL2_Audio.md)    
 1. [WSL2でOSC送信する](md/WSL2_OSC_Send.md)    
 1. [WSL2でOSC受信する](md/WSL2_OSC_Receive.md)    
 1. [OSC_CCMapper3(RiMidi) for Win/Mac](md/OSC_CCMapper3_Win_Mac.md)    
