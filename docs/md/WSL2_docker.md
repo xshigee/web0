@@ -1,13 +1,12 @@
     
 # WSL2にdockerをインストールする  
 
-2023/3/12        
+2023/3/12+        
 初版    
   
 ## 概要    
 本記事は「[WSL2でOSC受信する](https://xshigee.github.io/web0/md/WSL2_OSC_Receive.html)」の続編にあたり、  
 WSL2関連は設定は同じなので省略して、dockerのインストールについて記載する。
-
 
 ## systemdを有効にする
 WSL2のlinuxで以下を実行する：  
@@ -25,6 +24,23 @@ PowerShellで以下を実行してWSL2を再起動する。
 ```
 wsl --shutdown
 ```
+
+以下のコマンドで、  
+PID=1 が systemd であれば   
+正常に動作していることになる：
+
+```bash
+
+ps -e
+
+PID TTY         TIME CMD
+  1 ?        00:00:01 systemd
+  2 ?        00:00:00 init-systemd(Ub
+  5 ?        00:00:00 init
+＜省略＞
+
+```
+
 
 ## インストール手順
 WSL2のlinuxで以下を実行する：  
