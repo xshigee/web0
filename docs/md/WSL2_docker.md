@@ -1,7 +1,7 @@
     
 # WSL2にdockerをインストールする  
 
-2023/3/12+        
+2023/3/12++        
 初版    
   
 ## 概要    
@@ -130,6 +130,10 @@ ja_JP.utf8
 ```
 
 ## 参考情報 
+ps関連：  
+[【 ps 】コマンド――実行中のプロセスを一覧表示する](https://atmarkit.itmedia.co.jp/ait/articles/1603/28/news022.html)  
+[ps コマンドでよく使うオプションのメモ](https://ebc-2in2crc.hatenablog.jp/entry/2020/02/19/000932)  
+
 docker関連：  
 [Use docker containers without Docker Desktop in WSL2 with Ubuntu](https://avenir.ro/use-docker-containers-without-docker-desktop-in-wsl2-with-ubuntu/)  
 [Windows Subsystem for Linux(WSL)で Docker を利用する](https://simplestar-tech.hatenablog.com/entry/2019/10/14/101551)  
