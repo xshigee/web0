@@ -5,18 +5,18 @@
 初版    
   
 ## 概要  
-windowsにFoxDotをインストールする。
-FoxDotは、SuperColliderへ接続するPythonプログラミング環境で
-pythonでSuperColliderの音源の音を鳴らすことができる。
+windowsにFoxDotをインストールする。   
+FoxDotは、SuperColliderへ接続するPythonプログラミング環境で  
+pythonでSuperColliderの音源の音を鳴らすことができる。  
 
 
 ## SuperColliderのインストール
-まずは、音源であるSuperColliderを以下のURLからダウンロードしてインストールする。
+まずは、音源であるSuperColliderを以下のURLからダウンロードしてインストールする。  
 
 [https://github.com/supercollider/supercollider/releases/download/Version-3.13.0/SuperCollider-3.13.0_Release-x64-VS-3188503.exe](https://github.com/supercollider/supercollider/releases/download/Version-3.13.0/SuperCollider-3.13.0_Release-x64-VS-3188503.exe)  
 
 気道は、メニューから以下を選択する：  
-SuperCollider-3.13.0
+SuperCollider-3.13.0  
 
 ## pythonの再インストール
 最新版だとDoxDotが動作しなかったので「Python 3.10.10」をインストールする。  
