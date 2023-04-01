@@ -1,7 +1,7 @@
     
 # WSL2にQuilをインストールする  
 
-2023/4/2        
+2023/4/2+        
 初版    
   
 ## 概要  
@@ -128,6 +128,25 @@ src/p5/core.clj
 ・「(ns p5.core ...」の部分はテンプレートのものをそのまま残すこと。   
 ・ネットにあったプログラムの流用(修正)しているのでコメントは実情と一致していない。  
 
+## leiningen Plugin
+「[leiningen Plugins](https://github.com/technomancy/leiningen/wiki/plugins)」にあるようにleiningenのプラグインが
+ある。  
+このうちの[cljfmt](https://github.com/weavejester/cljfmt)について紹介する。  
+このプラグインを使うためにproject.cljに以下を追加する：  
+
+```
+  :plugins [[lein-cljfmt "0.9.2"]]
+```
+
+実例：ソースをチェックするには以下を実行する：  
+```
+lein cljfmt check src/p5/core.clj
+```
+
+実例：ソースをチェックして修正するには以下を実行する：  
+```
+lein cljfmt fix src/p5/core.clj
+```
 
 ## 参考情報 
 Quil関連：  
@@ -141,6 +160,7 @@ Clojure関連：
 [The Clojure Programming Language](https://clojure.org/)  
 [Leiningen - for automating Clojure projects](https://leiningen.org/)  
 [tutorial - leiningen-core 2.9.8](https://cljdoc.org/d/leiningen-core/leiningen-core/2.9.8/doc/tutorial)         
+[leiningen Plugins](https://github.com/technomancy/leiningen/wiki/plugins)  
 [Leiningen を使って Clojure を書いてみる](https://neos21.net/blog/2022/09/29-01.html)  
 [おいしいClojure入門](https://gihyo.jp/book/2013/978-4-7741-5991-1)  
 
