@@ -2,11 +2,12 @@
 
 # 役に立ちそうなメモの置き場
 
-2023/3/31現在  
+2023/4/2現在  
 
 以下のリンクをクリックして下さい：  
   
 # latest:rocket:  
+1. [WSL2にQuilをインストールする](md/WSL2_Quil.md)    
 1. [windowsにFoxDotをインストールする](md/win_FoxDot.md)    
 1. [WSL2にdockerをインストールする](md/WSL2_docker.md)    
 1. [WSL2で音を鳴らす](md/WSL2_Audio.md)    
