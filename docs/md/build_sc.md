@@ -1,11 +1,11 @@
     
 # SuperColliderをビルドする  
 
-2023/4/8        
+2023/4/8+        
 初版    
   
 ## 概要 
-SuperColliderはubuntuの場合、「sudo apt install supercollider」でインストールできるが
+SuperColliderはubuntuの場合、「sudo apt install supercollider」でインストールできるが  
 バージョンが古いので、ソースからのビルドを行い最新版をインストールする：    
 [Installing SuperCollider from source on Ubuntu](https://github.com/supercollider/supercollider/wiki/Installing-SuperCollider-from-source-on-Ubuntu)を参考にしてビルド手順を記述する。  
 
@@ -41,7 +41,7 @@ sudo make install
 sudo ldconfig
 ```
 
-## 2.sc3-pluginのインストール
+## 2.sc3-pluginsのインストール
 sc3のプラグインのインストールを行なう。
 
 以下を実行する：  
@@ -76,7 +76,40 @@ SuperColliderを起動して、サーバーをブートした後
 ```
 実行は[Ctrl]+[Enter]で行なう。
 
+
+## 補足：sc3-pluginsの追加(linux以外の場合)
+
+SuperColliderを起動して以下を実行する：
+
+```
+Platform.systemExtensionDir
+```
+windowsの場合、以下が返ってくる：    
+-> C:\ProgramData\SuperCollider\Extensions
+
+以下のURLのAssetからコンパイル済みのプラグイン(.zip)をダウンロードする：  
+[https://github.com/supercollider/sc3-plugins/releases](https://github.com/supercollider/sc3-plugins/releases)  
+
+以下から自分のOSに対応したものを選択する：  
+```
+Assets 8
+sc3-plugins-3.13.0-Linux-x64.zip
+sc3-plugins-3.13.0-macOS.zip
+sc3-plugins-3.13.0-Windows-32bit.zip
+sc3-plugins-3.13.0-Windows-64bit.zip
+...
+```
+ダウンロード後、解凍するとディレクトリSC3pluginsがあるので、  
+これを「Platform.systemExtensionDir」で確認したディレクトリにコピーする。  
+\# windowsの場合、C:\ProgramData\SuperCollider\Extensionsの中にコピーする。
+
+SuperColliderを再起動して以下を実行して音が鳴れば正常に動作していることになる。
+```
+{VOSIM.ar(Impulse.ar(100), 500, 3, 0.99)}.play
+```
+
 以上
+
 ## 参考情報 
 SuperCollider関連：   
 [SuperCollider](https://supercollider.github.io/)  
