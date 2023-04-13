@@ -1,6 +1,9 @@
     
 # windowsにFoxDotをインストールする  
 
+2023/4/13  
+linuxでの対応について記載する。  
+
 2023/3/31        
 初版    
   
@@ -9,22 +12,52 @@ windowsにFoxDotをインストールする。
 FoxDotは、SuperColliderへ接続するPythonプログラミング環境で  
 pythonでSuperColliderの音源の音を鳴らすことができる。  
 
-
 ## SuperColliderのインストール
+1. windowsの場合  
 まずは、音源であるSuperColliderを以下のURLからダウンロードしてインストールする。  
 
 [https://github.com/supercollider/supercollider/releases/download/Version-3.13.0/SuperCollider-3.13.0_Release-x64-VS-3188503.exe](https://github.com/supercollider/supercollider/releases/download/Version-3.13.0/SuperCollider-3.13.0_Release-x64-VS-3188503.exe)  
 
-気道は、メニューから以下を選択する：  
+起動は、メニューから以下を選択する：  
 SuperCollider-3.13.0  
+
+2. linuxの場合  
+以下を参照にしてビルド＆インストールする：  
+[SuperColliderをビルドする](https://xshigee.github.io/web0/md/build_sc.html)  
 
 ## pythonの再インストール
 最新版だとDoxDotが動作しなかったので「Python 3.10.10」をインストールする。  
 
+1. windowsの場合  
 別のバージョンがインストール済みの場合、アンインストールして、  
 以下のURLからダウンロートしてインストールする。  
 
 [https://www.python.org/ftp/python/3.10.10/python-3.10.10-amd64.exe](https://www.python.org/ftp/python/3.10.10/python-3.10.10-amd64.exe)  
+
+2. linuxの場合
+以下を参考にインストールする：  
+[UbuntuにPython 3.10をインストールする方法](https://codechacha.com/ja/python-install-python-3-10/)  
+\# この場合、コマンド名を別名にするので既存のものをアンインストールする必要はない。  
+以下を実行する：  
+```
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt install python3.10
+# インストールが完了したら、
+# 以下のようにインストールされていることを確認する。
+python3.10 --version  
+3.10.3
+
+# FoxDotを起動する場合は以下を実行する
+python3.10 -m FoxDot
+
+```
+
+python3.10を動かしたとき、tkinterでエラーになる場合、
+以下をインストールする：  
+```
+sudo apt install python3-tk
+
+```
 
 ## SuperCollider側FoxDotのインストール
 
@@ -62,6 +95,7 @@ FoxDot.start
 3.PowerShellで以下を実行する：
 ```
 python -m FoxDot
+# linuxの場合、python3.10 -m FoxDot
 ```
 FoxDotの画面が開き、FoxDotが実行できるようになる。
 使い方の詳細は[参考情報]を参照のこと。

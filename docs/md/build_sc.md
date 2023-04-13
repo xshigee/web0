@@ -1,13 +1,13 @@
     
 # SuperColliderをビルドする  
 
-2023/4/8+        
+2023/4/8++        
 初版    
   
 ## 概要 
 SuperColliderはubuntuの場合、「sudo apt install supercollider」でインストールできるが  
 バージョンが古いので、ソースからのビルドを行い最新版をインストールする：    
-[Installing SuperCollider from source on Ubuntu](https://github.com/supercollider/supercollider/wiki/Installing-SuperCollider-from-source-on-Ubuntu)を参考にしてビルド手順を記述する。  
+「[Installing SuperCollider from source on Ubuntu](https://github.com/supercollider/supercollider/wiki/Installing-SuperCollider-from-source-on-Ubuntu)」を参考にしてビルド手順を記述する。  
 
 ## 1.SuperColliderのインストール
 以下の手順を実行する。
@@ -78,6 +78,9 @@ SuperColliderを起動して、サーバーをブートした後
 
 
 ## 補足：sc3-pluginsの追加(linux以外の場合)
+
+\# linuxでのビルドがうまく行かない場合も  
+\# 以下の手順でインストールできる。  
 
 SuperColliderを起動して以下を実行する：
 

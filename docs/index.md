@@ -2,11 +2,13 @@
 
 # 役に立ちそうなメモの置き場
 
-2023/4/8現在  
+2023/4/13現在  
 
 以下のリンクをクリックして下さい：  
   
 # latest:rocket:  
+1. [windowsにOvertoneをインストールする](md/win_Overtone.md)   
+1. [linuxでbrew/clojureをインストールする](md/linux_brew_clojure.md)    
 1. [SuperColliderをビルドする](md/build_sc.md)    
 1. [WSL2にQuilをインストールする](md/WSL2_Quil.md)    
 1. [windowsにFoxDotをインストールする](md/win_FoxDot.md)    
