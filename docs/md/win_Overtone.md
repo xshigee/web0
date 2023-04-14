@@ -160,7 +160,6 @@ ot777.core=> (stop)
 
 ```
 
-
 ## 参考情報 
 Overtone関連：  
 [https://github.com/overtone/overtone](https://github.com/overtone/overtone)  
