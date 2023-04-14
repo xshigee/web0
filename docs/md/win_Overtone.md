@@ -47,7 +47,7 @@ lein new ot777
 # ot777は任意
 cd ot77
 
-project.cljを編集して以下のようにする：
+#project.cljを編集して以下のようにする：
 ------------------------------------------------
 
 (defproject ot777 "0.1.0-SNAPSHOT"
