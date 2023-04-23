@@ -2,11 +2,12 @@
 
 # 役に立ちそうなメモの置き場
 
-2023/4/14現在  
+2023/4/23現在  
 
 以下のリンクをクリックして下さい：  
   
 # latest:rocket:  
+1. [ubuntu22.04からubuntu22.10への移行対応](md/move_u2204_u2210.md)   
 1. [windowsにOvertoneをインストールする](md/win_Overtone.md)   
 1. [linuxでbrew/clojureをインストールする](md/linux_brew_clojure.md)    
 1. [SuperColliderをビルドする](md/build_sc.md)    
