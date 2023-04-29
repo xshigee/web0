@@ -2,11 +2,14 @@
 
 # 役に立ちそうなメモの置き場
 
-2023/4/23現在  
+2023/4/29現在  
 
 以下のリンクをクリックして下さい：  
   
 # latest:rocket:  
+1. [M5AtomS3をplatformioで動かす](md/platformio_AtomS3.md)   
+1. [XIAO_ESP32C3をplatformioで動かす](md/platformio_XIAO_ESP32C3.md)   
+1. [respberry_pico_Wをplatformioで動かす](md/platformio_pico_W.md)   
 1. [ubuntu22.04からubuntu22.10への移行対応](md/move_u2204_u2210.md)   
 1. [windowsにOvertoneをインストールする](md/win_Overtone.md)   
 1. [linuxでbrew/clojureをインストールする](md/linux_brew_clojure.md)    
