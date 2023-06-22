@@ -2,11 +2,12 @@
 
 # 役に立ちそうなメモの置き場
 
-2023/4/29現在  
+2023/6/22現在  
 
 以下のリンクをクリックして下さい：  
   
 # latest:rocket:  
+1. [R1ことはじめ](md/R1-GetStarted.md)   
 1. [M5AtomS3をplatformioで動かす](md/platformio_AtomS3.md)   
 1. [XIAO_ESP32C3をplatformioで動かす](md/platformio_XIAO_ESP32C3.md)   
 1. [respberry_pico_Wをplatformioで動かす](md/platformio_pico_W.md)   
