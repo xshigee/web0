@@ -2,12 +2,13 @@
 
 # 役に立ちそうなメモの置き場
 
-2023/7/3現在  
+2023/7/5現在  
 
 以下のリンクをクリックして下さい：  
   
 # latest:rocket:  
 
+1. [Mac(M2)ことはじめ](md/Mac_beginner2.md)   
 1. [dotnetでC#を動かす(ver2,Mac対応)](md/dotnet_Cs2.md)   
 1. [R1ことはじめ](md/R1-GetStarted.md)   
 1. [M5AtomS3をplatformioで動かす](md/platformio_AtomS3.md)   
