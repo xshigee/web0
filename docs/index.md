@@ -2,12 +2,13 @@
 
 # 役に立ちそうなメモの置き場
 
-2023/7/5現在  
+2023/8/6現在  
 
 以下のリンクをクリックして下さい：  
   
 # latest:rocket:  
 
+1. [LininoOneをplatformioで動かす](md/platformio_LininoOne.md)   
 1. [Mac(M2)ことはじめ](md/Mac_beginner2.md)   
 1. [dotnetでC#を動かす(ver2,Mac対応)](md/dotnet_Cs2.md)   
 1. [R1ことはじめ](md/R1-GetStarted.md)   
