@@ -24,6 +24,8 @@ sudo ./install.sh
 [https://cweb.canon.jp/drv-upd/ij-mfp/linux-sd-20152h-320.html](https://cweb.canon.jp/drv-upd/ij-mfp/linux-sd-20152h-320.html)  
 ScanGear MP Ver. 3.20 for Linux  
 
+[https://canon.jp/support/software/os/select/ij-mfp/scangearmp2-450-1-debtar?pr=5582&os=20](https://canon.jp/support/software/os/select/ij-mfp/scangearmp2-450-1-debtar?pr=5582&os=20)  
+ScanGear MP Ver. 4.50 (debianパッケージアーカイブ)
 
 インストール方法  
 上のurlからダウンロードしたものを解凍して以下を実行する：  
@@ -38,5 +40,5 @@ sudo ./install.sh
 ```
 
 なお、スキャナーアプリとしては、xsaneになる。
-
+;
 以上
