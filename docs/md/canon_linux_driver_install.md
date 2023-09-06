@@ -1,5 +1,5 @@
 
-2023/9/5  
+2023/9/5+  
 初版  
 
 # Canonプリンター/スキャナー(複合機 TS8630)のドライバーのインストール方法(linux版)
@@ -21,9 +21,6 @@ sudo ./install.sh
 ```
 
 ## 2.スキャナードライバー
-[https://cweb.canon.jp/drv-upd/ij-mfp/linux-sd-20152h-320.html](https://cweb.canon.jp/drv-upd/ij-mfp/linux-sd-20152h-320.html)  
-ScanGear MP Ver. 3.20 for Linux  
-
 [https://canon.jp/support/software/os/select/ij-mfp/scangearmp2-450-1-debtar?pr=5582&os=20](https://canon.jp/support/software/os/select/ij-mfp/scangearmp2-450-1-debtar?pr=5582&os=20)  
 ScanGear MP Ver. 4.50 (debianパッケージアーカイブ)
 
@@ -39,6 +36,12 @@ sudo apt install sane-utils
 sudo ./install.sh
 ```
 
-なお、スキャナーアプリとしては、xsaneになる。
-;
+なお、スキャナーアプリとしては、xsaneになる。  
+
+GIMPでプラグインで直にスキャナーで読めるらしいが  
+自分の環境では上手く行かなかった。  
+もっとも、xsaneで読んでファイル経由でGIMPに取り込めるので、特に問題はない。  
+  
+
+
 以上
