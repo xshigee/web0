@@ -1,7 +1,7 @@
     
 # RaspberryPiのopenFrameworksを使う  
 
-2023/9/25      
+2023/9/25+      
 初版    
   
 ## 概要    
@@ -10,7 +10,7 @@ RapberryPi版openframeworksをインストールして使う。
 
 ## インストール
 
-1. システムのアップデート
+1.システムのアップデート
 以下のコマンドを実行してシステムをアップデートする：  
 
 ```
@@ -20,7 +20,7 @@ sudo apt upgrade
 
 ```
 
-2. 以下のRaspberryPi用frameworkをダウンロードして解凍する： 
+2.以下のRaspberryPi用frameworkをダウンロードして解凍する： 
 
 ```
 
@@ -36,7 +36,7 @@ tar -zxvf of_v0.12.0_linuxarmv6l_release.tar.gz
 
 ```
 
-3. 解凍したものを所定の場所に置きコンパイルする  
+3.解凍したものを所定の場所に置きコンパイルする  
 
 ```
 #以下、64bitsを前提にする：
@@ -54,7 +54,7 @@ make Release -C /home/USERNAME/of_v0.12.0_linuxaarch64_release/libs/openFramewor
 
 ```
 
-4. 動作確認のためにサンプルを実行する  
+4.動作確認のためにサンプルを実行する  
 
 ```
 
