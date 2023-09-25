@@ -8,6 +8,7 @@
   
 # latest:rocket:  
 
+1. [RaspberryPiのopenFrameworksを使う](md/RSPI_ofx_linux.md)   
 1. [RaspberryPiのdotnetのインストール](md/RSPI_dotnet_install.md)   
 1. [Canonプリンター/スキャナー(複合機 TS8630)のドライバーのインストール方法(linux版)](md/canon_linux_driver_install.md)   
 1. [LininoOneをplatformioで動かす](md/platformio_LininoOne.md)   
