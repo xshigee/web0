@@ -1,15 +1,15 @@
     
 # ArgonONE_m.2のSSDにOSを書き込む  
 
-2023/9/25      
+2023/9/25+      
 初版    
   
 ## OS書き込み方法  
 RaspberryPiのケース[Argon One M.2](https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-5PL4)のSSDにOSを書き込む方法について記述する。  
 Argon One M.2はM.2_SATA_SSDを内蔵できるケースで、このSSDにOSを書き込み、SD無しでSSDからブートすることができる。  
 
-手順の概要としては：
-まずmicroSDでブートして、OSアプリである[Raspberry Pi Imager]で以下の処理を行う：
+手順の概要としては：  
+まずmicroSDでブートして、OSアプリである[Raspberry Pi Imager]で以下の処理を行う：  
 1. SSDをフォーマットする。  
 1. OSをSSDに書き込む。  
 この際、設定アイコンでSSDでブートするOSに必要な設定を予め設定できる。
