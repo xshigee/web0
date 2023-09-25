@@ -1,7 +1,7 @@
     
 # RaspberryPiのprocessingをインストールする  
 
-2023/9/25      
+2023/9/25+      
 初版    
   
 ## 概要    
@@ -13,7 +13,7 @@ ARMのCPUの32bits/64bitsでインストールする内容は異なる。
 ARM32bitsの場合:
 ```
 
-cd ~Downloads
+cd ~/Downloads
 wget https://github.com/processing/processing4/releases/download/processing-1293-4.3/processing-4.3-linux-arm32.tgz
 tar -zxvf processing-4.3-linux-arm32.tgz
 
@@ -26,7 +26,7 @@ sudo ./install.sh
 ARM64bitsの場合:
 ```
 
-cd ~Downloads
+cd ~/Downloads
 wget https://github.com/processing/processing4/releases/download/processing-1293-4.3/processing-4.3-linux-arm64.tgz
 tar -zxvf processing-4.3-linux-arm64.tgz
 
