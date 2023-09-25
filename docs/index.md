@@ -8,6 +8,7 @@
   
 # latest:rocket:  
 
+1. [RaspberryPiのprocessingをインストールする](md/RSPI_processing_install.md)
 1. [ArgonONE_m.2のSSDにOSを書き込む](md/RSPI_ArgonOne_m.2.md)   
 1. [RaspberryPiのopenFrameworksを使う](md/RSPI_ofx_linux.md)   
 1. [RaspberryPiのdotnetのインストール](md/RSPI_dotnet_install.md)   
