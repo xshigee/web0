@@ -2,12 +2,13 @@
 
 # 役に立ちそうなメモの置き場
 
-2023/9/5現在  
+2023/9/25現在  
 
 以下のリンクをクリックして下さい：  
   
 # latest:rocket:  
 
+1. [RaspberryPiのdotnetのインストール](md/RSPI_dotnet_install.md)   
 1. [Canonプリンター/スキャナー(複合機 TS8630)のドライバーのインストール方法(linux版)](md/canon_linux_driver_install.md)   
 1. [LininoOneをplatformioで動かす](md/platformio_LininoOne.md)   
 1. [Mac(M2)ことはじめ](md/Mac_beginner2.md)   
