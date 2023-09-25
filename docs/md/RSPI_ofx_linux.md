@@ -12,6 +12,7 @@ RapberryPi版openframeworksをインストールして使う。
 
 1. システムのアップデート
 以下のコマンドを実行してシステムをアップデートする：  
+
 ```
 sudo apt clean
 sudo apt update
@@ -22,6 +23,7 @@ sudo apt upgrade
 2. 以下のRaspberryPi用frameworkをダウンロードして解凍する： 
 
 ```
+
 ARM64bitsの場合:
 cd ~Downloads
 wget https://github.com/openframeworks/openFrameworks/releases/download/0.12.0/of_v0.12.0_linuxaarch64_release.tar.gz
@@ -34,7 +36,7 @@ tar -zxvf of_v0.12.0_linuxarmv6l_release.tar.gz
 
 ```
 
-3. 解凍したものを所定の場所に置きコンパイルする
+3. 解凍したものを所定の場所に置きコンパイルする  
 
 ```
 #以下、64bitsを前提にする：
@@ -52,7 +54,7 @@ make Release -C /home/USERNAME/of_v0.12.0_linuxaarch64_release/libs/openFramewor
 
 ```
 
-4. 動作確認のためにサンプルを実行する
+4. 動作確認のためにサンプルを実行する  
 
 ```
 
@@ -62,8 +64,10 @@ make
 make run
 
 ```
+
 ## コンパイルエラー回避
-32bits版ではコンパイルエラーがおきるので以下のパッチをかける。
+32bits版ではコンパイルエラーがおきるので以下のパッチをかける。  
+
 ```
 ~/of_v0.12.0_linuxarmv6l_release/libs/openFrameworksCompiled/project/linuxarmv6l/config.linuxarmv6l.default.mk
 内の「PLATFORM_LIBRARIES += openmaxil」をコメントアウトする。 
