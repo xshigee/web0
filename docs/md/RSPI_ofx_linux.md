@@ -1,7 +1,7 @@
     
 # RaspberryPiのopenFrameworksを使う  
 
-2023/9/25+      
+2023/9/25++      
 初版    
   
 ## 概要    
@@ -25,12 +25,12 @@ sudo apt upgrade
 ```
 
 ARM64bitsの場合:
-cd ~Downloads
+cd ~/Downloads
 wget https://github.com/openframeworks/openFrameworks/releases/download/0.12.0/of_v0.12.0_linuxaarch64_release.tar.gz
 tar -zxvf of_v0.12.0_linuxaarch64_release.tar.gz
 
 ARM32bitsの場合:
-cd ~Downloads
+cd ~/Downloads
 wget https://github.com/openframeworks/openFrameworks/releases/download/0.12.0/of_v0.12.0_linuxarmv6l_release.tar.gz
 tar -zxvf of_v0.12.0_linuxarmv6l_release.tar.gz
 
