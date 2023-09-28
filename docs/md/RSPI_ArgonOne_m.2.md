@@ -1,7 +1,7 @@
     
 # ArgonONE_m.2のSSDにOSを書き込む  
 
-2023/9/25++      
+2023/9/25+++      
 初版    
   
 ## OS書き込み方法  
@@ -77,6 +77,48 @@ GUIのボリューム・アイコンを右クリックすると
 参考：  
 [Headless_RaspberryPiでAudio出力のデフォルトを変更する](https://beta-notes.way-nifty.com/blog/2020/11/post-ef9846.html)  
 
+## USBスピーカ設定
+USBスピーカを使用する場合、以下のように設定する：  
+1. USBスピーカをUSB接続する。
+1. sudo raspi-config/audio/USB Audioを選択してオーディオ出力をUSBスピーカに切り替える。
+1. 音量調節
+使用しているスピーカによると思うが実際に接続した「JBL Pebbles」では、GUIでの音量調整ができなかった。
+そのかわり、alsamixerで音量調節ができる。
+
+## 電源オン/オフ
+電源関連は以下のようになっている：  
+1. 電源オン
+電源ボタンを押す(Short Press)
+
+1. 電源オフ
+電源ボタンを5秒以上押す。(Forced Shutdown)
+
+1. Reboot
+電源ボタンをダブルクリックする。
+
+## [参考]bootloaderのバージョン
+USBブートができたバージョンは以下を使用している：  
+```
+
+$ vcgencmd bootloader_version
+2023/01/11 17:40:52
+version 8ba17717fbcedd4c3b6d4bce7e50c7af4155cba9 (release)
+timestamp 1673458852
+update-time 0
+capabilities 0x0000007f
+
+```
+
+## OSのビットの確認
+以下を実行して、32または64が返ってくるので、それで確認する。
+```
+
+getconf LONG_BIT
+64
+#64bitsの場合
+```
+
+参考：[Raspberry piで使える便利なコマンド](https://racoubit.org/expl/soft/command.php?a=2)  
 
 以上  
 
