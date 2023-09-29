@@ -1,7 +1,7 @@
     
 # ArgonONE_m.2のSSDにOSを書き込む  
 
-2023/9/25+++      
+2023/9/25++++      
 初版    
   
 ## OS書き込み方法  
@@ -17,7 +17,6 @@ Argon One M.2はM.2_SATA_SSDを内蔵できるケースで、このSSDにOSを�
 1. RaspberryPiの電源を落とす。
 1. microSDを外す。
 1. 再度、電源を入れて、SSDからブートする。
-
 
 ハードの設定としては以下にする：
 1. USB3Bridgeで本体とSSDを接続しておく。
@@ -118,6 +117,12 @@ getconf LONG_BIT
 ```
 
 参考：[Raspberry piで使える便利なコマンド](https://racoubit.org/expl/soft/command.php?a=2)  
+
+## [参考]headlessのOSを作成する方法
+最初の「OSの書き込み方法」でUSBのSD-Reader/Writerを接続して、SSDのところをSDに置き換えて、ImagerでSDに書き込む際に設定でSSHを有効にして書き込む。  
+それだけで、headlessのOSのSDが出来上がる。  
+  
+homeのデフォルトのディレクトリは、最初にGUIが起動される際に、自動生成されるようだ。したがって、headlessでsshでログインした場合は、該当のディレクトリは作成されないので、必要なものを手動で作成する必要がある。
 
 以上  
 
