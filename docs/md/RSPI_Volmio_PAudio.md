@@ -1,7 +1,7 @@
     
 # RaspberryPiをVolumioをインストールする  
 
-2023/10/1  
+2023/10/1+  
 初版    
   
 ## 概要
@@ -10,18 +10,18 @@ RaspberryPiを以下のVolumioをインストールする。
 
 PCが起動していない場合でも、スマフォのアプリ(iPhone/Android用)「volumio」で、PCのwebブラウザーと同様のことを実現しているので、それを利用するとPC不要でスマフォがリモコンになった家電感覚で使用できる。  
 
-また、shairport-syncを内蔵しているのAirPlay_Receiver(server)として、 iPhoneなどからオーディオデータをWiFi経由で受信してRaspberryPiのオーディオ出力で再生できる。  
+また、shairport-syncを内蔵しているのでAirPlay_Receiver(server)として、 iPhoneなどからオーディオデータをWiFi経由で受信してRaspberryPiのオーディオ出力で再生できる。  
 
 なお、本記事は「[Headless_RaspberryPiをVolumioをインストールする](https://beta-notes.way-nifty.com/blog/2020/11/post-11c7cc.html)」のVolumio最新版に対応したものにあたる。 
 
 ## インストール方法
 volumioは、すでに動いているOSに何かをインストールする形ではなく専用SDを作り、それをRaspberryPiに入れて、起動することで volumioが動く。
 
-専用SDの作成には「Raspberry PI Imager」を使用して、OSの選択肢と[Volumio]を選び(USB接続したSDwriterの)SDにVolmioを書き込む。  
-\#該当アプリはWindow用、MacOS用、Linux用の３種類がある　　
+専用SDの作成には「Raspberry PI Imager」を使用して、OSの選択肢と[Volumio]を選び(USB接続したSDwriterの)SDにVolumioを書き込む。  
+\#該当アプリはWindow用、MacOS用、Linux用の３種類がある  
 
 以下、詳細：  
-0. 以下のURLからダウンロートしてImagerをインストールする。
+0. 以下のURLからダウンロートしてImagerをインストールする。  
 windows用：    
 [https://downloads.raspberrypi.org/imager/imager_latest.exe](https://downloads.raspberrypi.org/imager/imager_latest.exe)  
 MacOS用：  
@@ -58,7 +58,7 @@ http://volumio.local
 すると、設定画面が表示されるので 
 画面にしたがって設定する。
 
-ハードに依存している設定は以下のように設定する：　　
+ハードに依存している設定は以下のように設定する：  
 ```
 playback Options
 Audio Output:
