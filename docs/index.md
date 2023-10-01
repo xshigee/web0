@@ -2,12 +2,13 @@
 
 # 役に立ちそうなメモの置き場
 
-2023/9/25現在  
+2023/10/1現在  
 
 以下のリンクをクリックして下さい：  
   
 # latest:rocket:  
 
+1. [RaspberryPiをVolumioをインストールする](md/RSPI_Volmio_PAudio.md)
 1. [RaspberryPiのprocessingをインストールする](md/RSPI_processing_install.md)
 1. [ArgonONE_m.2のSSDにOSを書き込む](md/RSPI_ArgonOne_m.2.md)   
 1. [RaspberryPiのopenFrameworksを使う](md/RSPI_ofx_linux.md)   
