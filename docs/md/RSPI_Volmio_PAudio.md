@@ -88,6 +88,13 @@ MPD Client Volume Control: ON
 メニューのPlugin/Search Plugin/System Hardwareから
 [Pirate Audio]を選択してインストールする。
 
+実際に有効にするためにはリブートの必要があるようなので
+SSHに入り以下を実行する：  
+
+```
+
+sudo reboot
+```
 
 
 ## SSH接続
