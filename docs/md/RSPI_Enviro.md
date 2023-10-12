@@ -62,7 +62,7 @@ kill -9 xxxx
 
 ```
 
-参考：
+参考：  
 [Enviro for Raspberry Pi - Enviro](https://shop.pimoroni.com/products/enviro?variant=31155658489939)   
 [Getting Started with Enviro+](https://learn.pimoroni.com/article/getting-started-with-enviro-plus)   
 [nohup 付きで実行した処理を強制終了したい](https://ja.stackoverflow.com/questions/72807/nohup-%E4%BB%98%E3%81%8D%E3%81%A7%E5%AE%9F%E8%A1%8C%E3%81%97%E3%81%9F%E5%87%A6%E7%90%86%E3%82%92%E5%BC%B7%E5%88%B6%E7%B5%82%E4%BA%86%E3%81%97%E3%81%9F%E3%81%84)   
