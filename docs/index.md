@@ -2,12 +2,13 @@
 
 # 役に立ちそうなメモの置き場
 
-2023/10/12現在  
+2023/10/14現在  
 
 以下のリンクをクリックして下さい：  
   
 # latest:rocket:  
 
+1. [RaspberryPi4のSSD/SD性能測定](md/RSPI_SSD_SpeedTest.md)
 1. [RaspberryPiをEnviroをインストールする](md/RSPI_Enviro.md)
 1. [RaspberryPiをVolumioをインストールする](md/RSPI_Volmio_PAudio.md)
 1. [RaspberryPiのprocessingをインストールする](md/RSPI_processing_install.md)
