@@ -1,7 +1,7 @@
     
 # RaspberryPi4のSSD/SD性能測定  
 
-2023/10/14      
+2023/10/14+      
 初版    
   
 ## 概要 
@@ -10,7 +10,7 @@
 測定するハードウェアの型番：
 1. 「Argon One M.2」の内蔵SSD  
 [WDS500G3B0B [WD Blue SA510シリーズ SATA接続 M.2 SSD 500GB]](https://www.yodobashi.com/product/100000001007168243/?kad1=1&utm_medium=cpc&utm_source=kakaku&utm_term=WDS500G3B0B+%5BWD+Blue+SA510%E3%82%B7%E3%83%AA%E3%83%BC%E3%82%BA+SATA%E6%8E%A5%E7%B6%9A+M.2+SSD+500GB%5D&xfr=kad)  
-2. SSD内蔵USBメモリ 
+2. SSD内蔵USBメモリ    
 [ESD-EXS0250GBK [SSD 外付け 250GB USB3.2 Gen1]](https://www.yodobashi.com/product/100000001008041380/)  
 
 
