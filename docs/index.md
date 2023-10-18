@@ -2,12 +2,13 @@
 
 # 役に立ちそうなメモの置き場
 
-2023/10/14現在  
+2023/10/18現在  
 
 以下のリンクをクリックして下さい：  
   
 # latest:rocket:  
 
+1. [RP2040_TinyML開発ボードを動かしてみる](md/RP2040TinyMLDev.md)
 1. [RaspberryPi4のSSD/SD性能測定](md/RSPI_SSD_SpeedTest.md)
 1. [RaspberryPiをEnviroをインストールする](md/RSPI_Enviro.md)
 1. [RaspberryPiをVolumioをインストールする](md/RSPI_Volmio_PAudio.md)
