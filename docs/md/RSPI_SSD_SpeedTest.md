@@ -1,6 +1,9 @@
     
 # RaspberryPi4のSSD/SD性能測定  
 
+2023/10/26  
+SDでの測定結果の追加  
+
 2023/10/14+      
 初版    
   
@@ -86,9 +89,10 @@ $ dd if=/tmp/tempfile of=/dev/null bs=1M count=1024
 
 ```
 
-[参考]SDでの測定結果：
-```
+## [参考]SDでの測定結果(RaspberryPi4)  
 
+SDその１
+```
 WRITE:
 $ dd if=/dev/zero of=/tmp/tempfile bs=1M count=1024 conv=fdatasync
 1024+0 records in
@@ -101,10 +105,65 @@ $ dd if=/tmp/tempfile of=/dev/null bs=1M count=1024
 1024+0 records in
 1024+0 records out
 1073741824 bytes (1.1 GB, 1.0 GiB) copied, 24.5313 s, 43.8 MB/s
-
 ```
 
-[参考]pc-linuxでの測定結果：
+SDその２
+```
+WRITE:
+$ dd if=/dev/zero of=/tmp/tempfile bs=1M count=1024 conv=fdatasync
+1024+0 records in
+1024+0 records out
+1073741824 bytes (1.1 GB, 1.0 GiB) copied, 59.2803 s, 18.1 MB/s
+
+READ:
+$ sudo sh -c "/usr/bin/echo 3 > /proc/sys/vm/drop_caches"
+xshige@sd2:~ $ dd if=/tmp/tempfile of=/dev/null bs=1M count=1024
+1024+0 records in
+1024+0 records out
+1073741824 bytes (1.1 GB, 1.0 GiB) copied, 26.4189 s, 40.6 MB/s
+```
+RaspberryPi4の場合、(10)以上であればSDの速さで大きく差が出ることはないようだ。
+
+## [参考]SDでの測定結果(RaspberryPi Zero2)
+
+SDその１
+```
+
+WRITE:
+$ dd if=/dev/zero of=/tmp/tempfile bs=1M count=1024 conv=fdatasync
+1024+0 records in
+1024+0 records out
+1073741824 bytes (1.1 GB, 1.0 GiB) copied, 122.166 s, 8.8 MB/s
+
+READ:
+$ sudo sh -c "/usr/bin/echo 3 > /proc/sys/vm/drop_caches"
+$ dd if=/tmp/tempfile of=/dev/null bs=1M count=1024
+1024+0 records in
+1024+0 records out
+1073741824 bytes (1.1 GB, 1.0 GiB) copied, 46.0671 s, 23.3 MB/s
+```
+
+SDその２
+```
+WRITE:
+$ dd if=/dev/zero of=/tmp/tempfile bs=1M count=1024 conv=fdatasync
+1024+0 records in
+1024+0 records out
+1073741824 bytes (1.1 GB, 1.0 GiB) copied, 58.2476 s, 18.4 MB/s
+
+READ:
+$ sudo sh -c "/usr/bin/echo 3 > /proc/sys/vm/drop_caches"
+$ dd if=/tmp/tempfile of=/dev/null bs=1M count=1024
+1024+0 records in
+1024+0 records out
+1073741824 bytes (1.1 GB, 1.0 GiB) copied, 45.446 s, 23.6 MB/s
+
+```
+Zero2においてSDの速さの違いは、WRITEの速さの違いになって表れるようだ。  
+また、Pi4とZero2の違いは、READの速さの違いとして表れ、２倍くらいの差になるようだ。
+
+
+## [参考]pc-linuxでの測定結果
 ```
 
 WRITE:
