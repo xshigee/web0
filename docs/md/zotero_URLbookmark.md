@@ -69,7 +69,7 @@ function doExport() {
 1. 出力ファイル「youtube.md」を選び出力する。(出力名は任意)
 
 これで以下のような出力ファイルができる：  
-youtube.md
+youtube.md  
 ```markdown
 [TVアニメ「鬼滅の刃」柱解禁PV - YouTube](https://www.youtube.com/watch?v=ad0fHdQfc_g)  
 [【完結編後編】ありがとう進撃の巨人 - YouTube](https://www.youtube.com/watch?v=NQIzbAJMQoY&t=2879s)  
@@ -77,7 +77,7 @@ youtube.md
 [アニメ『豚のレバーは加熱しろ』ラジオ｜豚のラジオは加熱しろ　#2](https://www.youtube.com/watch?v=7mg95tw_Myc)
 <省略>
 ```
-実際の表示(markdownのレンダリング出力)：　　
+実際の表示(markdownのレンダリング出力)：  
 [TVアニメ「鬼滅の刃」柱解禁PV - YouTube](https://www.youtube.com/watch?v=ad0fHdQfc_g)  
 [【完結編後編】ありがとう進撃の巨人 - YouTube](https://www.youtube.com/watch?v=NQIzbAJMQoY&t=2879s)  
 [【葬送のフリーレン】ヒンメルは○○を求めていた？石碑の意味が悲し](https://www.youtube.com/watch?v=u7re-1JDXz0)  
