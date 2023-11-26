@@ -2,12 +2,13 @@
 
 # 役に立ちそうなメモの置き場
 
-2023/11/11現在  
+2023/11/27現在  
 
 以下のリンクをクリックして下さい：  
   
 # latest:rocket:  
 
+1. [Arduino_UNO_R4_WiFiをplatformioで動かす](md/arduino_R4_uno_WiFi.md)
 1. [zoteroでURLブックマークを作る](md/zotero_URLbookmark.md)
 1. [RP2040_TinyML開発ボードを動かしてみる](md/RP2040TinyMLDev.md)
 1. [RaspberryPi4のSSD/SD性能測定](md/RSPI_SSD_SpeedTest.md)
