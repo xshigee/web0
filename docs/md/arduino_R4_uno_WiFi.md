@@ -311,6 +311,10 @@ MAC: F4:12:FA:9F:47:C8
 
 ```
 
+## 接続問題
+ボードは、シリアルポートを使ってリセットして再接続しているが、ハードウェア状況によっては再接続が不可になることがある。
+その場合、USBハブを追加してUSBハブ経由でボードを接続すると改善することがある。  
+
 ## 参照   
 [platformio.ini for arduino](https://xshigee.github.io/web0/md/platformio_iini_arduino_md.html)  
 [respberry_pico_Wをplatformioで動かす](https://xshigee.github.io/web0/md/platformio_pico_W.html)  
