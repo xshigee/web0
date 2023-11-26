@@ -27,7 +27,7 @@ lib_deps =
 
 ```
 
-### blink
+## blink
 もっとも標準的なスケッチでツールのテスト代わりに使う：  
 ```c++
 
@@ -69,7 +69,7 @@ void loop() {
 }
 ```
 
-### matrix
+## matrix
 新たに採用されたLEDマトリクス(基板上)を光らせるスケッチ：  
 
 matrix.ino
@@ -143,9 +143,9 @@ ref:
 [Arduino Uno R4 WifiのLEDディスプレイに日本語やドット絵アニメーションを流す](https://nomolk.hatenablog.com/entry/2023/11/02/120000)  
 上のリンクのスケッチをそのまま流用した。  
 
-##　netscan
+## netscan
 ネットをスキャンする標準的なスケッチ。  
-たぶん「#include <WiFiS3.h>」の部分をボードごとに変更すれば動作すると思われる。  
+たぶん「\#include <WiFiS3.h>」の部分をボードごとに変更すれば動作すると思われる。  
 
 ```c++
 /*
