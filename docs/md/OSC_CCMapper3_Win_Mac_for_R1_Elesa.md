@@ -15,7 +15,7 @@
 なお、ソースコードは、Windows/MacOS共通になっている。  
 本記事のみに完結するようにしているため「[CCMapper3(RiMidi) for Win/Mac](https://xshigee.github.io/web0/md/CCMapper3_Win_Mac.html)」と内容が一部ダブっている。  
 
-Ref:
+Ref:  
 [Wind Synthesizer R1 - Musical Instrument From the Future!](https://store.robkoo.com/products/buy_r1)  
 [TAHORNG Elesa10](https://www.fineassist.jp/products/TH/Elesa/entry-234.html)  
 
