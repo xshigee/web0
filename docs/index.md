@@ -8,6 +8,7 @@
   
 # latest:rocket:  
 
+1. [Flet_CCMapper(RtMidi/python3) for R1/Elesa](md/CCMapper_Flet_Pyhon3RtMidi_for_R1_Elesa.md)  
 1. [OSC_CCMapper3(RiMidi) for R1/Elesa](md/OSC_CCMapper3_Win_Mac_for_R1_Elesa.md)    
 1. [Arduino_UNO_R4_WiFiをplatformioで動かす](md/arduino_R4_uno_WiFi.md)
 1. [zoteroでURLブックマークを作る](md/zotero_URLbookmark.md)
