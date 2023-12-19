@@ -1,6 +1,9 @@
     
 # Flet_CCMapper(RtMidi/python3) for R1/Elesa
 
+2023/12/12  
+実行ファイル(exeなど)の作成方法を追加した。  
+
 2023/12/17        
 初版    
   
@@ -1026,6 +1029,53 @@ if __name__ == '__main__':
 
 #=====================================-
 ```
+
+## 実行ファイル作成方法(Packaging desktop app)
+
+```bash
+
+# windowsの場合(linuxも同様)
+python -m virtualenv rtmidi
+rtmidi\Scripts\activate
+ここで、仮想環境rtmidiにはいる
+
+# Mac/Windows/Linux共通
+pip install pyinstaller
+flet pack your_program.py
+```
+
+windowsでエラーになった場合、以下を実行する：  
+```
+pyinstaller --onefile  .\Flet_CCMapper.py
+```
+ref:  
+[Packaging desktop app](https://flet.dev/docs/guides/python/packaging-desktop-app)  
+[\*win32ctypes.pywin32.pywintypes.error when using pyinstaller in VS Code - Possible Virus/Trojan?](https://stackoverflow.com/questions/77239487/win32ctypes-pywin32-pywintypes-error-when-using-pyinstaller-in-vs-code-possib)  
+
+
+以下の場所に実行ファイルができる：  
+```bash
+
+On macOS:
+open dist/your_program.app
+
+on Windows:
+dist\your_program.exe
+
+on Linux:
+dist/your_program
+```
+
+## インストール対応
+インストール中に\*.whlができた場合、以下を実行すると正常にインストールできる。  
+
+実例：  
+```bash
+
+python -m pip install --no-deps .\python_rtmidi-1.5.8-cp311-cp311-win_amd64.whl python_rtmidi
+```
+ref:  
+[【Python】wheel（.whl）とは](https://rurukblog.com/post/python-wheel/)  
 
 ## 参考情報 
 MIDI tool関連：  
