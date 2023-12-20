@@ -1,7 +1,7 @@
     
 # Flet_CCMapper(RtMidi/python3) for R1/Elesa
 
-2023/12/20+  
+2023/12/20++  
 インストール方法を見直した。  
 
 2023/12/12  
@@ -1105,6 +1105,11 @@ ref:
 [【Python】wheel（.whl）とは](https://rurukblog.com/post/python-wheel/)  
 
 ## 参考情報 
+Mac関連：  
+[Macでエイリアスを作成する/削除する](https://support.apple.com/ja-jp/guide/mac-help/mchlp1046/mac)  
+一部抜粋：  
+「Option＋Commandキーを押しながらオリジナルの項目を他のフォルダまたはデスクトップにドラッグすると、エイリアスの作成と移動をワンステップで行えます。」
+
 MIDI tool関連：  
 [Protokol - A responsive heavy duty console for troubleshooting control protocols](https://hexler.net/protokol#get)  
 MIDIトラフィックをモニターできるツール。(お勧め)  
@@ -1131,6 +1136,7 @@ OS関連：
 loopMIDI関連：  
 [loopMIDI](https://www.tobias-erichsen.de/software/loopmidi.html)  
 [loopMIDIでつなぐ](https://webmidiaudio.com/npage501.html)  
+
 
 WIDI_Bud_Pro関連：  
 [WIDI Bud Pro](https://hookup.co.jp/products/cme/widi-bud-pro)  
