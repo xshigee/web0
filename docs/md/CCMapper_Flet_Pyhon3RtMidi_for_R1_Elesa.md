@@ -1,6 +1,9 @@
     
 # Flet_CCMapper(RtMidi/python3) for R1/Elesa
 
+2023/12/20  
+インストール方法を見直した。  
+
 2023/12/12  
 実行ファイル(exeなど)の作成方法を追加した。  
 
@@ -110,18 +113,16 @@ python3 flet_CCMapper.py
 \# Flet実行時にエラーなったので、それを回避するために、     
 \# pythonの仮想環境を設定している  
 ```
-sudo apt update
-sudo apt install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgs
-# GStreamerをインストールしている 
+# To install GStreamer on Ubuntu/Debian run the following commands:
+
+sudo apt-get update
+sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-bad1.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav  gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio
 
 # pythonの仮想環境fletを設定する
 python -m venv flet
 . ./flet/bin/activate
 
-sudo apt install python3-rtmidi  
-# pythonでありがちなpipでないので注意のこと。
-
-# もしかして、linuxのバージョンによっては上ではなく以下が有効の可能性がある
+pip install python-rtmidi
 pip install flet
 
 ```
@@ -135,6 +136,8 @@ fletライブラリを使用する場合は、
 . ./flet/bin/activate
 
 ```
+ref:   
+[Creating Flet apps in Python - linux](https://flet.dev/docs/guides/python/getting-started)  
 
 
 ## 実行
@@ -1034,7 +1037,7 @@ if __name__ == '__main__':
 
 ```bash
 
-# windowsの場合(linuxも同様)
+# windowsの場合
 python -m virtualenv rtmidi
 rtmidi\Scripts\activate
 ここで、仮想環境rtmidiにはいる
@@ -1043,15 +1046,6 @@ rtmidi\Scripts\activate
 pip install pyinstaller
 flet pack your_program.py
 ```
-
-windowsでエラーになった場合、以下を実行する：  
-```
-pyinstaller --onefile  .\Flet_CCMapper.py
-```
-ref:  
-[Packaging desktop app](https://flet.dev/docs/guides/python/packaging-desktop-app)  
-[\*win32ctypes.pywin32.pywintypes.error when using pyinstaller in VS Code - Possible Virus/Trojan?](https://stackoverflow.com/questions/77239487/win32ctypes-pywin32-pywintypes-error-when-using-pyinstaller-in-vs-code-possib)  
-
 
 以下の場所に実行ファイルができる：  
 ```bash
@@ -1065,6 +1059,38 @@ dist\your_program.exe
 on Linux:
 dist/your_program
 ```
+
+実際には上手く行かない場合があり、その場合は以下を実行する：  
+
+windowsでエラーになった場合：  
+```
+pyinstaller --onefile  .\Flet_CCMapper.py
+```
+ref:  
+[Packaging desktop app](https://flet.dev/docs/guides/python/packaging-desktop-app)  
+[\*win32ctypes.pywin32.pywintypes.error when using pyinstaller in VS Code - Possible Virus/Trojan?](https://stackoverflow.com/questions/77239487/win32ctypes-pywin32-pywintypes-error-when-using-pyinstaller-in-vs-code-possib)  
+
+
+linuxでエラーになった場合：
+```
+
+# pythonの仮想環境fletを設定する
+python -m venv flet
+. ./flet/bin/activate
+
+python -m PyInstaller Flet_CCMapper.py
+
+# 実行ファイルの場所も異なる
+cd dist/Flet_CCMapper
+ls
+Flet_CCMapper  _internal
+
+# 実行
+./Flet_CCMapper
+
+```
+ref:   
+[pyinstaller No module named pyinstaller](https://stackoverflow.com/questions/44740792/pyinstaller-no-module-named-pyinstaller)  
 
 ## インストール対応
 インストール中に\*.whlができた場合、以下を実行すると正常にインストールできる。  
