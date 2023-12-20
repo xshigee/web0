@@ -1,7 +1,7 @@
     
 # Flet_CCMapper(RtMidi/python3) for R1/Elesa
 
-2023/12/20  
+2023/12/20+  
 インストール方法を見直した。  
 
 2023/12/12  
@@ -1043,6 +1043,7 @@ rtmidi\Scripts\activate
 ここで、仮想環境rtmidiにはいる
 
 # Mac/Windows/Linux共通
+# Macの場合、pipではなくpip3になる
 pip install pyinstaller
 flet pack your_program.py
 ```
@@ -1051,7 +1052,7 @@ flet pack your_program.py
 ```bash
 
 On macOS:
-open dist/your_program.app
+dist/your_program.app
 
 on Windows:
 dist\your_program.exe
