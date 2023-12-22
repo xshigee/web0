@@ -1750,7 +1750,103 @@ Macの場合、WIDI_Bud経由でないので、あらかじめ、bluetooth対応
 GUI付きCCMaperとして「[Flet_CCMapper(RtMidi/python3)](https://xshigee.github.io/web0/md/CCMapper_Flet_Pyhon3RtMidi.html)」があり、Vitalのような比較的重いソフト音源を使った場合、fletの処理のせいか、MIDIメッセージを落とし、音が出っぱなしになったりした。
 本件のCCMapperはC#実装で、それに比べると処理が軽く、GUIを外部のTouchOSCが担当しているので、現状、今までのCCMapperのなかでは、処理が一番軽い印象がある。
 
-## 参考情報           
+## 実行ファイル作成方法(.NETアプリの発行)
+
+以下を実行するとpublishディレクトリが作成され、その中に実行ファイルが作成される：  
+```
+Windows用：
+dotnet publish -c Release --self-contained true -r win-x64
+
+Linux用：
+dotnet publish -c Release --self-contained true -r linux-x64
+
+mac用：
+dotnet publish -c Release --self-contained true -r osx-x64
+
+```
+実例：  
+
+Windowsの場合
+```
+PS C:\cs_ws\OSC_CCMapper3_cs_RtMidi\bin\Release\net6.0\win-x64\publish> ls *.exe
+
+    Directory: C:\cs_ws\OSC_CCMapper3_cs_RtMidi\bin\Release\net6.0\win-x64\publish
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a---          2023/12/21    22:19         147968 OSC_CCMapper3_cs_RtMidi.exe
+...
+...
+
+OSC_CCMapper3_cs_RtMidi.exeが実行ファイルになる
+
+```
+
+Macの場合
+```
+% pwd
+/Users/xxxxx/cs_ws/OSC_CCMapper3_cs_RtMidi/bin/Release/net7.0/osx-x64/publish
+
+% ls -l OSC*
+
+-rwxr-xr-x@ 1 xshige2  staff  117456 12 21 22:42 OSC_CCMapper3_cs_RtMidi
+-rw-r--r--  1 xshige2  staff   31545 12 21 22:42 OSC_CCMapper3_cs_RtMidi.deps.json
+-rw-r--r--  1 xshige2  staff   25600 12 21 22:42 OSC_CCMapper3_cs_RtMidi.dll
+-rw-r--r--  1 xshige2  staff   17396 12 21 22:42 OSC_CCMapper3_cs_RtMidi.pdb
+-rw-r--r--  1 xshige2  staff     271 12 21 22:42 OSC_CCMapper3_cs_RtMidi.runtimeconfig.json
+
+OSC_CCMapper3_cs_RtMidiが実行ファイルになる
+```
+
+Linuxの場合
+```
+$ pwd
+/home/xxxxx/cs_ws/apptest1/bin/Release/net8.0/linux-x64/publish
+
+実行：
+~/cs_ws/apptest1/bin/Release/net8.0/linux-x64/publish$ ./apptest1
+  _   _      _ _         __        __         _     _ _
+ | | | | ___| | | ___    \ \      / /__  _ __| | __| | |
+ | |_| |/ _ \ | |/ _ \    \ \ /\ / / _ \| '__| |/ _` | |
+ |  _  |  __/ | | (_) |    \ V  V / (_) | |  | | (_| |_|
+ |_| |_|\___|_|_|\___( )    \_/\_/ \___/|_|  |_|\__,_(_)
+                     |/
+
+apptest1が実行ファイルになる
+
+```
+ref:  
+[.NET CLI を使用した .NET アプリの発行](https://learn.microsoft.com/ja-jp/dotnet/core/deploying/deploy-with-cli)  
+
+抜粋：
+mkdir apptest1
+cd apptest1
+dotnet new console
+dotnet add package Figgle
+
+Program.cs
+```C#
+
+using System;
+
+namespace apptest1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine(Figgle.FiggleFonts.Standard.Render("Hello, World!"));
+        }
+    }
+}
+```
+
+## 参考情報     
+Mac関連：  
+[Macでエイリアスを作成する/削除する](https://support.apple.com/ja-jp/guide/mac-help/mchlp1046/mac)  
+一部抜粋：  
+「Option＋Commandキーを押しながらオリジナルの項目を他のフォルダまたはデスクトップにドラッグすると、エイリアスの作成と移動をワンステップで行えます。」
+
 MIDI tool関連：  
 [Protokol - A responsive heavy duty console for troubleshooting control protocols](https://hexler.net/protokol#get)  
 MIDIトラフィックをモニターできるツール。(お勧め)  
