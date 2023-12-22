@@ -1,6 +1,9 @@
     
 # OSC_CCMapper3(RiMidi) for R1/Elesa  
 
+2023/12/23  
+実行ファイル作成方法を追加した。  
+
 2023/12/17        
 初版    
   
@@ -1818,13 +1821,13 @@ apptest1が実行ファイルになる
 ref:  
 [.NET CLI を使用した .NET アプリの発行](https://learn.microsoft.com/ja-jp/dotnet/core/deploying/deploy-with-cli)  
 
-抜粋：
-mkdir apptest1
-cd apptest1
-dotnet new console
-dotnet add package Figgle
+抜粋：  
+mkdir apptest1  
+cd apptest1  
+dotnet new console  
+dotnet add package Figgle  
 
-Program.cs
+Program.cs  
 ```C#
 
 using System;
