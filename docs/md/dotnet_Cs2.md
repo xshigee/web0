@@ -1,6 +1,9 @@
     
 # dotnetでC#を動かす(ver2,Mac対応)   
 
+2023/12/23  
+updated  
+
 2023/7/3     
 初版    
   
@@ -44,6 +47,9 @@ sudo apt-get update
 sudo apt-get install -y apt-transport-https
 sudo apt-get update
 sudo apt-get install -y dotnet-sdk-6.0
+#or
+sudo apt-get install -y dotnet-sdk-8.0
+
 sudo apt-get install -y aspnetcore-runtime-6.0
 
 ```
