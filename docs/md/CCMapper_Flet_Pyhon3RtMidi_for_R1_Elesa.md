@@ -1,6 +1,10 @@
     
 # Flet_CCMapper(RtMidi/python3) for R1/Elesa
 
+2023/12/24  
+Note_Offの音源の処理が重い場合、それを落とすことがあるようなので
+Note_OffのあとAll_Note_Offを送ることで改善した。  
+
 2023/12/20++  
 インストール方法を見直した。  
 
@@ -120,6 +124,7 @@ sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgst
 
 # pythonの仮想環境fletを設定する
 python -m venv flet
+
 . ./flet/bin/activate
 
 pip install python-rtmidi
@@ -202,6 +207,7 @@ Flet_CCMapper.py
 #
 # written by: xshige
 #
+# 2023/12/24: issue All Note Off after Note Off to assure Note Off done with heavy tone generator
 # 2023/12/17: TAHORNG Elesa support version
 # 2023/6/28: ROBKOO R1 support version (USB-MIDI for YDS-150 removed)
 # 2023/1/22: code refined
@@ -244,7 +250,13 @@ def midiin_callback(event, data=None):
         channel = (status & 0xF) + 1
         print("NoteOff note:%d velocity:%d" % (note, velocity))
         #message[1] = curNote # 2023/1/22 REMOVED
-        if (XFER.value): midiout.send_message(message)
+        if (XFER.value):
+            midiout.send_message(message)
+            # All Note Off
+            msg = [CONTROL_CHANGE + channel - 1]
+            msg.append(123)
+            msg.append(0)
+            midiout.send_message(msg)
         """
         if (XFER.value):
             # experimental code
