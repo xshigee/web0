@@ -1,6 +1,9 @@
     
 # OSC_CCMapper3(RiMidi) for R1/Elesa  
 
+2023/12/24  
+Note_Offにおいて音源の処理が重い場合、それを落とすことがあるようなので Note_OffのあとAll_Note_Offを送ることで改善した。
+
 2023/12/23  
 実行ファイル作成方法を追加した。  
 
@@ -58,6 +61,9 @@ OSC_CCMapper3_cs_RtMidi/Program.cs
 
 // 2023/12/17
 // R1,Elesa supported for Mac
+// 2023/12/24
+// issue All Note Off after Note Off to assure Note Off done with heavy tone generator
+//
 // 2023/5/3
 // osc_CCMapper3_RtMidi
 
@@ -918,8 +924,11 @@ namespace RtMidi.Core.CCMapper
                 iKey += transpose;
                 var eKey = (Enums.Key)Enum.ToObject(typeof(Enums.Key), iKey);
 
-                if (enableSendNote)
+                if (enableSendNote) {
                     outputList[0].Send(new NoteOffMessage(msg.Channel, eKey, msg.Velocity));
+                    // All Note Off
+                    outputList[0].Send(new ControlChangeMessage(msg.Channel, 123, 0));
+                }
             }
 
             void ChannelPressureHandler(IMidiInputDevice sender, in ChannelPressureMessage msg)
