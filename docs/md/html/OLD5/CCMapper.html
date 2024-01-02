@@ -1,16 +1,11 @@
 <!DOCTYPE html>
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>CCMapper 2024/1/2</title>
+<title>CCMapper 2023/1/16</title>
 
 <h1>CCMapper</h1>
-<h3>2024/1/2</h3>
+<h3>2023/1/16</h3>
 
-<!-- 2024/01/02 The flollowings are added:
-    (1) R1, Elsa are supported in Mac.
-	(2) issued All Note Off after Note Off to assure Note Off done with heavy tone generator
--->
-
-<!-- 2023/01/16
+<!-- 2023/1/16
 	change NoteOn to NoteOff if velocity is zero (patch for NuRad)
 -->
 
@@ -100,12 +95,7 @@ window.onload = function() {
 
 		if (status == MIDI_NOTE_OFF) {
 			noteNest--;
-			if (fXfer) {
-				midi.sendNoteOff(ch,e.data[1]+transpose);
- 				// All Note Off
-				midi.send(MIDI_CONTROL_CHANGE|ch, 123, 0);
-				return;
-			}
+			if (fXfer) midi.sendNoteOff(ch,e.data[1]+transpose);
 			// debug
 			if (noteNest !== 0) {
 				console.log("***** maybe NoteOn dropped! *****");

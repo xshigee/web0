@@ -1,6 +1,5 @@
 // proormidiM.js
-// 2024/1/ 2: added R1, Elesa supported in Mac
-// 2023/1/16: //added input device name(USB-MIDI) for YDS-150
+// 2023/1/16: added input device name(USB-MIDI) for YDS-150
 // 2023/1/ 2: modified for CCMapper (last M means 'Modified')
 
 // poormidi.js (Very Poor) Web MIDI API Wrapper
@@ -23,9 +22,7 @@
   const indev4 = "EWI"; // for Mac (with WIDI Master/EWI5000,EWI4000,EVI3010 etc)
   const indev5 = "AE-"; // for Mac (Roland)
   const indev6 = "YDS-"; // for Mac (YAMAHA)
-  //const indev7 = "Saxophone" // for USB-MIDI (YAMAHA)
-  const indev7 = "ROBKOO"; // for R1 (ROBKOO)
-  const indev8 = "Elesa"; // for Elesa (TAHORNG)
+  const indev7 = "Saxophone" // for USB-MIDI (YAMAHA)
   const outdev0 = "loopMIDI"; // for Windows/Mac
   const outdev1 = "Midi Through"; // for linux
   var innum = 1;
@@ -210,10 +207,6 @@ this.send = function(){
           break;
         }
         if (o.value.name.includes(indev7)) {
-          innum = num;
-          break;
-        }
-        if (o.value.name.includes(indev8)) {
           innum = num;
           break;
         }

@@ -1,6 +1,13 @@
     
 # CCMapper(Web Midi)  
 
+2024/1/2  
+CCMapper改版：  
+(1)Macにおいて、R1,Elesaをサポートした。  
+(2)Note_Offにおいて音源の処理が重い場合、
+それを落とすことがあるようなので Note_Offの後、
+All_Note_Offを送ることで改善した。  
+
 2023/1/16  
 CCMapper改版：  
 以下を追加した:  
@@ -126,12 +133,17 @@ CCMapper.html
 
 <!DOCTYPE html>
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>CCMapper 2023/1/16</title>
+<title>CCMapper 2024/1/2</title>
 
 <h1>CCMapper</h1>
-<h3>2023/1/16</h3>
+<h3>2024/1/2</h3>
 
-<!-- 2023/1/16
+<!-- 2024/01/02 The flollowings are added:
+  (1) R1, Elsa are supported in Mac.  
+  (2) issued All Note Off after Note Off to assure Note Off done with heavy tone generator  
+-->
+
+<!-- 2023/01/16
 	change NoteOn to NoteOff if velocity is zero (patch for NuRad)
 -->
 
@@ -221,7 +233,12 @@ window.onload = function() {
 
 		if (status == MIDI_NOTE_OFF) {
 			noteNest--;
-			if (fXfer) midi.sendNoteOff(ch,e.data[1]+transpose);
+			if (fXfer) {
+				midi.sendNoteOff(ch,e.data[1]+transpose);
+ 				// All Note Off
+				midi.send(MIDI_CONTROL_CHANGE|ch, 123, 0);
+				return;
+			}
 			// debug
 			if (noteNest !== 0) {
 				console.log("***** maybe NoteOn dropped! *****");
@@ -693,7 +710,8 @@ CCMapper_files/poormidiM.js
 ```js
 
 // proormidiM.js
-// 2023/1/16: added input device name(USB-MIDI) for YDS-150
+// 2024/1/ 2: added R1, Elesa supported in Mac
+// 2023/1/16: //added input device name(USB-MIDI) for YDS-150
 // 2023/1/ 2: modified for CCMapper (last M means 'Modified')
 
 // poormidi.js (Very Poor) Web MIDI API Wrapper
@@ -716,7 +734,9 @@ CCMapper_files/poormidiM.js
   const indev4 = "EWI"; // for Mac (with WIDI Master/EWI5000,EWI4000,EVI3010 etc)
   const indev5 = "AE-"; // for Mac (Roland)
   const indev6 = "YDS-"; // for Mac (YAMAHA)
-  const indev7 = "Saxophone" // for USB-MIDI (YAMAHA)
+  //const indev7 = "Saxophone" // for USB-MIDI (YAMAHA)
+  const indev7 = "ROBKOO"; // for R1 (ROBKOO)
+  const indev8 = "Elesa"; // for Elesa (TAHORNG)
   const outdev0 = "loopMIDI"; // for Windows/Mac
   const outdev1 = "Midi Through"; // for linux
   var innum = 1;
@@ -904,6 +924,10 @@ this.send = function(){
           innum = num;
           break;
         }
+        if (o.value.name.includes(indev8)) {
+          innum = num;
+          break;
+        }
         num ++;
       }
       /*
@@ -957,6 +981,7 @@ this.send = function(){
 \# たぶん、大抵のものは登録済みなので修正不要だと思われる
 ```js
 
+  // input/output MIDI device related
   const indev0 = "WIDI Bud"; // for Windows/linux
   const indev1 = "Elefue"; // for Mac
   const indev2 = "re.corder"; // for Mac
@@ -964,10 +989,15 @@ this.send = function(){
   const indev4 = "EWI"; // for Mac (with WIDI Master/EWI5000,EWI4000,EVI3010 etc)
   const indev5 = "AE-"; // for Mac (Roland)
   const indev6 = "YDS-"; // for Mac (YAMAHA)
+  //const indev7 = "Saxophone" // for USB-MIDI (YAMAHA)
+  const indev7 = "ROBKOO"; // for R1 (ROBKOO)
+  const indev8 = "Elesa"; // for Elesa (TAHORNG)
 
 ```
+\# USB-MIDI(YAMAHA)は無効にした。  
 
-CCMapperを起動したら、次に音源を立ち上げて入力MIDIデバイスをlinuxの場合は「Midi Through port」(windows/Macの場合は「loopMIDI port」)に設定する。
+CCMapperを起動したら、次に音源を立ち上げて入力MIDIデバイスをlinuxの場合は「Midi Through port」(windows/Macの場合は「loopMIDI port」)に設定する。  
+Macの場合、bluetoothで接続するデバイスごとにデバイス名が異なるので、先にbluetoothでの接続を確立してから、このCCMapperを立ち上げる必要がある。  
 
 ここで、wind_controlerで吹くと音が出る。
                                                            
