@@ -1,7 +1,7 @@
     
 # CCMapper3(chuck)
 
-2024/1/13      
+2024/1/13+      
 初版    
   
 ## 概要   
@@ -10,14 +10,13 @@
 参照：   
 [ChucK : Strongly-timed, Concurrent, and On-the-fly Music Programming Language](https://chuck.stanford.edu/)  
 
-
 ## インストール
 [ChucK : Release version:1.4.1.1 (numchucks)](https://chuck.cs.princeton.edu/release/)  
 上のリンクからOS(MacOS,Linux,Windows)に応じたインストールプログラムをダウンロードしてインストールする。  
 miniAudicleといわれるIDEも同時にインストールされるが、本記事では、プログラミング言語chuckのみを使用する。    
-Mac以外は実用的でない気がする。
+windowsではエラーになり動作しない。Linux/Macは動作する。  
 
-## Mac用CCMapper3.ck
+## CCMapper3.ck
 
 CCMapper3.ck
 ```c++
